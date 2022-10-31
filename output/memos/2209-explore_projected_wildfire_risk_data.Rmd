@@ -1,0 +1,265 @@
+---
+title: "Exploring projected wildfire risk data"
+subtitle: "August 2022"
+output: html_notebook
+---
+
+## Memo
+
+Imports and examines raster dataon projected future wildfire risk in the U.S., using data provided by Brown et al.
+
+```{r setup, include=FALSE}
+source("../../code/0-setup/01-setup.R")
+library("ncdf4")
+library("raster")
+library("RColorBrewer")
+```
+
+```{r data_input, include=FALSE}
+us_states_west <- st_read("../../data/raw/us_census/tl_2018_us_state.shp") %>% 
+  filter(STUSPS %in% c("AK", "WA", "OR", "CA", "ID", "NV", "AZ", "MT", "WY", 
+                       "UT", "CO", "NM", "ND", "SD", "NE", "KS", "OK", "TX"))
+us_states_west_mask <- us_states_west %>% st_union() %>% st_geometry()
+```
+
+
+## 2017 data
+
+```{r echo=FALSE}
+nc_spring_2017 <-
+  nc_open("../../data/raw/KBDI_Wildfire_Gas/KBDI/2017/Mean_KBDI_Spring_2017.nc")
+# nc_summer_2017 <-
+#   nc_open("../../data/raw/KBDI_Wildfire_Gas/KBDI/2017/Mean_KBDI_Summer_2017.nc")
+# nc_fall_2017 <-
+#   nc_open("../../data/raw/KBDI_Wildfire_Gas/KBDI/2017/Mean_KBDI_Fall_2017.nc")
+
+kbdi_spring_2017 <- ncvar_get(nc_spring_2017, "KBDI")
+kbdi_spring_2017[is.nan(kbdi_spring_2017)] <- NA  # replaces NaN with NA
+kbdi_spring_2017_raster <- 
+  raster(t(kbdi_spring_2017), 
+         crs = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +
+                   towgs84=0,0,0")) %>% 
+  flip(direction = "y")
+lon_spring_2017  <- ncvar_get(nc_spring_2017, varid = "longitude",
+                              verbose = T)
+                              #attributes(nc_spring_2017$dim)$names[1])
+                              #nc_spring_2017$dim$longitude)
+
+kbdi_summer_2017 <- ncvar_get(nc_summer_2017, "KBDI")
+kbdi_summer_2017[is.nan(kbdi_summer_2017)] <- NA  # replaces NaN with NA
+kbdi_summer_2017_raster <- 
+  raster(t(kbdi_summer_2017), 
+         crs = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs+
+                   towgs84=0,0,0")) %>% 
+  flip(direction = "y")
+
+kbdi_fall_2017 <- ncvar_get(nc_fall_2017, "KBDI")
+kbdi_fall_2017[is.nan(kbdi_fall_2017)] <- NA  # replaces NaN with NA
+kbdi_fall_2017_raster <- 
+  raster(t(kbdi_fall_2017), 
+         crs = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs+
+                   towgs84=0,0,0")) %>% 
+  flip(direction = "y")
+```
+
+
+#### Plot. KBDI for continental U.S. in spring 2017, all values
+
+```{r echo=FALSE}
+plot(kbdi_spring_2017_raster, col = brewer.pal(n = 9, name = "YlOrRd"))
+```
+
+#### Plot. KBDI for continental U.S. in spring 2017, KBDI ≥ 600 (high risk)
+
+```{r echo=FALSE}
+kbdi_spring_2017_high <- kbdi_spring_2017_raster >= 600
+plot(kbdi_spring_2017_high, col = brewer.pal(n = 9, name = "YlOrRd"))
+```
+
+#### Plot. KBDI for continental U.S. in summer 2017, all values
+
+```{r echo=FALSE}
+plot(kbdi_summer_2017_raster, col = brewer.pal(n = 9, name = "YlOrRd"))
+```
+
+#### Plot. KBDI for continental U.S. in summer 2017, KBDI ≥ 600 (high risk)
+
+```{r echo=FALSE}
+kbdi_summer_2017_high <- kbdi_summer_2017_raster >= 600
+plot(kbdi_summer_2017_high, col = brewer.pal(n = 9, name = "YlOrRd"))
+```
+
+#### Plot. KBDI for continental U.S. in summer 2017, all values
+
+```{r echo=FALSE}
+plot(kbdi_fall_2017_raster, col = brewer.pal(n = 9, name = "YlOrRd"))
+```
+
+#### Plot. KBDI for continental U.S. in fall 2017, KBDI ≥ 600 (high risk)
+
+```{r echo=FALSE}
+kbdi_fall_2017_high <- kbdi_fall_2017_raster >= 600
+plot(kbdi_fall_2017_high, col = brewer.pal(n = 9, name = "YlOrRd"))
+```
+
+
+
+
+## 2046-2054 data (mid-century)
+
+```{r echo=FALSE}
+nc_spring_2046_2054 <-
+  nc_open("../../data/raw/KBDI_Wildfire_Gas/KBDI/MidCen/Mean_KBDI_Spring_2046-2054_R8Y4.nc")
+nc_summer_2046_2054 <-
+  nc_open("../../data/raw/KBDI_Wildfire_Gas/KBDI/MidCen/Mean_KBDI_Summer_2046-2054_R8Y4.nc")
+nc_fall_2046_2054 <-
+  nc_open("../../data/raw/KBDI_Wildfire_Gas/KBDI/MidCen/Mean_KBDI_Fall_2046-2054_R8Y4.nc")
+
+kbdi_spring_2046_2054 <- ncvar_get(nc_spring_2046_2054, "KBDI")
+kbdi_spring_2046_2054[is.nan(kbdi_spring_2046_2054)] <- NA  # replaces NaN with NA
+kbdi_spring_2046_2054_raster <- 
+  raster(t(kbdi_spring_2046_2054), 
+         crs = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs+
+                   towgs84=0,0,0")) %>% 
+  flip(direction = "y")
+# lon_spring_2046_2054  <- ncvar_get(nc_spring_2046_2054, "longitude")
+                              #attributes(nc_spring_2046_2054$dim)$names[1])
+                              #nc_spring_2046_2054$dim$longitude)
+
+kbdi_summer_2046_2054 <- ncvar_get(nc_summer_2046_2054, "KBDI")
+kbdi_summer_2046_2054[is.nan(kbdi_summer_2046_2054)] <- NA  # replaces NaN with NA
+kbdi_summer_2046_2054_raster <- 
+  raster(t(kbdi_summer_2046_2054), 
+         crs = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs+
+                   towgs84=0,0,0")) %>% 
+  flip(direction = "y")
+
+kbdi_fall_2046_2054 <- ncvar_get(nc_fall_2046_2054, "KBDI")
+kbdi_fall_2046_2054[is.nan(kbdi_fall_2046_2054)] <- NA  # replaces NaN with NA
+kbdi_fall_2046_2054_raster <- 
+  raster(t(kbdi_fall_2046_2054), 
+         crs = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs+
+                   towgs84=0,0,0")) %>% 
+  flip(direction = "y")
+```
+
+
+#### Plot. KBDI for continental U.S. in spring 2046_2054, all values
+
+```{r echo=FALSE}
+plot(kbdi_spring_2046_2054_raster, col = brewer.pal(n = 9, name = "YlOrRd"))
+```
+
+#### Plot. KBDI for continental U.S. in spring 2046_2054, KBDI ≥ 600 (high risk)
+
+```{r echo=FALSE}
+kbdi_spring_2046_2054_high <- kbdi_spring_2046_2054_raster >= 600
+plot(kbdi_spring_2046_2054_high, col = brewer.pal(n = 9, name = "YlOrRd"))
+```
+
+#### Plot. KBDI for continental U.S. in summer 2046_2054, all values
+
+```{r echo=FALSE}
+plot(kbdi_summer_2046_2054_raster, col = brewer.pal(n = 9, name = "YlOrRd"))
+```
+
+#### Plot. KBDI for continental U.S. in summer 2046-2054, KBDI ≥ 600 (high risk)
+
+```{r echo=FALSE}
+kbdi_summer_2046_2054_high <- kbdi_summer_2046_2054_raster >= 600
+plot(kbdi_summer_2046_2054_high, col = brewer.pal(n = 9, name = "YlOrRd"))
+```
+
+#### Plot. KBDI for continental U.S. in fall 2046_2054, all values
+
+```{r echo=FALSE}
+plot(kbdi_fall_2046_2054_raster, col = brewer.pal(n = 9, name = "YlOrRd"))
+```
+
+#### Plot. KBDI for continental U.S. in fall 2046_2054, KBDI ≥ 600 (high risk)
+
+```{r echo=FALSE}
+kbdi_fall_2046_2054_high <- kbdi_fall_2046_2054_raster >= 600
+plot(kbdi_fall_2046_2054_high, col = brewer.pal(n = 9, name = "YlOrRd"))
+```
+
+
+## Late century data (2086-2094)
+
+```{r echo=FALSE}
+nc_spring_2086_2094 <-
+  nc_open("../../data/raw/KBDI_Wildfire_Gas/KBDI/EndCen/Mean_KBDI_Spring_2086-2094_R8Y8.nc")
+nc_summer_2086_2094 <-
+  nc_open("../../data/raw/KBDI_Wildfire_Gas/KBDI/EndCen/Mean_KBDI_Summer_2086-2094_R8Y8.nc")
+nc_fall_2086_2094 <-
+  nc_open("../../data/raw/KBDI_Wildfire_Gas/KBDI/EndCen/Mean_KBDI_Fall_2086-2094_R8Y8.nc")
+
+kbdi_spring_2086_2094 <- ncvar_get(nc_spring_2086_2094, "KBDI")
+kbdi_spring_2086_2094[is.nan(kbdi_spring_2086_2094)] <- NA  # replaces NaN with NA
+kbdi_spring_2086_2094_raster <- 
+  raster(t(kbdi_spring_2086_2094), 
+         crs = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs+
+                   towgs84=0,0,0")) %>% 
+  flip(direction = "y")
+# lon_spring_2086_2094  <- ncvar_get(nc_spring_2086_2094, "longitude")
+                              #attributes(nc_spring_2086_2094$dim)$names[1])
+                              #nc_spring_2086_2094$dim$longitude)
+
+kbdi_summer_2086_2094 <- ncvar_get(nc_summer_2086_2094, "KBDI")
+kbdi_summer_2086_2094[is.nan(kbdi_summer_2086_2094)] <- NA  # replaces NaN with NA
+kbdi_summer_2086_2094_raster <- 
+  raster(t(kbdi_summer_2086_2094), 
+         crs = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs+
+                   towgs84=0,0,0")) %>% 
+  flip(direction = "y")
+
+kbdi_fall_2086_2094 <- ncvar_get(nc_fall_2086_2094, "KBDI")
+kbdi_fall_2086_2094[is.nan(kbdi_fall_2086_2094)] <- NA  # replaces NaN with NA
+kbdi_fall_2086_2094_raster <- 
+  raster(t(kbdi_fall_2086_2094), 
+         crs = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs+
+                   towgs84=0,0,0")) %>% 
+  flip(direction = "y")
+```
+
+
+#### Plot. KBDI for continental U.S. in spring 2086_2094, all values
+
+```{r echo=FALSE}
+plot(kbdi_spring_2086_2094_raster, col = brewer.pal(n = 9, name = "YlOrRd"))
+```
+
+#### Plot. KBDI for continental U.S. in spring 2086_2094, KBDI ≥ 600 (high risk)
+
+```{r echo=FALSE}
+kbdi_spring_2086_2094_high <- kbdi_spring_2086_2094_raster >= 600
+plot(kbdi_spring_2086_2094_high, col = brewer.pal(n = 9, name = "YlOrRd"))
+```
+
+#### Plot. KBDI for continental U.S. in summer 2086_2094, all values
+
+```{r echo=FALSE}
+plot(kbdi_summer_2086_2094_raster, col = brewer.pal(n = 9, name = "YlOrRd"))
+```
+
+#### Plot. KBDI for continental U.S. in summer 2086_2094, KBDI ≥ 600 (high risk)
+
+```{r echo=FALSE}
+kbdi_summer_2086_2094_high <- kbdi_summer_2086_2094_raster >= 600
+plot(kbdi_summer_2086_2094_high, col = brewer.pal(n = 9, name = "YlOrRd"))
+```
+
+#### Plot. KBDI for continental U.S. in fall 2086_2094, all values
+
+```{r echo=FALSE}
+plot(kbdi_fall_2086_2094_raster, col = brewer.pal(n = 9, name = "YlOrRd"))
+```
+
+#### Plot. KBDI for continental U.S. in fall 2086_2094, KBDI ≥ 600 (high risk)
+
+```{r echo=FALSE}
+kbdi_fall_2086_2094_high <- kbdi_fall_2086_2094_raster >= 600
+plot(kbdi_fall_2086_2094_high, col = brewer.pal(n = 9, name = "YlOrRd"))
+```
+
+

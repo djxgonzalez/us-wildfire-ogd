@@ -1,0 +1,63 @@
+##============================================================================##
+## 1.03 - imports NetCDF data from Brown et al. (2021) paper with projected
+## wildfire risk in 2017, mid-century, and late century; combines data
+## for spring+summer+fall seasons with max KBDI value for each; identifies
+## wildfires in high risk areas (KBDI ≥ 600)
+
+##---------------------------------------------------------------------------
+## 2017 (present)
+
+#.........................................................................
+# data input
+
+# spring
+nc_spring_2017 <-
+  nc_open("data/raw/KBDI_Wildfire_Gas/KBDI/2017/Mean_KBDI_Spring_2017.nc")
+nc_summer_2017 <-
+  nc_open("data/raw/KBDI_Wildfire_Gas/KBDI/2017/Mean_KBDI_Summer_2017.nc")
+nc_fall_2017 <-
+  nc_open("data/raw/KBDI_Wildfire_Gas/KBDI/2017/Mean_KBDI_Fall_2017.nc")
+
+kbdi_spring_2017 <- ncvar_get(nc_spring_2017, "KBDI")
+kbdi_spring_2017[is.nan(kbdi_spring_2017)] <- NA  # replaces NaN with NA
+kbdi_spring_2017_raster <- 
+  raster(t(kbdi_spring_2017), 
+         crs = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs +
+                   towgs84=0,0,0")) %>% 
+  flip(direction = "y")
+lon_spring_2017  <- ncvar_get(nc_spring_2017, varid = "longitude",
+                              verbose = T)
+#attributes(nc_spring_2017$dim)$names[1])
+#nc_spring_2017$dim$longitude)
+
+# summer
+kbdi_summer_2017 <- ncvar_get(nc_summer_2017, "KBDI")
+kbdi_summer_2017[is.nan(kbdi_summer_2017)] <- NA  # replaces NaN with NA
+kbdi_summer_2017_raster <- 
+  raster(t(kbdi_summer_2017), 
+         crs = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs+
+                   towgs84=0,0,0")) %>% 
+  flip(direction = "y")
+
+# fall
+kbdi_fall_2017 <- ncvar_get(nc_fall_2017, "KBDI")
+kbdi_fall_2017[is.nan(kbdi_fall_2017)] <- NA  # replaces NaN with NA
+kbdi_fall_2017_raster <- 
+  raster(t(kbdi_fall_2017), 
+         crs = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs+
+                   towgs84=0,0,0")) %>% 
+  flip(direction = "y")
+
+
+##### stack the spring/summer/fall rasters
+kbdi_2017_stack <- 
+##### combine into one raster with max KBDI among all 3 seasons
+##### export this
+##### filter to KBDI ≥ 600
+##### export this too
+##### remember to nc close
+
+##### do the above for mid-century and late century
+
+
+##============================================================================##

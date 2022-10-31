@@ -1,0 +1,166 @@
+---
+title: "Simple document"
+output: html_document
+---
+
+```{r include=FALSE}
+library(dplyr) # data wrangling
+library(tidyr) # data wrangling
+library(ggplot2) # data visualisation
+library(sf) # simple features - geospatial geometries
+library(osmdata) # obtaining OpenStreetMap vector data
+library(units) # working with units
+library(mapview) # interactive geometry viewing
+library(ggmap) # downloading raster maps from a variety of sources
+library(ggspatial) # map backgrounds and annotations for ggplot
+library(tmap) # static/interactive map library with ggplot-like syntax
+library(sp)
+require(maps)
+library(maptools)
+```
+
+
+```{r}
+fire1986_1 = read_sf('../Fires/Utah/1986/co3713810901119860621/co3713810901119860621_19850810_19860813_burn_bndy.shp')
+fire1986_2 = read_sf('../Fires/Utah/1986/co3722210895719860621/co3722210895719860621_19850810_19860813_burn_bndy.shp')
+
+fire1988 = read_sf('../Fires/Utah/1988/co4023510902719880717/co4023510902719880717_19850817_19880809_burn_bndy.shp')
+
+fire1991 = read_sf('../Fires/Utah/1991/id4200311255419910715/id4200311255419910715_19910519_19920505_burn_bndy.shp')
+
+fire1993_1 = read_sf('../Fires/Utah/1993/ut3701311385619930801/ut3701311385619930801_19920809_19930828_burn_bndy.shp')
+fire1993_2 = read_sf('../Fires/Utah/1993/ut3718411353919930621/ut3718411353919930621_19920615_19930720_burn_bndy.shp')
+
+fire1995_1 = read_sf('../Fires/Utah/1995/ut3700511373919950701/ut3700511373919950701_19930720_19950726_burn_bndy.shp')
+fire1995_2 = read_sf('../Fires/Utah/1995/ut3704611374319950730/ut3704611374319950730_19950726_19950827_burn_bndy.shp')
+fire1995_3 = read_sf('../Fires/Utah/1995/ut3715811395619950627/ut3715811395619950627_19940714_19950818_burn_bndy.shp')
+fire1995_4 = read_sf('../Fires/Utah/1995/ut3719211396819950627/ut3719211396819950627_19940714_19950818_burn_bndy.shp')
+
+fire1996 = read_sf('../Fires/Utah/1996/ut3717611381919960816/ut3717611381919960816_19960719_19960820_burn_bndy.shp')
+
+fire1998_1 = read_sf('../Fires/Utah/1998/ut3702511380719980627/ut3702511380719980627_19980623_19980927_burn_bndy.shp')
+fire1998_2 = read_sf('../Fires/Utah/1998/ut3709311205519980728/ut3709311205519980728_19980702_19980803_burn_bndy.shp')
+
+fire1999_1 = read_sf('../Fires/Utah/1999/co3900410902419990702/co3900410902419990702_19980720_19990816_burn_bndy.shp')
+fire1999_2 = read_sf('../Fires/Utah/1999/co4009210904019990625/co4009210904019990625_19980602_20000607_burn_bndy.shp')
+fire1999_3 = read_sf('../Fires/Utah/1999/nv4183711405919990719/nv4183711405919990719_19990703_20000603_burn_bndy.shp')
+
+fire2000_1 = read_sf('../Fires/Utah/2000/id4199711370020000818/id4199711370020000818_20000705_20010521_burn_bndy.shp')
+fire2000_2 = read_sf('../Fires/Utah/2000/id4204311334220000728/id4204311334220000728_19991024_20000924_burn_bndy.shp')
+fire2000_3 = read_sf('../Fires/Utah/2000/nv3829311416220000727/nv3829311416220000727_19990813_20010826_burn_bndy.shp')
+
+fire2002_1 = read_sf('../Fires/Utah/2002/nv3801411407120020711/nv3801411407120020711_20010615_20030707_burn_bndy.shp')
+fire2002_2 = read_sf('../Fires/Utah/2002/nv3822311405320020601/nv3822311405320020601_20010615_20030605_burn_bndy.shp')
+fire2002_3 = read_sf('../Fires/Utah/2002/ut3717611382020020601/ut3717611382020020601_20010615_20020813_burn_bndy.shp')
+
+fire2003 = read_sf('../Fires/Utah/2003/ut3715011381920030628/ut3715011381920030628_20030621_20030723_burn_bndy.shp')
+
+fire2005_1 = read_sf('../Fires/Utah/2005/nv3724211430320050622/nv3724211430320050622_20050525_20050712_burn_bndy.shp')
+fire2005_2 = read_sf('../Fires/Utah/2005/ut3701611375020050603/ut3701611375020050603_20040702_20050619_burn_bndy.shp')
+fire2005_3 = read_sf('../Fires/Utah/2005/ut3705111373420050603/ut3705111373420050603_20050525_20050712_burn_bndy.shp')
+fire2005_4 = read_sf('../Fires/Utah/2005/ut3709211398620050723/ut3709211398620050723_20050712_20050829_burn_bndy.shp')
+fire2005_5 = read_sf('../Fires/Utah/2005/ut3716911391620050623/ut3716911391620050623_20050525_20050712_burn_bndy.shp')
+fire2005_6 = read_sf('../Fires/Utah/2005/ut3717311381820050729/ut3717311381820050729_20050712_20050829_burn_bndy.shp')
+fire2005_7 = read_sf('../Fires/Utah/2005/ut3718911354420050721/ut3718911354420050721_20030918_20050907_burn_bndy.shp')
+
+fire2006_1 = read_sf('../Fires/Utah/2006/co3898110904620060720/co3898110904620060720_20030819_20060912_burn_bndy.shp')
+fire2006_2 = read_sf('../Fires/Utah/2006/ut3703511206620060614/ut3703511206620060614_20050916_20060903_burn_bndy.shp')
+fire2006_3 = read_sf('../Fires/Utah/2006/ut3705411086120060610/ut3705411086120060610_20040609_20070618_burn_bndy.shp')
+fire2006_4 = read_sf('../Fires/Utah/2006/ut3705811379820060625/ut3705811379820060625_20050712_20070702_burn_bndy.shp')
+fire2006_5 = read_sf('../Fires/Utah/2006/ut3706811330520060518/ut3706811330520060518_20050619_20060606_burn_bndy.shp')
+fire2006_6 = read_sf('../Fires/Utah/2006/ut3707411328820060518/ut3707411328820060518_20050619_20060606_burn_bndy.shp')
+fire2006_7 = read_sf('../Fires/Utah/2006/ut3717611383320060726/ut3717611383320060726_20060512_20060917_burn_bndy.shp')
+
+fire2007_1 = read_sf('../Fires/Utah/2007/id4222111319320070706/id4222111319320070706_20060901_20080906_burn_bndy.shp')
+fire2007_2 = read_sf('../Fires/Utah/2007/nv4176911415120070718/nv4176911415120070718_20060924_20070911_burn_bndy.shp')
+
+fire2011_1 = read_sf('../Fires/Utah/2011/ut3707811375020110616/ut3707811375020110616_20100617_20110620_burn_bndy.shp')
+fire2011_2 = read_sf('../Fires/Utah/2011/ut3718111375620110610/ut3718111375620110610_20100624_20110627_burn_bndy.shp')
+
+fire2012_1 = read_sf('../Fires/Utah/2012/nv3809511410120120601/nv3809511410120120601_20110526_20130531_burn_bndy.shp')
+fire2012_2 = read_sf('../Fires/Utah/2012/ut3711811378420120721/ut3711811378420120721_20110729_20120808_burn_bndy.shp')
+fire2012_3 = read_sf('../Fires/Utah/2012/ut3714711329520120522/ut3714711329520120522_20110604_20120529_burn_bndy.shp')
+fire2012_4 = read_sf('../Fires/Utah/2012/ut3718311382520120812/ut3718311382520120812_20110915_20120824_burn_bndy.shp')
+fire2012_5 = read_sf('../Fires/Utah/2012/ut3719411389320120804/ut3719411389320120804_20110729_20120808_burn_bndy.shp')
+fire2012_6 = read_sf('../Fires/Utah/2012/ut3721811355820120813/ut3721811355820120813_20110823_20120902_burn_bndy.shp')
+
+fire2014 = read_sf('../Fires/Utah/2014/nv3748511410320140702/nv3748511410320140702_20130702_20150724_burn_bndy.shp')
+
+fire2017 = read_sf('../Fires/Utah/2017/id4204611288420170627/id4204611288420170627_20160624_20170729_burn_bndy.shp')
+
+fire2018 = read_sf('../Fires/Utah/2018/nv4180711406520180726/nv4180711406520180726_20180707_20180808_burn_bndy.shp')
+
+fire_utah = bind_rows(fire1986_1,fire1986_2,fire1988,fire1991,fire1993_1,fire1993_2,fire1995_1,fire1995_2,fire1995_3,
+                      fire1995_4,fire1996,fire1998_1,fire1998_2,fire1999_1,fire1999_2,fire1999_3,fire2000_1,fire2000_2,
+                      fire2000_3,fire2002_1,fire2002_2,fire2002_3,fire2003,fire2005_1,fire2005_2,fire2005_3,fire2005_4,
+                      fire2005_5,fire2005_6,fire2005_7,fire2006_1,fire2006_2,fire2006_3,fire2006_4,fire2006_5,fire2006_6,
+                      fire2006_7,fire2007_1,fire2007_2,fire2011_1,fire2011_2,fire2012_1,fire2012_2,fire2012_3,fire2012_4,
+                      fire2012_5,fire2012_6,fire2014,fire2017,fire2018)
+
+wells_utah = readr::read_csv('../wells/States/Utah/Utah_all.csv')
+```
+
+
+```{r}
+crs_nad83 <- st_crs("+init=epsg:4269 +proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs +towgs84=0,0,0") 
+
+# CSV file for wells in utah, long-lat included only 
+wells_utah = wells_utah %>% 
+  rename('long' = `Surface Hole Longitude (WGS84)`,
+         'lat' = `Surface Hole Latitude (WGS84)`)
+
+# Shapefile for wells in utah (geometry included)
+wells_utah_sf = wells_utah %>% 
+  drop_na(long,lat) %>% 
+  st_as_sf(coords = c('long','lat'),
+           crs = crs_nad83)
+
+# Shapefile for wildfires in utah
+fire_utah = fire_utah %>% 
+  rename('long' = BurnBndLon,
+         'lat' = BurnBndLat) %>% 
+  mutate(long = as.numeric(long),
+         lat = as.numeric(lat)) %>% 
+  st_transform(crs = crs_nad83)
+```
+
+
+```{r}
+sf::sf_use_s2(FALSE)
+utah_inters = st_intersection(fire_utah, wells_utah_sf) # 8 rows
+utah_inters %>% 
+    filter_at(vars(ends_with("date")), any_vars(. < Ig_Date)) # 8 rows
+
+fire_utah_3566 = fire_utah %>% 
+  st_as_sf() %>% 
+  st_transform(3566)
+fire_utah_buff = st_buffer(fire_utah_3566, 1000)
+
+wells_3566 = wells_utah_sf %>% 
+  st_transform(3566)
+utah_inter_buff = st_intersection(fire_utah_buff, wells_3566) # 12 rows
+utah_inter_buff %>% 
+  filter_at(vars(ends_with("date")), any_vars(. < Ig_Date)) # 12 rows
+```
+
+```{r}
+# All wells existed before 1984
+wells_before_1984 = wells_3566 %>% 
+  filter_at(vars(ends_with("date")), any_vars(. < "1985-01-01")) # 17579 wells 
+
+fire_1984 = fire_utah_buff %>% 
+  filter(Ig_Date < "1985-01-01" & Ig_Date > "1983-12-31")
+
+# All wells existed before 2020
+wells_before_2020 = wells_3566 %>% 
+  filter_at(vars(ends_with("date")), any_vars(. < "2021-01-01")) # 21372 wells
+
+fire_2020 = fire_utah_buff %>%  # 64 fires
+  filter(Ig_Date < "2021-01-01" & Ig_Date > "2019-12-31")
+
+intersection_1984 = st_intersection(wells_before_1984, fire_1984) #0
+intersection_2020 = st_intersection(wells_before_2020, fire_2020) #3
+
+unique(intersection_2020$Well.Name)
+```
+

@@ -1,0 +1,172 @@
+---
+title: "Simple document"
+output: html_document
+---
+
+```{r include=FALSE}
+library(dplyr) # data wrangling
+library(tidyr) # data wrangling
+library(ggplot2) # data visualisation
+library(sf) # simple features - geospatial geometries
+library(osmdata) # obtaining OpenStreetMap vector data
+library(units) # working with units
+library(mapview) # interactive geometry viewing
+library(ggmap) # downloading raster maps from a variety of sources
+library(ggspatial) # map backgrounds and annotations for ggplot
+library(tmap) # static/interactive map library with ggplot-like syntax
+library(sp)
+require(maps)
+library(maptools)
+```
+
+
+```{r}
+fire1986_1 = read_sf('../Fires/Washington/1986/wa4592611950219860605/wa4592611950219860605_19850809_19860727_burn_bndy.shp')
+fire1986_2 = read_sf('../Fires/Washington/1986/wa4601011711619860811/wa4601011711619860811_19860922_burn_bndy.shp')
+
+fire1990_1 = read_sf('../Fires/Washington/1990/wa4588012063219900731/wa4588012063219900731_19890811_19910801_burn_bndy.shp')
+fire1990_2 = read_sf('../Fires/Washington/1990/wa4602611924919900730/wa4602611924919900730_19890820_19900823_burn_bndy.shp')
+
+fire1991 = read_sf('../Fires/Washington/1991/or4588311905119910801/or4588311905119910801_19910709_19910810_burn_bndy.shp')
+
+fire1992 = read_sf('../Fires/Washington/1992/wa4583312110119920804/wa4583312110119920804_19910801_19930806_burn_bndy.shp')
+
+fire1994 = read_sf('../Fires/Washington/1994/wa4568312122219940819/wa4568312122219940819_19940926_burn_bndy.shp')
+
+fire1996 = read_sf('../Fires/Washington/1996/wa4601711882519960807/wa4601711882519960807_19950805_19960807_burn_bndy.shp')
+
+fire1998 = read_sf('../Fires/Washington/1998/wa4566812101719980710/wa4566812101719980710_19961001_19980921_burn_bndy.shp')
+fire1998 = read_sf('../Fires/Washington/1998/wa4596712037519980727/wa4596712037519980727_19980719_19990714_burn_bndy.shp')
+
+fire2000_1 = read_sf('../Fires/Washington/2000/id4594011680920000811/id4594011680920000811_19990708_20010619_burn_bndy.shp')
+fire2000_2 = read_sf('../Fires/Washington/2000/wa4575312042420000709/wa4575312042420000709_19980712_20000709_burn_bndy.shp')
+fire2000_3 = read_sf('../Fires/Washington/2000/wa4576512047520000727/wa4576512047520000727_19990917_20000927_burn_bndy.shp')
+fire2000_4 = read_sf('../Fires/Washington/2000/wa4577012021720000927/wa4577012021720000927_19990917_20000927_burn_bndy.shp')
+fire2000_5 = read_sf('../Fires/Washington/2000/wa4579512010420000726/wa4579512010420000726_19990917_20000927_burn_bndy.shp')
+fire2000_6 = read_sf('../Fires/Washington/2000/wa4585511983320000927/wa4585511983320000927_19990917_20000927_burn_bndy.shp')
+fire2000_7 = read_sf('../Fires/Washington/2000/wa4596412011120000823/wa4596412011120000823_19990917_20000927_burn_bndy.shp')
+
+fire2001_1 = read_sf('../Fires/Washington/2001/id4601611690520010930/id4601611690520010930_20010923_20011017_burn_bndy.shp')
+fire2001_2 = read_sf('../Fires/Washington/2001/wa4574212052320010818/wa4574212052320010818_19980921_20010913_burn_bndy.shp')
+fire2001_3 = read_sf('../Fires/Washington/2001/wa4604211893720010728/wa4604211893720010728_20000802_20010805_burn_bndy.shp')
+
+fire2003 = read_sf('../Fires/Washington/2003/or4598411891120030629/or4598411891120030629_20020613_20030811_burn_bndy.shp')
+
+fire2005_1 = read_sf('../Fires/Washington/2005/wa4580012023420050723/wa4580012023420050723_20040804_20050807_burn_bndy.shp')
+fire2005_2 = read_sf('../Fires/Washington/2005/wa4602611908920050622/wa4602611908920050622_20040728_20050731_burn_bndy.shp')
+
+fire2006 = read_sf('../Fires/Washington/2006/wa4602011892220060728/wa4602011892220060728_20060718_20060819_burn_bndy.shp')
+
+fire2007_1 = read_sf('../Fires/Washington/2007/id4605311687720070713/id4605311687720070713_20060720_20070824_burn_bndy.shp')
+fire2007_2 = read_sf('../Fires/Washington/2007/wa4570912077220070816/wa4570912077220070816_20060826_20070829_burn_bndy.shp')
+fire2007_3 = read_sf('../Fires/Washington/2007/wa4586312016120070713/wa4586312016120070713_20060725_20070728_burn_bndy.shp')
+fire2007_4 = read_sf('../Fires/Washington/2007/wa4604911898220070729/wa4604911898220070729_20060819_20070822_burn_bndy.shp')
+
+fire2010_1 = read_sf('../Fires/Washington/2010/wa4564012112620100712/wa4564012112620100712_20090802_20100720_burn_bndy.shp')
+fire2010_2 = read_sf('../Fires/Washington/2010/wa4572012128220100827/wa4572012128220100827_20090903_20100829_burn_bndy.shp')
+fire2010_3 = read_sf('../Fires/Washington/2010/wa4600811892220100731/wa4600811892220100731_20080723_20100814_burn_bndy.shp')
+
+fire2011_1 = read_sf('../Fires/Washington/2011/wa4566512100820110829/wa4566512100820110829_20110824_20110901_burn_bndy.shp')
+fire2011_2 = read_sf('../Fires/Washington/2011/wa4594612067220110907/wa4594612067220110907_20100720_20120802_burn_bndy.shp')
+fire2011_3 = read_sf('../Fires/Washington/2011/wa4603011885720110807/wa4603011885720110807_20100814_20110817_burn_bndy.shp')
+
+fire2012_1 = read_sf('../Fires/Washington/2012/or4598611692820120820/or4598611692820120820_20110920_20120930_burn_bndy.shp')
+fire2012_2 = read_sf('../Fires/Washington/2012/wa4564912112420120726/wa4564912112420120726_20110808_20120802_burn_bndy.shp')
+fire2012_3 = read_sf('../Fires/Washington/2012/wa4576012151620120905/wa4576012151620120905_20110730_20130804_burn_bndy.shp')
+
+fire2013_1 = read_sf('../Fires/Washington/2013/wa4599612064920130724/wa4599612064920130724_20110723_20140715_burn_bndy.shp')
+fire2013_2 = read_sf('../Fires/Washington/2013/wa4603312001420130910/wa4603312001420130910_20130915_burn_bndy.shp')
+fire2013_3 = read_sf('../Fires/Washington/2013/wa4604511708320130829/wa4604511708320130829_20130815_20130831_burn_bndy.shp')
+
+fire2014 = read_sf('../Fires/Washington/2014/id4599311683120140803/id4599311683120140803_20140726_20140827_burn_bndy.shp')
+
+
+fire2015_1 = read_sf('../Fires/Washington/2015/or4598111899520150913/or4598111899520150913_20140926_20150929_burn_bndy.shp')
+fire2015_2 = read_sf('../Fires/Washington/2015/wa4564412110720150913/wa4564412110720150913_20150819_20150920_burn_bndy.shp')
+fire2015_3 = read_sf('../Fires/Washington/2015/wa4571012075220150702/wa4571012075220150702_20150702_20150718_burn_bndy.shp')
+fire2015_4 = read_sf('../Fires/Washington/2015/wa4571712031520150805/wa4571712031520150805_20150718_20150819_burn_bndy.shp')
+fire2015_5 = read_sf('../Fires/Washington/2015/wa4600211902220150627/wa4600211902220150627_20150625_20150812_burn_bndy.shp')
+
+fire2016 = read_sf('../Fires/Washington/2016/wa4577312031420160911/wa4577312031420160911_20150920_20160915_burn_bndy.shp')
+
+fire2018_1 = read_sf('../Fires/Washington/2018/id4603311692920180809/id4603311692920180809_20180805_20180815_burn_bndy.shp')
+fire2018_2 = read_sf('../Fires/Washington/2018/wa4567012103420180801/wa4567012103420180801_20180726_20180811_burn_bndy.shp')
+fire2018_3 = read_sf('../Fires/Washington/2018/wa4597011911020180622/wa4597011911020180622_20180601_20180703_burn_bndy.shp')
+
+fire_washington = bind_rows(fire1986_1,fire1986_2,fire1990_1,fire1990_2,fire1991,fire1992,fire1994,
+                            fire1996,fire1998,fire2000_1,fire2000_2,fire2000_3,fire2000_4,fire2000_5,
+                            fire2000_6,fire2000_7,fire2001_1,fire2001_2,fire2001_3,fire2003,fire2005_1,
+                            fire2005_2,fire2006,fire2007_1,fire2007_2,fire2007_3,fire2007_4,fire2010_1,
+                            fire2010_2,fire2010_3,fire2011_1,fire2011_2,fire2011_3,fire2012_1,fire2012_2,
+                            fire2012_3,fire2013_1,fire2013_2,fire2013_3,fire2014,fire2015_1,fire2015_2,
+                            fire2015_3,fire2015_4,fire2015_5,fire2016,fire2018_1,fire2018_2,fire2018_3)
+
+wells_washington = readr::read_csv('../wells/States/Washington/Washington_All.csv')
+
+```
+
+
+```{r}
+crs_nad83 <- st_crs("+init=epsg:4269 +proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs +towgs84=0,0,0") 
+
+# CSV file for wells in washington, long-lat included only 
+wells_washington = wells_washington %>% 
+  rename('long' = `Surface Hole Longitude (WGS84)`,
+         'lat' = `Surface Hole Latitude (WGS84)`)
+
+# Shapefile for wells in washington (geometry included)
+wells_washington_sf = wells_washington %>% 
+  drop_na(long,lat) %>% 
+  st_as_sf(coords = c('long','lat'),
+           crs = crs_nad83)
+
+# Shapefile for wildfires in washington
+fire_washington = fire_washington %>% 
+  rename('long' = BurnBndLon,
+         'lat' = BurnBndLat) %>% 
+  mutate(long = as.numeric(long),
+         lat = as.numeric(lat)) %>% 
+  st_transform(crs = crs_nad83)
+```
+
+
+```{r}
+sf::sf_use_s2(FALSE)
+washington_inters = st_intersection(fire_washington, wells_washington_sf) #  1 row
+washington_inters %>% 
+  filter_at(vars(ends_with("date")), any_vars(. < Ig_Date)) # 1 rows
+
+fire_washington_3338 = fire_washington %>% 
+  st_as_sf() %>% 
+  st_transform(3338)
+fire_washington_buff = st_buffer(fire_washington_3338, 1000)
+
+wells_3338 = wells_washington_sf %>% 
+  st_transform(3338)
+washington_inter_buff = st_intersection(fire_washington_buff, wells_3338) # 2 rows
+washington_inter_buff %>% 
+  filter_at(vars(ends_with("date")), any_vars(. < Ig_Date)) # 2 rows
+```
+
+
+```{r}
+# All wells existed before 1984
+wells_before_1984 = wells_3338 %>% 
+  filter_at(vars(ends_with("date")), any_vars(. < "1985-01-01")) # 17579 wells 
+
+fire_1984 = fire_washington_buff %>% 
+  filter(Ig_Date < "1985-01-01" & Ig_Date > "1983-12-31")
+
+# All wells existed before 2020
+wells_before_2020 = wells_3338 %>% 
+  filter_at(vars(ends_with("date")), any_vars(. < "2021-01-01")) # 21372 wells
+
+fire_2020 = fire_washington_buff %>%  # 64 fires
+  filter(Ig_Date < "2021-01-01" & Ig_Date > "2019-12-31")
+
+intersection_1984 = st_intersection(wells_before_1984, fire_1984) #0
+intersection_2020 = st_intersection(wells_before_2020, fire_2020) #3
+
+unique(intersection_2020$Well.Name)
+```
+

@@ -1,0 +1,175 @@
+---
+title: "Simple document"
+output: html_document
+---
+
+```{r include=FALSE}
+library(dplyr) # data wrangling
+library(tidyr) # data wrangling
+library(ggplot2) # data visualisation
+library(sf) # simple features - geospatial geometries
+library(osmdata) # obtaining OpenStreetMap vector data
+library(units) # working with units
+library(mapview) # interactive geometry viewing
+library(ggmap) # downloading raster maps from a variety of sources
+library(ggspatial) # map backgrounds and annotations for ggplot
+library(tmap) # static/interactive map library with ggplot-like syntax
+library(sp)
+require(maps)
+library(maptools)
+```
+
+
+```{r}
+fire1986_1 = read_sf('../Fires/Texas/1986/nm3203310436719860315/nm3203310436719860315_19860402_burn_bndy.shp')
+fire1986_2 = read_sf('../Fires/Texas/1986/tx2728009735619860704/tx2728009735619860704_19860729_burn_bndy.shp')
+
+fire1987 = read_sf('../Fires/Texas/1987/nm3599110368519870707/nm3599110368519870707_19860716_19870719_burn_bndy.shp')
+
+fire1988 = read_sf('../Fires/Texas/1988/nm3328010317019881126/nm3328010317019881126_19890505_burn_bndy.shp')
+
+fire1989_1 = read_sf('../Fires/Texas/1989/nm3201010476419890512/nm3201010476419890512_19890816_burn_bndy.shp')
+fire1989_2 = read_sf('../Fires/Texas/1989/nm3298210311619890525/nm3298210311619890525_19890809_burn_bndy.shp')
+fire1989_3 = read_sf('../Fires/Texas/1989/nm3644510305619890316/nm3644510305619890316_19890410_burn_bndy.shp')
+
+fire1994 = read_sf('../Fires/Texas/1994/nm3203710596319940629/nm3203710596319940629_19930903_19940720_burn_bndy.shp')
+
+fire1997 = read_sf('../Fires/Texas/1997/nm3643510304819970324/nm3643510304819970324_19970331_burn_bndy.shp')
+
+fire2004_1 = read_sf('../Fires/Texas/2004/tx2674209885520040804/tx2674209885520040804_20040806_burn_bndy.shp')
+fire2004_2 = read_sf('../Fires/Texas/2004/tx2696309858520040221/tx2696309858520040221_19970429_20040331_burn_bndy.shp')
+
+fire2005_1 = read_sf('../Fires/Texas/2005/tx2675409886620050505/tx2675409886620050505_20030804_20050817_burn_bndy.shp')
+fire2005_2 = read_sf('../Fires/Texas/2005/tx2685609880820050223/tx2685609880820050223_20050318_burn_bndy.shp')
+
+fire2006 = read_sf('../Fires/Texas/2006/nm3315710331520060312/nm3315710331520060312_20000527_20060418_burn_bndy.shp')
+
+fire2007 = read_sf('../Fires/Texas/2007/tx2728709736420070715/tx2728709736420070715_20040730_20070808_burn_bndy.shp')
+
+fire2008_1 = read_sf('../Fires/Texas/2008/nm3284010333420080314/nm3284010333420080314_20070304_20080407_burn_bndy.shp')
+fire2008_2 = read_sf('../Fires/Texas/2008/tx2671309823220080318/tx2671309823220080318_20080419_burn_bndy.shp')
+fire2008_3 = read_sf('../Fires/Texas/2008/tx2682109852620080205/tx2682109852620080205_20080207_burn_bndy.shp')
+fire2008_4 = read_sf('../Fires/Texas/2008/tx2684809867220080326/tx2684809867220080326_20080326_burn_bndy.shp')
+fire2008_5 = read_sf('../Fires/Texas/2008/tx2687809865520080131/tx2687809865520080131_20080207_burn_bndy.shp')
+fire2008_6 = read_sf('../Fires/Texas/2008/tx2689009813720080430/tx2689009813720080430_20050521_20080522_burn_bndy.shp')
+fire2008_7 = read_sf('../Fires/Texas/2008/tx2691909812220080319/tx2691909812220080319_20050521_20080419_burn_bndy.shp')
+fire2008_8 = read_sf('../Fires/Texas/2008/tx2724909849320080129/tx2724909849320080129_20080207_burn_bndy.shp')
+fire2008_9 = read_sf('../Fires/Texas/2008/tx2728309848020080129/tx2728309848020080129_20080207_burn_bndy.shp')
+fire2008_10 = read_sf('../Fires/Texas/2008/tx2729009854220080412/tx2729009854220080412_20070308_20080419_burn_bndy.shp')
+
+fire2009_1 = read_sf('../Fires/Texas/2009/tx2667409792520090224/tx2667409792520090224_20090407_burn_bndy.shp')
+fire2009_2 = read_sf('../Fires/Texas/2009/tx2689009775820090328/tx2689009775820090328_20090407_burn_bndy.shp')
+fire2009_3 = read_sf('../Fires/Texas/2009/tx2705009832320090811/tx2705009832320090811_20090804_20090828_burn_bndy.shp')
+fire2009_4 = read_sf('../Fires/Texas/2009/tx2710509738020090402/tx2710509738020090402_20090525_burn_bndy.shp')
+
+fire2010_1 = read_sf('../Fires/Texas/2010/nm3517810308420100326/nm3517810308420100326_20100312_20100328_burn_bndy.shp')
+fire2010_2 = read_sf('../Fires/Texas/2010/tx2676709835420101201/tx2676709835420101201_20081207_20101213_burn_bndy.shp')
+
+fire2011_1 = read_sf('../Fires/Texas/2011/la3287709403420110906/la3287709403420110906_20110828_20110913_burn_bndy.shp')
+fire2011_2 = read_sf('../Fires/Texas/2011/nm3290010309120110509/nm3290010309120110509_20110416_20110518_burn_bndy.shp')
+fire2011_3 = read_sf('../Fires/Texas/2011/nm3645510259320110525/nm3645510259320110525_20110619_burn_bndy.shp')
+fire2011_4 = read_sf('../Fires/Texas/2011/tx2672909780020110102/tx2672909780020110102_20090101_20110107_burn_bndy.shp')
+fire2011_5 = read_sf('../Fires/Texas/2011/tx2686809829320110612/tx2686809829320110612_20110607_20110725_burn_bndy.shp')
+fire2011_6 = read_sf('../Fires/Texas/2011/tx2710109802320110607/tx2710109802320110607_20110607_burn_bndy.shp')
+fire2011_7 = read_sf('../Fires/Texas/2011/tx2716609835320110618/tx2716609835320110618_20110607_20110725_burn_bndy.shp')
+fire2011_8 = read_sf('../Fires/Texas/2011/tx2732809807020110225/tx2732809807020110225_20110303_burn_bndy.shp')
+
+fire2013 = read_sf('../Fires/Texas/2013/ok3389109699920130303/ok3389109699920130303_20110303_20130316_burn_bndy.shp')
+
+fire2014 = read_sf('../Fires/Texas/2014/tx2703009739020140519/tx2703009739020140519_20130605_20140616_burn_bndy.shp')
+
+fire2016 = read_sf('../Fires/Texas/2016/nm3386810321220160302/nm3386810321220160302_20160225_20160312_burn_bndy.shp')
+
+fire2017_1 = read_sf('../Fires/Texas/2017/nm3542510305820170623/nm3542510305820170623_20170619_20170705_burn_bndy.shp')
+fire2017_2 = read_sf('../Fires/Texas/2017/tx2685709736320171221/tx2685709736320171221_20161206_20180110_burn_bndy.shp')
+fire2017_3 = read_sf('../Fires/Texas/2017/tx2698209813720170122/tx2698209813720170122_20160128_20170130_burn_bndy.shp')
+fire2017_4 = read_sf('../Fires/Texas/2017/tx2712109753920170403/tx2712109753920170403_20160325_20170429_burn_bndy.shp')
+
+fire2018_1 = read_sf('../Fires/Texas/2018/nm3349810333820180412/nm3349810333820180412_20180403_20180505_burn_bndy.shp')
+fire2018_2 = read_sf('../Fires/Texas/2018/tx2708809759120180311/tx2708809759120180311_20160325_20180416_burn_bndy.shp')
+fire2018_3 = read_sf('../Fires/Texas/2018/tx2722009737020180414/tx2722009737020180414_20150526_20180502_burn_bndy.shp')
+
+fire2020 = read_sf('../Fires/Texas/2020/tx2712409737720200623/tx2712409737720200623_20200608_20200710_burn_bndy.shp')
+
+fire_texas = bind_rows(fire1986_1,fire1986_2,fire1987,fire1988,fire1989_1,fire1989_2,fire1989_3,fire1994,
+                       fire1997,fire2004_1,fire2004_2,fire2005_1,fire2005_2,fire2006,fire2007,fire2008_1,
+                       fire2008_2,fire2008_3,fire2008_4,fire2008_5,fire2008_6,fire2008_7,fire2008_8,fire2008_9,
+                       fire2008_10,fire2009_1,fire2009_2,fire2009_3,fire2009_4,fire2010_1,fire2010_2,fire2011_1,
+                       fire2011_2,fire2011_3,fire2011_4,fire2011_5,fire2011_6,fire2011_7,fire2011_8,fire2013,
+                       fire2014,fire2016,fire2017_1,fire2017_2,fire2017_3,fire2017_4,fire2018_1,fire2018_2,
+                       fire2018_3,fire2020)
+
+wells1 = readr::read_csv('../wells/States/Texas/TX_Anderson_Crosby.csv')
+wells2 = readr::read_csv('../wells/States/Texas/TX_Culberson_Henderson.csv')
+wells3 = readr::read_csv('../wells/States/Texas/TX_Hidalgo_Menard.csv')
+wells4 = readr::read_csv('../wells/States/Texas/TX_Midland_PaloPinto.csv')
+
+wells_texas = rbind(wells1, wells2, wells3, wells4)
+
+```
+
+
+```{r}
+crs_nad83 <- st_crs("+init=epsg:4269 +proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs +towgs84=0,0,0") 
+
+# CSV file for wells in texas, long-lat included only 
+wells_texas = wells_texas %>% 
+  rename('long' = `Surface Hole Longitude (WGS84)`,
+         'lat' = `Surface Hole Latitude (WGS84)`)
+
+# Shapefile for wells in texas (geometry included)
+wells_texas_sf = wells_texas %>% 
+  drop_na(long,lat) %>% 
+  st_as_sf(coords = c('long','lat'),
+           crs = crs_nad83)
+
+# Shapefile for wildfires in texas
+fire_texas = fire_texas %>% 
+  rename('long' = BurnBndLon,
+         'lat' = BurnBndLat) %>% 
+  mutate(long = as.numeric(long),
+         lat = as.numeric(lat)) %>% 
+  st_transform(crs = crs_nad83)
+```
+
+
+```{r}
+sf::sf_use_s2(FALSE)
+texas_inters = st_intersection(st_make_valid(fire_texas), st_make_valid(wells_texas_sf)) # 460 rows
+texas_inters %>% 
+  filter_at(vars(ends_with("date")), any_vars(. < Ig_Date)) # 392 rows
+
+fire_texas_32139 = fire_texas %>% 
+  st_as_sf() %>% 
+  st_transform(32139)
+fire_texas_buff = st_buffer(fire_texas_32139, 1000)
+
+wells_32139 = wells_texas_sf %>% 
+  st_transform(32139)
+texas_inter_buff = st_intersection(fire_texas_buff, wells_32139) # 1456 rows
+texas_inter_buff %>% 
+  filter_at(vars(ends_with("date")), any_vars(. < Ig_Date)) # 1275 rows
+```
+
+
+```{r}
+# All wells existed before 1984
+wells_before_1984 = wells_32139 %>% 
+  filter_at(vars(ends_with("date")), any_vars(. < "1985-01-01")) # 17579 wells 
+
+fire_1984 = fire_texas_buff %>% 
+  filter(Ig_Date < "1985-01-01" & Ig_Date > "1983-12-31")
+
+# All wells existed before 2020
+wells_before_2020 = wells_32139 %>% 
+  filter_at(vars(ends_with("date")), any_vars(. < "2021-01-01")) # 21372 wells
+
+fire_2020 = fire_texas_buff %>%  # 64 fires
+  filter(Ig_Date < "2021-01-01" & Ig_Date > "2019-12-31")
+
+intersection_1984 = st_intersection(wells_before_1984, fire_1984) #0
+intersection_2020 = st_intersection(wells_before_2020, fire_2020) #3
+
+unique(intersection_2020$Well.Name)
+```
+

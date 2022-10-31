@@ -1,0 +1,155 @@
+---
+title: "Simple document"
+output: html_document
+---
+
+```{r include=FALSE}
+library(dplyr) # data wrangling
+library(tidyr) # data wrangling
+library(ggplot2) # data visualisation
+library(sf) # simple features - geospatial geometries
+library(osmdata) # obtaining OpenStreetMap vector data
+library(units) # working with units
+library(mapview) # interactive geometry viewing
+library(ggmap) # downloading raster maps from a variety of sources
+library(ggspatial) # map backgrounds and annotations for ggplot
+library(tmap) # static/interactive map library with ggplot-like syntax
+library(sp)
+require(maps)
+library(maptools)
+```
+
+
+```{r}
+fire1984 = read_sf('../Fires/SouthDakota/1984/sd4308410285019840906/sd4308410285019840906_19840622_19840926_burn_bndy.shp')
+
+fire1985_1 = read_sf('../Fires/SouthDakota/1985/sd4308710266019850704/sd4308710266019850704_19840903_19850805_burn_bndy.shp')
+fire1985_2 = read_sf('../Fires/SouthDakota/1985/sd4312410259319850414/sd4312410259319850414_19850501_burn_bndy.shp')
+fire1985_3 = read_sf('../Fires/SouthDakota/1985/sd4317510096019850704/sd4317510096019850704_19850501_19850805_burn_bndy.shp')
+fire1985_4 = read_sf('../Fires/SouthDakota/1985/sd4323410242219850806/sd4323410242219850806_19840903_19850821_burn_bndy.shp')
+
+
+fire1987_1 = read_sf('../Fires/SouthDakota/1987/sd4309110256819870902/sd4309110256819870902_19840926_19871005_burn_bndy.shp')
+fire1987_2 = read_sf('../Fires/SouthDakota/1987/sd4318810091419870111/sd4318810091419870111_19870507_burn_bndy.shp')
+
+fire1988_1 = read_sf('../Fires/SouthDakota/1988/mt4563610416919880620/mt4563610416919880620_19870926_19890915_burn_bndy.shp')
+fire1988_2 = read_sf('../Fires/SouthDakota/1988/ne4248910375819880414/ne4248910375819880414_19880329_19880414_burn_bndy.shp')
+fire1988_3 = read_sf('../Fires/SouthDakota/1988/ne4298710038519880910/ne4298710038519880910_19880923_burn_bndy.shp')
+fire1988_4 = read_sf('../Fires/SouthDakota/1988/sd4322910104119880910/sd4322910104119880910_19850906_19880930_burn_bndy.shp')
+
+
+fire1990 = read_sf('../Fires/SouthDakota/1990/sd4302510248119900924/sd4302510248119900924_19881007_19901029_burn_bndy.shp')
+
+fire1992 = read_sf('../Fires/SouthDakota/1992/sd4301810085019921022/sd4301810085019921022_19921112_burn_bndy.shp')
+
+fire1994 = read_sf('../Fires/SouthDakota/1994/sd4316710266019940925/sd4316710266019940925_19921002_19941008_burn_bndy.shp')
+
+fire1996_1 = read_sf('../Fires/SouthDakota/1996/sd4300010242719960905/sd4300010242719960905_19911025_19961022_burn_bndy.shp')
+fire1996_2 = read_sf('../Fires/SouthDakota/1996/sd4306510339219960803/sd4306510339219960803_19940821_19960810_burn_bndy.shp')
+fire1996_3 = read_sf('../Fires/SouthDakota/1996/sd4324910400719960803/sd4324910400719960803_19960801_19960817_burn_bndy.shp')
+
+fire1998 = read_sf('../Fires/SouthDakota/1998/sd4308910256519981124/sd4308910256519981124_19971126_19981215_burn_bndy.shp')
+
+fire1999_1 = read_sf('../Fires/SouthDakota/1999/mt4578910404819991031/mt4578910404819991031_19991029_19991106_burn_bndy.shp')
+fire1999_2 = read_sf('../Fires/SouthDakota/1999/sd4310010154419991013/sd4310010154419991013_19981215_19991031_burn_bndy.shp')
+fire1999_3 = read_sf('../Fires/SouthDakota/1999/sd4314410283119991216/sd4314410283119991216_19991209_19991225_burn_bndy.shp')
+fire1999_4 = read_sf('../Fires/SouthDakota/1999/sd4319510269019990207/sd4319510269019990207_19990328_burn_bndy.shp')
+
+
+fire2000_1 = read_sf('../Fires/SouthDakota/2000/ne4297710197420000917/ne4297710197420000917_20000915_20001009_burn_bndy.shp')
+fire2000_2 = read_sf('../Fires/SouthDakota/2000/ne4298010199020000724/ne4298010199020000724_20000713_20000806_burn_bndy.shp')
+fire2000_3 = read_sf('../Fires/SouthDakota/2000/sd4302010185120000724/sd4302010185120000724_20000713_20000806_burn_bndy.shp')
+fire2000_4 = read_sf('../Fires/SouthDakota/2000/sd4305910202220000724/sd4305910202220000724_20000713_20000806_burn_bndy.shp')
+fire2000_5 = read_sf('../Fires/SouthDakota/2000/sd4315610090420000110/sd4315610090420000110_19990321_20000316_burn_bndy.shp')
+fire2000_6 = read_sf('../Fires/SouthDakota/2000/sd4317910254320000902/sd4317910254320000902_20000821_20000915_burn_bndy.shp')
+fire2000_7 = read_sf('../Fires/SouthDakota/2000/sd4324009988720000918/sd4324009988720000918_19990930_20001002_burn_bndy.shp')
+
+
+fire2002_1 = read_sf('../Fires/SouthDakota/2002/mt4566710414620020830/mt4566710414620020830_20020826_20020911_burn_bndy.shp')
+fire2002_2 = read_sf('../Fires/SouthDakota/2002/sd4315910096220020729/sd4315910096220020729_19971009_20021007_burn_bndy.shp')
+fire2002_3 = read_sf('../Fires/SouthDakota/2002/sd4324810277620020818/sd4324810277620020818_20020429_20020819_burn_bndy.shp')
+
+fire2003_1 = read_sf('../Fires/SouthDakota/2003/sd4314910265720030412/sd4314910265720030412_20030526_burn_bndy.shp')
+fire2003_2 = read_sf('../Fires/SouthDakota/2003/sd4315210237420030811/sd4315210237420030811_20020905_20040825_burn_bndy.shp')
+fire2003_3 = read_sf('../Fires/SouthDakota/2003/sd4318910387820030803/sd4318910387820030803_20030713_20030814_burn_bndy.shp')
+
+fire2005 = read_sf('../Fires/SouthDakota/2005/sd4309410368820050807/sd4309410368820050807_20041104_20050920_burn_bndy.shp')
+
+fire2007_1 = read_sf('../Fires/SouthDakota/2007/sd4308110266320070707/sd4308110266320070707_20060721_20070724_burn_bndy.shp')
+fire2007_2 = read_sf('../Fires/SouthDakota/2007/sd4308510355320070707/sd4308510355320070707_20060721_20070724_burn_bndy.shp')
+
+fire2008 = read_sf('../Fires/SouthDakota/2008/sd4310410154220080418/sd4310410154220080418_20070428_20080422_burn_bndy.shp')
+
+
+fire2012_1 = read_sf('../Fires/SouthDakota/2012/nd4592010137420120824/nd4592010137420120824_20120908_burn_bndy.shp')
+fire2012_2 = read_sf('../Fires/SouthDakota/2012/nd4597810086820120921/nd4597810086820120921_20120924_burn_bndy.shp')
+fire2012_3 = read_sf('../Fires/SouthDakota/2012/ne4282410260920120829/ne4282410260920120829_20110930_20120908_burn_bndy.shp')
+fire2012_4 = read_sf('../Fires/SouthDakota/2012/ne4337110402520120721/ne4337110402520120721_20120830_burn_bndy.shp')
+fire2012_5 = read_sf('../Fires/SouthDakota/2012/sd4303910090420121017/sd4303910090420121017_20121019_burn_bndy.shp')
+fire2012_6 = read_sf('../Fires/SouthDakota/2012/sd4309610116620120719/sd4309610116620120719_20120908_burn_bndy.shp')
+
+fire2013 = read_sf('../Fires/SouthDakota/2013/nd4588110254820130403/nd4588110254820130403_20080421_20130505_burn_bndy.shp')
+
+fire2015 = read_sf('../Fires/SouthDakota/2015/sd4310910110920150329/sd4310910110920150329_20140314_20150410_burn_bndy.shp')
+
+fire2016 = read_sf('../Fires/SouthDakota/2016/sd4324610371020160716/sd4324610371020160716_20130724_20160801_burn_bndy.shp')
+
+fire2019= read_sf('../Fires/SouthDakota/2019/sd4312310155720190502/sd4312310155720190502_20190515_burn_bndy.shp')
+
+fire2020 = read_sf('../Fires/SouthDakota/2020/sd4311610262120200616/sd4311610262120200616_20200704_burn_bndy.shp')
+
+fire_sd = bind_rows(fire1984,fire1985_1,fire1985_2,fire1985_3,fire1985_4,fire1987_1,fire1987_2,fire1988_1,
+                    fire1988_2,fire1988_3,fire1988_4,fire1990,fire1992,fire1994,fire1996_1,fire1996_2,fire1996_3,
+                    fire1998,fire1999_1,fire1999_2,fire1999_3,fire1999_4,fire2000_1,fire2000_1,fire2000_2,
+                    fire2000_3,fire2000_4,fire2000_5,fire2000_6,fire2000_7,fire2002_1,fire2002_2,fire2002_3,
+                    fire2003_1,fire2003_2,fire2003_3,fire2005,fire2007_1,fire2007_2,fire2008,fire2012_1,fire2012_2,
+                    fire2012_3,fire2012_4,fire2012_5,fire2012_6,fire2013,fire2015,fire2016,fire2019,fire2020)
+
+wells_sd = readr::read_csv('../wells/States/SouthDakota/SouthDakota_All.csv')
+
+```
+
+
+```{r}
+crs_nad83 <- st_crs("+init=epsg:4269 +proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs +towgs84=0,0,0") 
+
+# CSV file for wells in sd, long-lat included only 
+wells_sd = wells_sd %>% 
+  rename('long' = `Surface Hole Longitude (WGS84)`,
+         'lat' = `Surface Hole Latitude (WGS84)`)
+
+# Shapefile for wells in sd (geometry included)
+wells_sd_sf = wells_sd %>% 
+  drop_na(long,lat) %>% 
+  st_as_sf(coords = c('long','lat'),
+           crs = crs_nad83)
+
+# Shapefile for wildfires in sd
+fire_sd = fire_sd %>% 
+  rename('long' = BurnBndLon,
+         'lat' = BurnBndLat) %>% 
+  mutate(long = as.numeric(long),
+         lat = as.numeric(lat)) %>% 
+  st_transform(crs = crs_nad83)
+```
+
+
+```{r}
+sf::sf_use_s2(FALSE)
+# CRS projection here 
+sd_inters = st_intersection(fire_sd, wells_sd_sf) # 0 row
+sd_inters %>% 
+  filter_at(vars(ends_with("date")), any_vars(. < Ig_Date)) # 0 row
+
+fire_sd_26914 = fire_sd %>% 
+  st_as_sf() %>% 
+  st_transform(26914)
+fire_sd_buff = st_buffer(fire_sd_26914, 1000)
+
+wells_26914 = wells_sd_sf %>% 
+  st_transform(26914)
+sd_inter_buff = st_intersection(fire_sd_buff, wells_26914) # 0 rows
+sd_inter_buff %>% 
+  filter_at(vars(ends_with("date")), any_vars(. < Ig_Date))
+```
+

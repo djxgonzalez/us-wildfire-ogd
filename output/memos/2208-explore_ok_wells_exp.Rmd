@@ -1,0 +1,38 @@
+---
+title: "Exploring wildfire and wells data in Oklahoma"
+subtitle: "August 2022"
+output: html_notebook
+---
+
+## Memo
+
+Compares two methods Leo used to determine which wells were within wildfire boundaries in Oklahoma. The '0km' method was restricted to wells within an individual state and may have under-counted fires. The '0km_plus' method accounted for wells in neighboring states, for wildfires that crossed state boundaries (and should have more wells than the 0km method) 
+
+Here, I simply verify that there are more wells in the 'plus' wildfire exposure data.
+
+```{r data_input, include=FALSE}
+# imports data
+fire_ok_all_dates_0km <- 
+  readRDS("../../data/interim/fire_ok_all_dates_0km.rds")
+fire_ok_all_dates_0km_plus <- 
+  readRDS("../../data/interim/fire_ok_all_dates_0km_plus.rds")
+```
+
+
+```{r echo=FALSE}
+# combines datasets
+fires_ok <- fire_ok_all_dates_0km_plus %>% 
+  select("Event_ID", "wells_ok_all_dates_0km") %>% 
+  rename("wells_ok_all_dates_0km_plus" = "wells_ok_all_dates_0km") %>% 
+  left_join(fire_ok_all_dates_0km, by = "Event_ID")
+fires_ok %>% 
+  select("Event_ID", "wells_ok_all_dates_0km", "wells_ok_all_dates_0km_plus") %>%
+  mutate(difference = wells_ok_all_dates_0km_plus - wells_ok_all_dates_0km) %>% 
+  arrange(desc(difference))
+```
+
+It looks like this worked. Two fires had more wells in the 'plus' method and no fires had fewer wells.I'll confirm that the fire with Event_ID == "OK3677410017520170307" originated in OK and crossed state boundaries.
+
+This was the STARBUCK fire in 2017. According to news reports, this fire burned in the Oklahoma panhandle and southern Kansas, and was highly destructive (though I didn't see a mention of oil wells).
+
+We can do further checks by mapping and visually inspecting the data.

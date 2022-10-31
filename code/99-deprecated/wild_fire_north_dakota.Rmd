@@ -1,0 +1,171 @@
+---
+title: "Simple document"
+output: html_document
+---
+
+```{r include=FALSE}
+library(dplyr) # data wrangling
+library(tidyr) # data wrangling
+library(ggplot2) # data visualisation
+library(sf) # simple features - geospatial geometries
+library(osmdata) # obtaining OpenStreetMap vector data
+library(units) # working with units
+library(mapview) # interactive geometry viewing
+library(ggmap) # downloading raster maps from a variety of sources
+library(ggspatial) # map backgrounds and annotations for ggplot
+library(tmap) # static/interactive map library with ggplot-like syntax
+library(sp)
+require(maps)
+library(maptools)
+```
+
+
+```{r}
+fire1985_1 = read_sf('../Fires/NorthDakota/1985/nd4675909750619850415/nd4675909750619850415_19850417_burn_bndy.shp')
+fire1985_2 = read_sf('../Fires/NorthDakota/1985/nd4699609945919850429/nd4699609945919850429_19840514_19850501_burn_bndy.shp')
+
+fire1988_1 = read_sf('../Fires/NorthDakota/1988/mt4771910404619880610/mt4771910404619880610_19880608_19880624_burn_bndy.shp')
+fire1988_2 = read_sf('../Fires/NorthDakota/1988/mt4807210407619880610/mt4807210407619880610_19870613_19880615_burn_bndy.shp')
+fire1988_3 = read_sf('../Fires/NorthDakota/1988/nd4621210083019880411/nd4621210083019880411_19870421_19880423_burn_bndy.shp')
+fire1988_4 = read_sf('../Fires/NorthDakota/1988/nd4713710341419880727/nd4713710341419880727_19880912_burn_bndy.shp')
+fire1988_5 = read_sf('../Fires/NorthDakota/1988/nd4731010357719880811/nd4731010357719880811_19870809_19880912_burn_bndy.shp')
+fire1988_6 = read_sf('../Fires/NorthDakota/1988/nd4740110372319880610/nd4740110372319880610_19880608_19880624_burn_bndy.shp')
+
+fire1993 = read_sf('../Fires/NorthDakota/1993/nd4664610060719930417/nd4664610060719930417_19920504_19930421_burn_bndy.shp')
+
+fire1994 = read_sf('../Fires/NorthDakota/1994/nd4703709941019940416/nd4703709941019940416_19920427_19940417_burn_bndy.shp')
+
+fire1998 = read_sf('../Fires/NorthDakota/1998/nd4743610379819980222/nd4743610379819980222_19950511_19980503_burn_bndy.shp')
+
+fire1999_1 = read_sf('../Fires/NorthDakota/1999/nd4635010081119990326/nd4635010081119990326_19990321_19990422_burn_bndy.shp')
+fire1999_2 = read_sf('../Fires/NorthDakota/1999/nd4720110169919991101/nd4720110169919991101_19991030_19991107_burn_bndy.shp')
+
+fire2000_1 = read_sf('../Fires/NorthDakota/2000/nd4629310075220000912/nd4629310075220000912_19990921_20000915_burn_bndy.shp')
+fire2000_2 = read_sf('../Fires/NorthDakota/2000/nd4639110059520000325/nd4639110059520000325_20000502_burn_bndy.shp')
+fire2000_3 = read_sf('../Fires/NorthDakota/2000/nd4696010324920000826/nd4696010324920000826_19980924_20001007_burn_bndy.shp')
+
+fire2002_1 = read_sf('../Fires/NorthDakota/2002/nd4612610116620020705/nd4612610116620020705_19980724_20020719_burn_bndy.shp')
+fire2002_2 = read_sf('../Fires/NorthDakota/2002/nd4636710064520020629/nd4636710064520020629_20020703_burn_bndy.shp')
+fire2002_3 = read_sf('../Fires/NorthDakota/2002/nd4662310061920020620/nd4662310061920020620_20020703_burn_bndy.shp')
+fire2002_4 = read_sf('../Fires/NorthDakota/2002/nd4666510065920020703/nd4666510065920020703_20020703_burn_bndy.shp')
+fire2002_5 = read_sf('../Fires/NorthDakota/2002/nd4760710337920020504/nd4760710337920020504_20010503_20020514_burn_bndy.shp')
+
+fire2003_1 = read_sf('../Fires/NorthDakota/2003/nd4603410071220031021/nd4603410071220031021_20031119_burn_bndy.shp')
+fire2003_2 = read_sf('../Fires/NorthDakota/2003/nd4644909729720030324/nd4644909729720030324_20020502_20030427_burn_bndy.shp')
+fire2003_3 = read_sf('../Fires/NorthDakota/2003/nd4661310060320030409/nd4661310060320030409_20030503_burn_bndy.shp')
+
+fire2004_1 = read_sf('../Fires/NorthDakota/2004/nd4631010060420040405/nd4631010060420040405_20040403_20040505_burn_bndy.shp')
+fire2004_2 = read_sf('../Fires/NorthDakota/2004/nd4654110355620040901/nd4654110355620040901_20030821_20040908_burn_bndy.shp')
+fire2004_3 = read_sf('../Fires/NorthDakota/2004/nd4727210352120040815/nd4727210352120040815_20030821_20040908_burn_bndy.shp')
+
+fire2005 = read_sf('../Fires/NorthDakota/2005/nd4667910068220050501/nd4667910068220050501_20040505_20050508_burn_bndy.shp')
+
+fire2006_1 = read_sf('../Fires/NorthDakota/2006/nd4610910082020060718/nd4610910082020060718_20060714_20060730_burn_bndy.shp')
+fire2006_2 = read_sf('../Fires/NorthDakota/2006/nd4698810029920060408/nd4698810029920060408_20050422_20060425_burn_bndy.shp')
+fire2006_3 = read_sf('../Fires/NorthDakota/2006/nd4729209759820061120/nd4729209759820061120_20061105_20061121_burn_bndy.shp')
+fire2006_4 = read_sf('../Fires/NorthDakota/2006/nd4746810142120060404/nd4746810142120060404_20040426_20060416_burn_bndy.shp')
+
+fire2007 = read_sf('../Fires/NorthDakota/2007/nd4749710133320071103/nd4749710133320071103_20040505_20080516_burn_bndy.shp')
+
+fire2008_1 = read_sf('../Fires/NorthDakota/2008/nd4652510387220080723/nd4652510387220080723_20080717_20080802_burn_bndy.shp')
+fire2008_2 = read_sf('../Fires/NorthDakota/2008/nd4730009918820080407/nd4730009918820080407_20080407_20080414_burn_bndy.shp')
+
+fire2011 = read_sf('../Fires/NorthDakota/2011/nd4759110337920110914/nd4759110337920110914_20110928_burn_bndy.shp')
+
+fire2012_1 = read_sf('../Fires/NorthDakota/2012/nd4592010137420120824/nd4592010137420120824_20120908_burn_bndy.shp')
+fire2012_2 = read_sf('../Fires/NorthDakota/2012/nd4597810086820120921/nd4597810086820120921_20120924_burn_bndy.shp')
+fire2012_3 = read_sf('../Fires/NorthDakota/2012/nd4645110388720120824/nd4645110388720120824_20120922_burn_bndy.shp')
+fire2012_4 = read_sf('../Fires/NorthDakota/2012/nd4759010267420120919/nd4759010267420120919_20120922_burn_bndy.shp')
+
+fire2014 = read_sf('../Fires/NorthDakota/2014/nd4694610341820140509/nd4694610341820140509_20140523_burn_bndy.shp')
+
+fire2015_1 = read_sf('../Fires/NorthDakota/2015/nd4636310058820150330/nd4636310058820150330_20140501_20150520_burn_bndy.shp')
+fire2015_2 = read_sf('../Fires/NorthDakota/2015/nd4637110064120151011/nd4637110064120151011_20111016_20151112_burn_bndy.shp')
+
+fire2016 = read_sf('../Fires/NorthDakota/2016/nd4613009696020160413/nd4613009696020160413_20151013_20160422_burn_bndy.shp')
+
+fire2017_1 = read_sf('../Fires/NorthDakota/2017/nd4723609885420170501/nd4723609885420170501_20160429_20170518_burn_bndy.shp')
+fire2017_2 = read_sf('../Fires/NorthDakota/2017/nd4731210349420170708/nd4731210349420170708_20160723_20170726_burn_bndy.shp')
+
+fire2018_1 = read_sf('../Fires/NorthDakota/2018/nd4695810346420180427/nd4695810346420180427_20170523_20180526_burn_bndy.shp')
+fire2018_2 = read_sf('../Fires/NorthDakota/2018/nd4718209882520180502/nd4718209882520180502_20170705_20180606_burn_bndy.shp')
+
+fire2019_1 = read_sf('../Fires/NorthDakota/2019/nd4611509695820190505/nd4611509695820190505_20180507_20190526_burn_bndy.shp')
+fire2019_2 = read_sf('../Fires/NorthDakota/2019/nd4759110337920190516/nd4759110337920190516_20180526_20190529_burn_bndy.shp')
+
+fire_north_dakota = bind_rows(fire1985_1,fire1985_2,fire1988_1,fire1988_2,fire1988_3,fire1988_4,fire1988_5,
+                              fire1988_6,fire1993,fire1994,fire1998,fire1999_1,fire1999_2,fire2000_1,fire2000_2,
+                              fire2000_3,fire2002_1,fire2002_2,fire2002_3,fire2002_4,fire2002_5,fire2003_1,
+                              fire2003_2,fire2003_3,fire2004_1,fire2004_2,fire2004_3,fire2005,fire2006_1,
+                              fire2006_2,fire2006_3,fire2006_4,fire2007,fire2008_1,fire2008_2,fire2011,fire2012_1,
+                              fire2012_2,fire2012_3,fire2012_4,fire2014,fire2015_1,fire2015_2,fire2016,fire2017_1,
+                              fire2017_2,fire2018_1,fire2018_2,fire2019_1,fire2019_2)
+wells_north_dakota = readr::read_csv('../wells/States/NorthDakota/NorthDakota_All.csv')
+
+```
+
+
+```{r}
+crs_nad83 <- st_crs("+init=epsg:4269 +proj=longlat +ellps=GRS80 +datum=NAD83 +no_defs +towgs84=0,0,0") 
+
+# CSV file for wells in north_dakota, long-lat included only 
+wells_north_dakota = wells_north_dakota %>% 
+  rename('long' = `Surface Hole Longitude (WGS84)`,
+         'lat' = `Surface Hole Latitude (WGS84)`)
+
+# Shapefile for wells in north_dakota (geometry included)
+wells_north_dakota_sf = wells_north_dakota %>% 
+  drop_na(long,lat) %>% 
+  st_as_sf(coords = c('long','lat'),
+           crs = crs_nad83)
+
+# Shapefile for wildfires in north_dakota
+fire_north_dakota = fire_north_dakota %>% 
+  rename('long' = BurnBndLon,
+         'lat' = BurnBndLat) %>% 
+  mutate(long = as.numeric(long),
+         lat = as.numeric(lat)) %>% 
+  st_transform(crs = crs_nad83)
+```
+
+
+```{r}
+sf::sf_use_s2(FALSE)
+north_dakota_inters = st_intersection(fire_north_dakota, wells_north_dakota_sf) # 131 rows
+north_dakota_inters %>% 
+  filter_at(vars(ends_with("date")), any_vars(. < Ig_Date)) # 87 rows
+
+fire_north_dakota_32121 = fire_north_dakota %>% 
+  st_as_sf() %>% 
+  st_transform(32121)
+fire_north_dakota_buff = st_buffer(fire_north_dakota_32121, 1000)
+
+wells_32121 = wells_north_dakota_sf %>% 
+  st_transform(32121)
+north_dakota_inter_buff = st_intersection(fire_north_dakota_buff, wells_32121) # 422 rows
+north_dakota_inter_buff %>% 
+  filter_at(vars(ends_with("date")), any_vars(. < Ig_Date)) # 250 rows
+```
+
+
+```{r}
+# All wells existed before 1984
+wells_before_1984 = wells_32121 %>% 
+  filter_at(vars(ends_with("date")), any_vars(. < "1985-01-01")) # 17579 wells 
+
+fire_1984 = fire_north_dakota_buff %>% 
+  filter(Ig_Date < "1985-01-01" & Ig_Date > "1983-12-31")
+
+# All wells existed before 2020
+wells_before_2020 = wells_32121 %>% 
+  filter_at(vars(ends_with("date")), any_vars(. < "2021-01-01")) # 21372 wells
+
+fire_2020 = fire_north_dakota_buff %>%  # 64 fires
+  filter(Ig_Date < "2021-01-01" & Ig_Date > "2019-12-31")
+
+intersection_1984 = st_intersection(wells_before_1984, fire_1984) #0
+intersection_2020 = st_intersection(wells_before_2020, fire_2020) #3
+
+unique(intersection_2020$Well.Name)
+```
+
