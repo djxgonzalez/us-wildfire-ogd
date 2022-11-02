@@ -1,3 +1,7 @@
+
+
+
+
 #Read in nc file
 library(ncdf4)
 library(tidyverse)
@@ -99,7 +103,8 @@ ggplot(data = cali_xyz, aes(x = x, y = y, color = z)) +
   geom_point(size = 2, alpha = 0.5) +
   scale_color_viridis(direction = -1) + 
   theme_minimal()+
-  geom_point(data = wells,aes(x = longitude, y = latit), color = "red", alpha = .5) 
+  geom_point(data = wells,aes(x = longitude, y = latit), color = "red", 
+             alpha = .5) 
 
 # filter to active wells:
 active_wells <- wells %>% filter(well_status == "ACTIVE")
@@ -108,7 +113,8 @@ ggplot(data = cali_xyz, aes(x = x, y = y, color = z)) +
   geom_point(size = 2, alpha = 0.5) +
   scale_color_viridis(direction = -1) + 
   theme_minimal()+
-  geom_point(data = active_wells,aes(x = longitude, y = latit), color = "red", alpha = .5) +
+  geom_point(data = active_wells,aes(x = longitude, y = latit), color = "red", 
+             alpha = .5) +
   coord_cartesian()
 
   

@@ -1,9 +1,7 @@
 ##============================================================================##
-## TITLE: 
-##
-## AIMS: 
-##
-
+## TITLE:   Wildfire and oil and gas development in the western United States: 
+##          Assessing historical, current, and future risks
+## AUTHORS: Gonzalez et al. (in prep)
 
 ##============================================================================
 ## 0. Setup
@@ -16,8 +14,6 @@ source("code/0-setup/01-setup.R")
 
 # attaches functions for tidying raw data
 source("code/1-data_tidying/01-tidy_enverus_data.R")
-source("code/1-data_tidying/02-tidy_calgem_production_data.R")
-source("code/1-data_tidying/03-tidy_ipums_data.R")
 
 # imports raw data, calls tidying functions, exports interim data
 source("code/1-data_tidying/04-call_data_tidying.R")
@@ -30,9 +26,6 @@ source("code/2-exposure_assessment/01-fxn_assess_exposure_buffer.R")
 
 # imports raw data, calls tidying functions, exports interim data
 source("code/2-exposure_assessment/02-assess_exposure_cities.R")
-source("code/2-exposure_assessment/03-assess_exposure_neighborhoods.R")
-source("code/2-exposure_assessment/04-assess_exposure_neighborhoods_preholc.R")
-source("code/2-exposure_assessment/05-assess_exposure_neighborhoods_postholc.R")
 
 # makes analytic dataset
 source("code/2-exposure_assessment/06-make_analytic_dataset.R")

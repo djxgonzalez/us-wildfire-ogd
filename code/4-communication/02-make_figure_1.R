@@ -15,7 +15,8 @@ us_states_west <- st_read("data/raw/us_census/tl_2018_us_state.shp") %>%
   st_transform(crs_nad83)
 us_states_east <- st_read("data/raw/us_census/tl_2018_us_state.shp") %>%
   filter(STUSPS %!in% c("AK", "WA", "OR", "CA", "ID", "NV", "AZ", "MT", "WY", 
-                        "UT", "CO", "NM", "ND", "SD", "NE", "KS", "OK", "TX")) %>% 
+                        "UT", "CO", "NM", "ND", "SD", "NE", "KS", "OK", "TX",
+                        "MN", "IA", "MO", "AR", "LA")) %>% 
   filter(NAME %!in% c("American Samoa", "Guam", "Puerto Rico", 
                       "Commonwealth of the Northern Mariana Islands",
                       "United States Virgin Islands", "Hawaii")) %>%
@@ -30,6 +31,7 @@ rus_can <- st_read("data/raw/esri/Countries_WGS84.shp") %>%
   st_geometry() %>%
   st_transform(crs_nad83)
 
+##### note: we need to re-generate these datasets to add the new states (MN>LA)
 # fires data
 wildfires_1984 <- readRDS("data/interim/wildfires_union_contiguous_1984.rds") %>%
   st_geometry()

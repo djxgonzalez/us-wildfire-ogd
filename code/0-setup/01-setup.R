@@ -7,6 +7,8 @@
 # attaches generally needed packages
 library("sf")
 library("tidyverse")
+library("RColorBrewer")
+library("viridis")
 
 # defines global variables
 # makes a "not in" operator, the inverse of %in%
