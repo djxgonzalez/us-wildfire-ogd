@@ -16,25 +16,31 @@ library("tidync")
 
 ## 2017 (present) ------------------------------------------------------------
 
-# data input ..............................................................
-
-# spring
-# nc_spring_2017 <-
-#   nc_open("data/raw/kbdi_wildfire_risk/KBDI/2017/Mean_KBDI_Spring_2017.nc")
-# nc_summer_2017 <-
-#   nc_open("data/raw/kbdi_wildfire_risk/KBDI/2017/Mean_KBDI_Summer_2017.nc")
+# data input ...............................................................
+latlon_2017 <- nc_open("data/raw/kbdi_wildfire_risk/KBDI/2017/PRISMlatlon.nc")
+nc_spring_2017 <-
+  nc_open("data/raw/kbdi_wildfire_risk/KBDI/2017/Mean_KBDI_Spring_2017.nc")
+nc_summer_2017 <-
+  nc_open("data/raw/kbdi_wildfire_risk/KBDI/2017/Mean_KBDI_Summer_2017.nc")
 nc_fall_2017 <-
   nc_open("data/raw/kbdi_wildfire_risk/KBDI/2017/Mean_KBDI_Fall_2017.nc")
 
-print(nc_fall_2017)
-# get longitude and latitude
-lon <- ncvar_get(nc_fall_2017,"lon")
-nlon <- dim(lon)
-head(lon)
+# data prep ................................................................
 
-lat <- ncvar_get(nc_fall_2017,"lat")
-nlat <- dim(lat)
-head(lat)
+lon_2017         <- ncvar_get(latlon_2017, "lon") %>% as.vector
+lat_2017         <- ncvar_get(latlon_2017, "lat") %>% as.vector
+kbdi_2017_spring <- ncvar_get(nc_spring_2017, "KBDI") %>% as.vector
+ 
+# kbdi_2017_spring <- as.data.frame(cbind(lon  = lon,
+#                                         lat  = lat,
+#                                         kbdi = kbdi_2017_spring))
+kbdi_2017_spring <- as.data.frame(cbind(lon  = lon,
+                                        lat  = lat,
+                                        kbdi = kbdi_2017_spring))
+
+ggplot(data = kbdi_2017_spring) +
+  geom_point(aes(x = lon, y = lat, fill = kbdi))
+
 
 
 

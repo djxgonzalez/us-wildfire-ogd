@@ -20,15 +20,11 @@ wells <- read_csv("enverus_wells_CA.csv")
 wells$latit <- gsub("[()]", "", wells$latit)
 wells$latit <- as.numeric(wells$latit)
 
-
-
-
-
 # set path and filename
-ncpath <- "~/Desktop/joan-nc/"
+ncpath <- "data/raw/kbdi_wildfire_risk/KBDI/EndCen/"
 ncname2 <- "WRFlatlon"  
 ncfname2 <- paste(ncpath, ncname2, ".nc", sep="")
-dname2 <- "wfirelatlong" 
+dname2 <- "wfirelatlong"
 
 # open a netCDF file
 ncin2 <- nc_open(ncfname2)
@@ -47,7 +43,7 @@ head(lat)
 ################################################################################
 
 # set path and filename
-ncpath <- "~/Desktop/joan-nc/"
+#ncpath <- "~/Desktop/joan-nc/"
 ncname <- "Mean_KBDI_Summer_2086-2094_R8Y8"  
 ncfname <- paste(ncpath, ncname, ".nc", sep="")
 dname <- "KBDI" 
