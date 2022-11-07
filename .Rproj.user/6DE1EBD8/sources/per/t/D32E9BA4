@@ -1,0 +1,26 @@
+{
+    "id": "D32E9BA4",
+    "path": "~/Documents/Professional/research/projects active/us wildfire ogd/us-wildfire-ogd/code/1-data_tidying/03-call_data_tidying_kbdi.R",
+    "project_path": "code/1-data_tidying/03-call_data_tidying_kbdi.R",
+    "type": "r_source",
+    "hash": "4065740899",
+    "contents": "",
+    "dirty": false,
+    "created": 1667698448214.0,
+    "source_on_save": false,
+    "relative_order": 2,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source",
+        "cursorPosition": "20,0",
+        "scrollLine": "6"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1667698338,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1667698338,
+    "read_only": false,
+    "read_only_alternatives": []
+}
