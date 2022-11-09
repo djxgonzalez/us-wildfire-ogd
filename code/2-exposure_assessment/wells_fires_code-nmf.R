@@ -16,9 +16,9 @@ library(viridis)
 
 
 
-wells <- read_csv("enverus_wells_CA.csv")
-wells$latit <- gsub("[()]", "", wells$latit)
-wells$latit <- as.numeric(wells$latit)
+wells <- readRDS("data/interim/enverus_wells.rds")
+# wells$latit <- gsub("[()]", "", wells$latit)
+# wells$latit <- as.numeric(wells$latit)
 
 # set path and filename
 ncpath <- "data/raw/kbdi_wildfire_risk/KBDI/EndCen/"
@@ -82,15 +82,15 @@ wf_risk
 
 
 
-  ggplot(data = xyz, aes(x = x, y = y, color = z)) +
+ggplot(data = xyz, aes(x = x, y = y, color = z)) +
   geom_point(size = 1, alpha = 0.5) +
   scale_color_viridis(direction = -1) + 
-  theme_minimal()+
-  geom_point(data = wells,aes(x = longitude, y = latit), color = "red") 
-  
-  
+  theme_minimal() +
+  geom_point(data = wells, color = "red") 
+
+
 # it overlays
-  # zoom on cali
+# zoom on cali
 
 cali_xyz <- xyz %>%
   filter(x > -127 & x < -112 & y > 30 & y < 44)
@@ -103,14 +103,16 @@ ggplot(data = cali_xyz, aes(x = x, y = y, color = z)) +
              alpha = .5) 
 
 # filter to active wells:
-active_wells <- wells %>% filter(well_status == "ACTIVE")
+active_wells <- wells %>%
+  filter(state == "CA") %>% 
+  filter(well_status == "ACTIVE")
 
-ggplot(data = cali_xyz, aes(x = x, y = y, color = z)) +
-  geom_point(size = 2, alpha = 0.5) +
+ggplot() +
+  geom_point(data = cali_xyz, aes(x = x, y = y, color = z),
+             size = 2, alpha = 0.5) +
   scale_color_viridis(direction = -1) + 
   theme_minimal()+
-  geom_point(data = active_wells,aes(x = longitude, y = latit), color = "red", 
-             alpha = .5) +
-  coord_cartesian()
+  geom_sf(data = active_wells, color = "red", alpha = .5) #+
+  #coord_cartesian()
 
-  
+
