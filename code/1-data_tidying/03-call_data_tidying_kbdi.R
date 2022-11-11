@@ -7,13 +7,12 @@
 ## setup ---------------------------------------------------------------------
 
 # attaches packages we need for this script
-library("RColorBrewer")
 library("ncdf4")
 library("graphics")
 library("usethis")
-library("sp")
 library("raster")
 library("viridis")
+library("terra")
 library("tidync")
 
 
@@ -37,23 +36,24 @@ nc_fall_2017 <-
 # latitude and longitude data common to all 2017 layers
 lon_2017     <- ncvar_get(latlon_2017, "lon")
 lat_2017     <- ncvar_get(latlon_2017, "lat")
-lon_lat_2017  <- as.matrix(expand_grid(lon_2017, lat_2017))
+lon_lat_2017 <- as.matrix(expand.grid(lon_2017, lat_2017))
+rm(latlon_2017, lon_2017, lat_2017)
 
 # KBDI data for spring 2017
-kbdi_2017_spring <- ncvar_get(nc_spring_2017, "KBDI")
-fill_value   <- ncatt_get(nc_spring_2017, "KBDI", "_FillValue")
+kbdi_2017_spring      <- ncvar_get(nc_spring_2017, "KBDI")
+fill_value            <- ncatt_get(nc_spring_2017, "KBDI", "_FillValue")
 kbdi_2017_spring[kbdi_2017_spring == fill_value$value] <- NA
 kbdi_2017_spring_long <- as.vector(kbdi_2017_spring)
 
 # KBDI data for summer 2017
-kbdi_2017_summer <- ncvar_get(nc_summer_2017, "KBDI")
-fill_value   <- ncatt_get(nc_summer_2017, "KBDI", "_FillValue")
+kbdi_2017_summer      <- ncvar_get(nc_summer_2017, "KBDI")
+fill_value            <- ncatt_get(nc_summer_2017, "KBDI", "_FillValue")
 kbdi_2017_summer[kbdi_2017_summer == fill_value$value] <- NA
 kbdi_2017_summer_long <- as.vector(kbdi_2017_summer)
 
 # KBDI data for fall 2017
-kbdi_2017_fall <- ncvar_get(nc_fall_2017, "KBDI")
-fill_value   <- ncatt_get(nc_fall_2017, "KBDI", "_FillValue")
+kbdi_2017_fall      <- ncvar_get(nc_fall_2017, "KBDI")
+fill_value          <- ncatt_get(nc_fall_2017, "KBDI", "_FillValue")
 kbdi_2017_fall[kbdi_2017_fall == fill_value$value] <- NA
 kbdi_2017_fall_long <- as.vector(kbdi_2017_fall)
 
@@ -64,21 +64,39 @@ colnames(kbdi_2017) <- c("lon", "lat", "kbdi_spring", "kbdi_summer",
                          "kbdi_fall")
 
 # finds max KBDI value for across the three seasons
-kbdi_2017 <- kbdi_2017 %>% 
+kbdi_max_2017 <- kbdi_2017 %>% 
   as_tibble() %>%
-  mutate(kbdi_max_2017 = pmax(kbdi_spring, kbdi_summer, kbdi_fall)) %>% 
-  filter(kbdi_max_2017 > 0) %>%
-  #filter(kbdi_max_2017 >= 600) %>%  # KBDI ≥ 600 indicates high wildfire risk
+  dplyr::mutate(kbdi_max_2017 = pmax(kbdi_spring, kbdi_summer, kbdi_fall)) %>% 
+  dplyr::filter(kbdi_max_2017 > 0) %>%
   dplyr::select(lon, lat, kbdi_max_2017) %>%
   dplyr::rename(x = lon, y = lat) %>% 
   as.data.frame()
 
-# converts to a raster for additional analyses
-kbdi_2017_raster <-
-  rasterFromXYZ(kbdi_2017, crs = CRS("+init=epsg:4269"))  # NAD83 CRS
+# finds max KBDI value for across the three seasons
+kbdi_high_2017 <- kbdi_2017 %>% 
+  as_tibble() %>%
+  dplyr::mutate(kbdi_max_2017 =  pmax(kbdi_spring, kbdi_summer, kbdi_fall)) %>% 
+  dplyr::filter(kbdi_max_2017 >= 0) %>%
+  dplyr::select(lon, lat, kbdi_max_2017) %>%
+  dplyr::rename(x = lon, y = lat) %>% 
+  as.data.frame()
+
+# removes files we no longer need
+rm(fill_value, kbdi_2017_fall, kbdi_2017_spring, kbdi_2017_summer, nc_fall_2017,
+   kbdi_2017_spring_long, kbdi_2017_summer_long,
+   nc_spring_2017, nc_summer_2017, kbdi_2017_fall_long, lon_lat_2017)
+
+# converts to a raster for additional analyses with CRS NAD83
+raster_kbdi_max_2017 <- 
+  rasterFromXYZ(kbdi_max_2017,  crs = CRS("+init=epsg:4269"))
+raster_kbdi_high_2017 <- 
+  rasterFromXYZ(kbdi_high_2017, crs = CRS("+init=epsg:4269")) %>% 
+  
 
 # visualizes wildfire risk
-plot(kbdi_2017_raster, col = viridis(n = 20, option = "inferno"))
+plot(raster_kbdi_max_2017, col = viridis(n = 20, option = "inferno"))
+# visualizes wildfire risk
+plot(raster_kbdi_max_2017, col = "red")
 
 # exports processed raster data ............................................
 saveRDS(kbdi_2017_raster, "data/processed/raster_max_kbdi_2017.rds")
@@ -106,7 +124,7 @@ lat_2050     <- ncvar_get(latlon_2050, "lat") %>% as.vector()
 lon_lat_2050 <- bind_cols(lon_2050, lat_2050)
 colnames(lon_lat_2050) <- c("lon", "lat")
 lon_lat_2050 <- as.matrix(lon_lat_2050)
-#lon_lat_2050 <- as.matrix(expand_grid(lon_2050, lat_2050))
+rm(latlon_2050, lon_2050, lat_2050)
 
 # KBDI data for spring 2050
 kbdi_2050_spring      <- ncvar_get(nc_spring_2050, "KBDI")
@@ -135,6 +153,8 @@ colnames(kbdi_2050) <- c("lon", "lat", "kbdi_spring", "kbdi_summer",
 # finds max KBDI value for across the three seasons
 kbdi_2050 <- kbdi_2050 %>% 
   as_tibble() %>%
+  filter(lon >= -124.79 & lon <= -66.96) %>%  # focuses on lower 48 states
+  filter(lat >= 24.50 & lat <= 49.42) %>% 
   mutate(kbdi_max_2050 = pmax(kbdi_spring, kbdi_summer, kbdi_fall)) %>% 
   filter(kbdi_max_2050 > 0) %>%
   dplyr::select(lon, lat, kbdi_max_2050) %>%
@@ -143,15 +163,24 @@ kbdi_2050 <- kbdi_2050 %>%
 
 # removes files we no longer need
 rm(fill_value, kbdi_2050_fall, kbdi_2050_spring, kbdi_2050_summer, nc_fall_2050,
-   kbdi_2050_spring_long, kbdi_2050_summer_long, nc_fall_2050_long,
-   nc_spring_2050, nc_summer_2050)
+   kbdi_2050_spring_long, kbdi_2050_summer_long,
+   nc_spring_2050, nc_summer_2050, kbdi_2050_fall_long, lon_lat_2050)
 
 # converts to a raster for additional analyses
+raster_template = rast(ext(kbdi_2017_raster), 
+                       resolution = 1000,
+                       crs = st_crs(cycle_hire_osm_projected)$wkt)
 kbdi_2050_raster <-
-  rasterFromXYZ(kbdi_2050, crs = CRS("+init=epsg:4269"))  # NAD83 CRS
+  #rasterize(kbdi_2050)
+  rasterFromXYZ(kbdi_2050)#, crs = CRS("+init=epsg:4269"))  # NAD83 CRS
 
 # visualizes wildfire risk
-plot(kbdi_2050_raster, col = viridis(n = 20, option = "inferno"))
+ggplot() +
+  geom_point(data = kbdi_2050, aes(x = x, y = y, color = kbdi_max_2050),
+             size = 2, alpha = 0.5) +
+  scale_color_viridis(option = "inferno") + 
+  theme_minimal()
+#plot(kbdi_2050_raster, col = viridis(n = 20, option = "inferno"))
 
 # exports processed raster data ............................................
 saveRDS(kbdi_2050_raster, "data/processed/raster_max_kbdi_2050.rds")
