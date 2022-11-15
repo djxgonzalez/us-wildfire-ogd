@@ -64,21 +64,12 @@ colnames(kbdi_2017) <- c("lon", "lat", "kbdi_spring", "kbdi_summer",
                          "kbdi_fall")
 
 # finds max KBDI value for across the three seasons
-kbdi_max_2017 <- kbdi_2017 %>% 
+kbdi_max_2017 <- kbdi_2017 %>%
   as_tibble() %>%
-  dplyr::mutate(kbdi_max_2017 = pmax(kbdi_spring, kbdi_summer, kbdi_fall)) %>% 
+  dplyr::mutate(kbdi_max_2017 = pmax(kbdi_spring, kbdi_summer, kbdi_fall)) %>%
   dplyr::filter(kbdi_max_2017 > 0) %>%
   dplyr::select(lon, lat, kbdi_max_2017) %>%
-  dplyr::rename(x = lon, y = lat) %>% 
-  as.data.frame()
-
-# finds max KBDI value for across the three seasons
-kbdi_high_2017 <- kbdi_2017 %>% 
-  as_tibble() %>%
-  dplyr::mutate(kbdi_max_2017 =  pmax(kbdi_spring, kbdi_summer, kbdi_fall)) %>% 
-  dplyr::filter(kbdi_max_2017 >= 0) %>%
-  dplyr::select(lon, lat, kbdi_max_2017) %>%
-  dplyr::rename(x = lon, y = lat) %>% 
+  dplyr::rename(x = lon, y = lat) %>%
   as.data.frame()
 
 # removes files we no longer need
@@ -86,20 +77,25 @@ rm(fill_value, kbdi_2017_fall, kbdi_2017_spring, kbdi_2017_summer, nc_fall_2017,
    kbdi_2017_spring_long, kbdi_2017_summer_long,
    nc_spring_2017, nc_summer_2017, kbdi_2017_fall_long, lon_lat_2017)
 
-# converts to a raster for additional analyses with CRS NAD83
+# converts raster with maximum 2017 KBDI to a raster for export
 raster_kbdi_max_2017 <- 
   rasterFromXYZ(kbdi_max_2017,  crs = CRS("+init=epsg:4269"))
-raster_kbdi_high_2017 <- 
-  rasterFromXYZ(kbdi_high_2017, crs = CRS("+init=epsg:4269")) %>% 
+
+# restricts raster to pixels with high KBDI, i.e., ≥ 600; makes this a binary
+# indicator to set up for the next step, which is to intersect with wells
+raster_kbdi_high_2017 <- raster_kbdi_max_2017
+raster_kbdi_high_2017[raster_kbdi_high_2017$kbdi_max_2017 <  600] <- NA
+raster_kbdi_high_2017[raster_kbdi_high_2017$kbdi_max_2017 >= 600] <- 1
   
 
 # visualizes wildfire risk
 plot(raster_kbdi_max_2017, col = viridis(n = 20, option = "inferno"))
 # visualizes wildfire risk
-plot(raster_kbdi_max_2017, col = "red")
+plot(raster_kbdi_high_2017, col = "red")
 
 # exports processed raster data ............................................
-saveRDS(kbdi_2017_raster, "data/processed/raster_max_kbdi_2017.rds")
+saveRDS(raster_kbdi_max_2017,  "data/processed/raster_max_kbdi_2017.rds")
+saveRDS(raster_kbdi_high_2017, "data/processed/raster_high_kbdi_2017.rds")
 
 
 ## 2050 (mid-century) --------------------------------------------------------
@@ -151,28 +147,44 @@ colnames(kbdi_2050) <- c("lon", "lat", "kbdi_spring", "kbdi_summer",
                          "kbdi_fall")
 
 # finds max KBDI value for across the three seasons
-kbdi_2050 <- kbdi_2050 %>% 
+kbdi_max_2050 <- kbdi_2050 %>%
   as_tibble() %>%
   filter(lon >= -124.79 & lon <= -66.96) %>%  # focuses on lower 48 states
-  filter(lat >= 24.50 & lat <= 49.42) %>% 
-  mutate(kbdi_max_2050 = pmax(kbdi_spring, kbdi_summer, kbdi_fall)) %>% 
-  filter(kbdi_max_2050 > 0) %>%
+  filter(lat >= 24.50 & lat <= 49.42) %>%
+  dplyr::mutate(kbdi_max_2050 = pmax(kbdi_spring, kbdi_summer, kbdi_fall)) %>%
+  dplyr::filter(kbdi_max_2050 > 0) %>%
   dplyr::select(lon, lat, kbdi_max_2050) %>%
-  dplyr::rename(x = lon, y = lat) %>% 
+  dplyr::rename(x = lon, y = lat) %>%
   as.data.frame()
 
-# removes files we no longer need
-rm(fill_value, kbdi_2050_fall, kbdi_2050_spring, kbdi_2050_summer, nc_fall_2050,
-   kbdi_2050_spring_long, kbdi_2050_summer_long,
-   nc_spring_2050, nc_summer_2050, kbdi_2050_fall_long, lon_lat_2050)
+# converts raster with maximum 2050 KBDI to a raster for export
+raster_kbdi_max_2050 <- 
+  rasterFromXYZ(kbdi_max_2050,  crs = CRS("+init=epsg:4269"))
 
-# converts to a raster for additional analyses
-raster_template = rast(ext(kbdi_2017_raster), 
-                       resolution = 1000,
-                       crs = st_crs(cycle_hire_osm_projected)$wkt)
-kbdi_2050_raster <-
-  #rasterize(kbdi_2050)
-  rasterFromXYZ(kbdi_2050)#, crs = CRS("+init=epsg:4269"))  # NAD83 CRS
+
+# # finds max KBDI value for across the three seasons
+# kbdi_2050 <- kbdi_2050 %>% 
+#   as_tibble() %>%
+#   filter(lon >= -124.79 & lon <= -66.96) %>%  # focuses on lower 48 states
+#   filter(lat >= 24.50 & lat <= 49.42) %>% 
+#   mutate(kbdi_max_2050 = pmax(kbdi_spring, kbdi_summer, kbdi_fall)) %>% 
+#   filter(kbdi_max_2050 > 0) %>%
+#   dplyr::select(lon, lat, kbdi_max_2050) %>%
+#   dplyr::rename(x = lon, y = lat) %>% 
+#   as.data.frame()
+# 
+# # removes files we no longer need
+# rm(fill_value, kbdi_2050_fall, kbdi_2050_spring, kbdi_2050_summer, nc_fall_2050,
+#    kbdi_2050_spring_long, kbdi_2050_summer_long,
+#    nc_spring_2050, nc_summer_2050, kbdi_2050_fall_long, lon_lat_2050)
+# 
+# # converts to a raster for additional analyses
+# raster_template = rast(ext(kbdi_2017_raster), 
+#                        resolution = 1000,
+#                        crs = st_crs(cycle_hire_osm_projected)$wkt)
+# kbdi_2050_raster <-
+#   #rasterize(kbdi_2050)
+#   rasterFromXYZ(kbdi_2050)#, crs = CRS("+init=epsg:4269"))  # NAD83 CRS
 
 # visualizes wildfire risk
 ggplot() +

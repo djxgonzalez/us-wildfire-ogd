@@ -9,7 +9,7 @@ library("raster")
 library("terra")
 
 # data input
-raster_kbdi_high_2017 <- readRDS("data/processed/raster_kbdi_high_2017.rds")
+raster_kbdi_high_2017 <- readRDS("data/processed/raster_max_kbdi_2017.rds")
 us_states                <- st_read("data/raw/us_census/tl_2018_us_state.shp")
 wells_interim            <- readRDS("data/interim/enverus_wells.rds")
 

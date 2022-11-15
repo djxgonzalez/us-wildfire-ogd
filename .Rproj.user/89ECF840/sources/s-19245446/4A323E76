@@ -3,7 +3,7 @@
     "path": "R:/DJXG/research/projects active/us wildfire ogd/us-wildfire-ogd/code/2-exposure_assessment/07-call_exposure_assessment_wildfire_risk_2017.R",
     "project_path": "code/2-exposure_assessment/07-call_exposure_assessment_wildfire_risk_2017.R",
     "type": "r_source",
-    "hash": "2637736687",
+    "hash": "0",
     "contents": "",
     "dirty": false,
     "created": 1668190559083.0,
@@ -16,11 +16,11 @@
         "scrollLine": "0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1668191563,
+    "lastKnownWriteTime": 1668549163,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1668191563722,
+    "last_content_update": 1668549163843,
     "read_only": false,
     "read_only_alternatives": []
 }
