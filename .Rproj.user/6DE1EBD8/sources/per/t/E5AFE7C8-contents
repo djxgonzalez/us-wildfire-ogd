@@ -1,0 +1,167 @@
+---
+title: "Summary Statistics - Wildfires and wells data"
+output:
+  html_notebook:
+    theme: flatly
+    highlight: haddock 
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+# loads necessary packages and defines global variables
+source("../../code/0-setup/01-setup.R")
+```
+
+```{r data_input, include=FALSE}
+enverus_wells <- readRDS("../../data/interim/enverus_wells.rds")
+wildfires_ca <- readRDS("../../data/interim/wildfires_all1.rds") %>%
+  ##### move all of this to a data prep script
+  bind_rows(readRDS("../../data/interim/wildfires_all2.rds")) %>% 
+  bind_rows(readRDS("../../data/interim/wildfires_all3.rds")) %>% 
+  rename(wildfire_id   = Event_ID,
+         wildfire_name = Incid_Name,
+         state         = State_Name,
+         year          = Ig_Year) %>% 
+  mutate(wildfire_id   = as.factor(wildfire_id),
+         wildfire_name = as.factor(wildfire_name),
+         state         = as.factor(state)) %>% 
+  filter(state == "CA") %>% 
+  mutate(year = ifelse(year > 2020, NA, year)) %>% 
+  drop_na(year)
+```
+
+
+# Wildfires data
+
+### Plots
+
+#### Plot. Wildfires by year
+
+```{r echo=FALSE}
+wildfires_ca %>% 
+  distinct(wildfire_id, .keep_all = TRUE) %>%
+  ggplot() +
+  geom_bar(aes(year)) +
+  xlab("Year") + 
+  ylab("Wildfires (n)") +
+  theme_classic()
+```
+
+
+# Wells data
+
+### Wells with dates
+
+```{r}
+# average duration of operation:
+d <- enverus_wells %>% 
+  drop_na(first_prod_date) %>% 
+  drop_na(last_prod_date) %>% 
+  mutate(prod_duration = last_prod_date - first_prod_date) %>% 
+  select(prod_duration)
+d <- d %>% mutate(prod_duration = as.numeric(prod_duration)) %>%  
+  filter(prod_duration > 0)
+summary(as.numeric(d$prod_duration)/365.25)
+sd(as.numeric(d$prod_duration)/365.25)
+```
+
+Note: by 0 km buffer, we mean wells inside the wildfire burn area.
+
+## All included states
+
+### Table. All wildfires by number of wells within wildfire boundaries
+
+```{r echo=FALSE}
+wildfires_wells_all_dates_0km %>% 
+  arrange(desc(wells_all_dates_0km))
+```
+
+### Figure. Wildfires by year
+
+```{r echo=FALSE}
+wildfires_wells_all_dates_0km %>% 
+  filter(ignition_year %in% c(1984:2020)) %>% 
+  group_by(ignition_year) %>% 
+  summarize(n = n()) %>% 
+  ggplot() +
+  geom_bar(aes(ignition_year, n), stat = "identity") +
+  labs(x = "Year", y = "Wildfires, n") +
+  theme_classic()
+```
+
+### Figure. Wildfires that burned ≥ 1 well by year
+
+```{r echo=FALSE}
+wildfires_wells_all_dates_0km %>% 
+  filter(ignition_year %in% c(1984:2020)) %>% 
+  filter(wells_all_dates_0km > 0) %>% 
+  group_by(ignition_year) %>% 
+  summarize(n = n()) %>% 
+  ggplot() +
+  geom_bar(aes(ignition_year, n), stat = "identity") +
+  labs(x = "Year", y = "Wildfires, n") +
+  theme_classic()
+```
+
+### Figure. Wells in wildfire burn areas by year
+
+```{r echo=FALSE}
+wildfires_wells_all_dates_0km %>% 
+  filter(ignition_year %in% c(1984:2020)) %>% 
+  group_by(ignition_year) %>% 
+  summarize(n = sum(wells_all_dates_0km)) %>% 
+  ggplot() +
+  geom_bar(aes(ignition_year, n), stat = "identity") +
+  labs(x = "Year", y = "Wells, n") +
+  theme_classic()
+```
+
+## Stratified by state
+
+### Figure. Wildfires by year and by state
+
+```{r echo=FALSE}
+wildfires_wells_all_dates_0km %>% 
+  filter(ignition_year %in% c(1984:2020)) %>% 
+  group_by(ignition_year, state) %>% 
+  summarize(n = n()) %>% 
+  ggplot() +
+  geom_bar(aes(ignition_year, n), stat = "identity") +
+  labs(x = "Year", y = "Wildfires, n") +
+  facet_wrap(~ state) +
+  theme_classic()
+```
+
+### Figure. Wildfires that burned ≥ 1 well by year and by state
+
+```{r echo=FALSE}
+wildfires_wells_all_dates_0km %>% 
+  filter(ignition_year %in% c(1984:2020)) %>% 
+  filter(wells_all_dates_0km > 0) %>% 
+  group_by(ignition_year, state) %>% 
+  summarize(n     = n()) %>% 
+  ggplot() +
+  geom_bar(aes(ignition_year, n), stat = "identity") +
+  labs(x = "Year", y = "Wildfires, n") +
+  facet_wrap(~ state) +
+  theme_classic()
+```
+
+Worth noting: It looks like \~25-50% of California wildfires are in areas with wells each year and nearly all Oklahoma wildfires are in areas with wells.
+
+### Figure. Wells in wildfire burn areas by year and by state
+
+```{r echo=FALSE}
+wildfires_wells_all_dates_0km %>% 
+  filter(ignition_year %in% c(1984:2020)) %>% 
+  group_by(ignition_year, state) %>% 
+  summarize(n     = sum(wells_all_dates_0km)) %>% 
+  ggplot() +
+  geom_bar(aes(ignition_year, n), stat = "identity") +
+  labs(x = "Year", y = "Wells, n") +
+  facet_wrap(. ~ state) +
+  theme_classic()
+```
