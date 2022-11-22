@@ -1,0 +1,119 @@
+##============================================================================##
+## 1.03 - 
+
+## setup ---------------------------------------------------------------------
+
+# attaches packages we need for this script
+library("ncdf4")
+library("raster")
+library("stars")
+
+## 2050 (mid-century) --------------------------------------------------------
+## note: these estimates are for 2046-2054, but I use 2090 as short-hand
+
+# data input ...............................................................
+latlon_2050 <- nc_open("data/raw/kbdi_wildfire_risk/KBDI/MidCen/WRFlatlon.nc")
+nc_spring_2050 <-
+  nc_open("data/raw/kbdi_wildfire_risk/KBDI/MidCen/Mean_KBDI_Spring_2046-2054_R8Y4.nc")
+nc_summer_2050 <-
+  nc_open("data/raw/kbdi_wildfire_risk/KBDI/MidCen/Mean_KBDI_Summer_2046-2054_R8Y4.nc")
+nc_fall_2050 <-
+  nc_open("data/raw/kbdi_wildfire_risk/KBDI/MidCen/Mean_KBDI_Fall_2046-2054_R8Y4.nc")
+
+# data prep ................................................................
+
+# gets necessary variables as numeric vectors
+
+# latitude and longitude data common to all 2050 layers
+lon_2050     <- ncvar_get(latlon_2050, "lon") %>% as.vector()
+lat_2050     <- ncvar_get(latlon_2050, "lat") %>% as.vector()
+lon_lat_2050 <- bind_cols(lon_2050, lat_2050)
+colnames(lon_lat_2050) <- c("lon", "lat")
+lon_lat_2050 <- as.matrix(lon_lat_2050)
+rm(latlon_2050)
+
+# KBDI data for spring 2050
+kbdi_2050_spring      <- ncvar_get(nc_spring_2050, "KBDI")
+fill_value            <- ncatt_get(nc_spring_2050, "KBDI", "_FillValue")
+kbdi_2050_spring[kbdi_2050_spring == fill_value$value] <- NA
+kbdi_2050_spring_long <- as.vector(kbdi_2050_spring)
+
+# KBDI data for summer 2050
+kbdi_2050_summer      <- ncvar_get(nc_summer_2050, "KBDI")
+fill_value            <- ncatt_get(nc_summer_2050, "KBDI", "_FillValue")
+kbdi_2050_summer[kbdi_2050_summer == fill_value$value] <- NA
+kbdi_2050_summer_long <- as.vector(kbdi_2050_summer)
+
+# KBDI data for fall 2050
+kbdi_2050_fall      <- ncvar_get(nc_fall_2050, "KBDI")
+fill_value          <- ncatt_get(nc_fall_2050, "KBDI", "_FillValue")
+kbdi_2050_fall[kbdi_2050_fall == fill_value$value] <- NA
+kbdi_2050_fall_long <- as.vector(kbdi_2050_fall)
+
+# assembles all KBDI layers for 2050
+kbdi_2050 <- data.frame(cbind(lon_lat_2050, kbdi_2050_spring_long,
+                              kbdi_2050_summer_long, kbdi_2050_fall_long))
+colnames(kbdi_2050) <- c("lon", "lat", "kbdi_spring", "kbdi_summer",
+                         "kbdi_fall")
+
+# finds max KBDI value for across the three seasons
+kbdi_max_2050 <- kbdi_2050 %>%
+  as_tibble() %>%
+  filter(lon >= -124.79 & lon <= -85) %>%  # or <= -66.96 for entire lower U.S.
+  filter(lat >= 24.50 & lat <= 49.42) %>%
+  dplyr::mutate(kbdi_max_2050 = pmax(kbdi_spring, kbdi_summer, kbdi_fall)) %>%
+  dplyr::select(lon, lat, kbdi_max_2050) %>%
+  dplyr::rename(x = lon, y = lat) %>%
+  as.data.frame()
+
+# removes files we no longer need
+rm(fill_value, kbdi_2050_fall, kbdi_2050_spring, kbdi_2050_summer, nc_fall_2050,
+   kbdi_2050_spring_long, kbdi_2050_summer_long,
+   nc_spring_2050, nc_summer_2050, kbdi_2050_fall_long, lon_lat_2050)
+
+# in stepwise fashion, converts KBDI data into sf object then a raster
+d <- kbdi_max_2050 %>% 
+  as_tibble() %>%
+  st_as_sf(coords = c("x", "y"), crs = CRS("+init=epsg:4269")) #%>% 
+  st_rasterize(template,
+               dx = 12000, dy = 12000)
+
+
+
+  
+  
+  
+  
+##################
+
+
+
+# # converts raster with maximum 2050 KBDI to a raster for export
+# kbdi_max_2050_extent <- extent(kbdi_max_2050[, (1:2)])
+# kbdi_max_2050_extent_raster <-
+#   raster(kbdi_max_2050_extent, 
+#          ncol = 362, nrow = 227,
+#          crs = "+init=epsg:4269 +proj=longlat +ellps=GRS80
+#                         +datum=NAD83 +no_defs +towgs84=0,0,0")
+#         #crs = CRS("+init=epsg:3310 +"))
+#         #ncol = 362, nrow = 227, crs = CRS("+init=epsg:4326"))
+#         #ncol = 362, nrow = 227, crs = CRS("+init=epsg:4269"))
+# raster_kbdi_max_2050 <- 
+#   rasterize(kbdi_max_2050[, 1:2], kbdi_max_2050_extent_raster,
+#             kbdi_max_2050[, 3], fun = max)
+
+# restricts raster to pixels with high KBDI, i.e., ≥ 600; makes this a binary
+# indicator to set up for the next step, which is to intersect with wells
+raster_kbdi_high_2050 <- raster_kbdi_max_2050
+raster_kbdi_high_2050[raster_kbdi_high_2050$layer <  600] <- NA
+raster_kbdi_high_2050[raster_kbdi_high_2050$layer >= 600] <- 1
+
+# visualizes wildfire risk
+plot(raster_kbdi_max_2050, col = viridis(n = 20, option = "inferno"))
+# visualizes wildfire risk
+plot(raster_kbdi_high_2050, col = "red")
+
+# exports processed raster data ............................................
+saveRDS(raster_kbdi_max_2050,  "data/processed/raster_max_kbdi_2050.rds")
+saveRDS(raster_kbdi_high_2050, "data/processed/raster_high_kbdi_2050.rds")
+

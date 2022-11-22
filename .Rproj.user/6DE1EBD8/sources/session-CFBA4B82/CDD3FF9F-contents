@@ -8,12 +8,10 @@
 
 # attaches packages we need for this script
 library("ncdf4")
-library("graphics")
-library("usethis")
+#library("graphics")
+#library("usethis")
 library("raster")
-library("viridis")
-library("terra")
-library("tidync")
+#library("tidync")
 
 
 ## 2017 (present) ------------------------------------------------------------
@@ -158,13 +156,18 @@ kbdi_max_2050 <- kbdi_2050 %>%
 # removes files we no longer need
 rm(fill_value, kbdi_2050_fall, kbdi_2050_spring, kbdi_2050_summer, nc_fall_2050,
    kbdi_2050_spring_long, kbdi_2050_summer_long,
-   nc_spring_2050, nc_summer_2050, kbdi_2050_fall_long, lon_lat_2050r)
+   nc_spring_2050, nc_summer_2050, kbdi_2050_fall_long, lon_lat_2050)
 
 # converts raster with maximum 2050 KBDI to a raster for export
 kbdi_max_2050_extent <- extent(kbdi_max_2050[, (1:2)])
 kbdi_max_2050_extent_raster <-
-  raster(kbdi_max_2050_extent,
-         ncol = 362, nrow = 227, crs = CRS("+init=epsg:4269"))
+  raster(kbdi_max_2050_extent, 
+         ncol = 362, nrow = 227,
+         crs = "+init=epsg:4269 +proj=longlat +ellps=GRS80
+                        +datum=NAD83 +no_defs +towgs84=0,0,0")
+        #crs = CRS("+init=epsg:3310 +"))
+        #ncol = 362, nrow = 227, crs = CRS("+init=epsg:4326"))
+        #ncol = 362, nrow = 227, crs = CRS("+init=epsg:4269"))
 raster_kbdi_max_2050 <- 
   rasterize(kbdi_max_2050[, 1:2], kbdi_max_2050_extent_raster,
             kbdi_max_2050[, 3], fun = max)
@@ -174,7 +177,6 @@ raster_kbdi_max_2050 <-
 raster_kbdi_high_2050 <- raster_kbdi_max_2050
 raster_kbdi_high_2050[raster_kbdi_high_2050$layer <  600] <- NA
 raster_kbdi_high_2050[raster_kbdi_high_2050$layer >= 600] <- 1
-
 
 # visualizes wildfire risk
 plot(raster_kbdi_max_2050, col = viridis(n = 20, option = "inferno"))
@@ -247,7 +249,7 @@ kbdi_max_2090 <- kbdi_2090 %>%
 # removes files we no longer need
 rm(fill_value, kbdi_2090_fall, kbdi_2090_spring, kbdi_2090_summer, nc_fall_2090,
    kbdi_2090_spring_long, kbdi_2090_summer_long,
-   nc_spring_2090, nc_summer_2090, kbdi_2090_fall_long, lon_lat_2090r)
+   nc_spring_2090, nc_summer_2090, kbdi_2090_fall_long, lon_lat_2090)
 
 # converts raster with maximum 2090 KBDI to a raster for export
 kbdi_max_2090_extent <- extent(kbdi_max_2090[, (1:2)])
