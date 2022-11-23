@@ -1,0 +1,28 @@
+{
+    "id": "18A81DE6",
+    "path": "~/Documents/Professional/research/projects active/us wildfire ogd/us-wildfire-ogd/code/3-analysis/03-results_wells_projected_Risk.Rmd",
+    "project_path": "code/3-analysis/03-results_wells_projected_Risk.Rmd",
+    "type": "r_markdown",
+    "hash": "2937712687",
+    "contents": "",
+    "dirty": false,
+    "created": 1669147674312.0,
+    "source_on_save": false,
+    "relative_order": 3,
+    "properties": {
+        "chunk_output_type": "inline",
+        "source_window_id": "",
+        "Source": "Source",
+        "last_setup_crc32": "7FDCA98Adc35be0c",
+        "cursorPosition": "25,17",
+        "scrollLine": "0"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1669155659,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1669155659828,
+    "read_only": false,
+    "read_only_alternatives": []
+}

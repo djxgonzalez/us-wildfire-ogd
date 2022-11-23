@@ -1,0 +1,28 @@
+---
+title: "Results: Wildfires in areas with projected wildfire risk"
+output:
+  html_notebook:
+    theme: flatly
+    highlight: haddock 
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+# loads necessary packages and defines global variables
+source("../../code/0-setup/01-setup.R")
+```
+
+```{r data_input, include=FALSE}
+wells_kbdi <- readRDS("../../data/processed/wells_kbdi.rds")
+```
+
+
+
+# 
+
+
+
+wells_kbdi

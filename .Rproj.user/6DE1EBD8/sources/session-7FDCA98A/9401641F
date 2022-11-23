@@ -1,0 +1,24 @@
+{
+    "id": "9401641F",
+    "path": "~/Documents/Professional/research/projects active/us wildfire ogd/us-wildfire-ogd/code/1-data_tidying/01-fxn-tidy_enverus_data.R",
+    "project_path": "code/1-data_tidying/01-fxn-tidy_enverus_data.R",
+    "type": "r_source",
+    "hash": "3829328331",
+    "contents": "",
+    "dirty": false,
+    "created": 1669170577477.0,
+    "source_on_save": false,
+    "relative_order": 5,
+    "properties": {
+        "source_window_id": "",
+        "Source": "Source"
+    },
+    "folds": "",
+    "lastKnownWriteTime": 1661560687,
+    "encoding": "UTF-8",
+    "collab_server": "",
+    "source_window": "",
+    "last_content_update": 1661560687,
+    "read_only": false,
+    "read_only_alternatives": []
+}
