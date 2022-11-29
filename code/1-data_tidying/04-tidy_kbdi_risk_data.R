@@ -1,6 +1,5 @@
-
 ##============================================================================##
-## 1.03 - imports NetCDF data from Brown et al. (2021) paper with projected
+## 1.04 - imports NetCDF data from Brown et al. (2021) paper with projected
 ## wildfire risk in 2017, mid-century, and late century; combines data
 ## for spring+summer+fall seasons with max KBDI value for each; identifies
 ## wildfires in high risk areas (KBDI ≥ 600)

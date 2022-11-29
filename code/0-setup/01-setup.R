@@ -20,7 +20,7 @@ crs_nad83 <- st_crs("+init=epsg:4269 +proj=longlat +ellps=GRS80
                         +datum=NAD83 +no_defs +towgs84=0,0,0")  
 # projected CRS, for creating buffers
 #crs_projected <- st_crs("+proj=utm +datum=WGS84") 
-crs_projected <- st_crs("+proj=utm +zone=11 +datum=WGS84") 
+#crs_projected <- st_crs("+proj=utm +zone=11 +datum=WGS84") 
 
 ##============================================================================##
 
