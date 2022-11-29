@@ -1,7 +1,0 @@
-"0","wells_kbdi %>% "
-"0","  filter(kbdi_max_2050 >= 400) %>% "
-"0","  group_by(state) %>% "
-"0","  summarize(n = n()) %>% "
-"0","  ggplot() +"
-"0","  geom_bar(aes(state, n), stat = ""identity"") +"
-"0","  theme_classic()"
