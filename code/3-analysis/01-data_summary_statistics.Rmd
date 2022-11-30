@@ -16,23 +16,8 @@ source("../../code/0-setup/01-setup.R")
 ```
 
 ```{r data_input, include=FALSE}
-enverus_wells <- readRDS("../../data/interim/enverus_wells.rds")
-wildfires_all <- readRDS("../../data/interim/wildfires_all1.rds") %>%
-  ##### move all of this to a data prep script
-  bind_rows(readRDS("../../data/interim/wildfires_all2.rds")) %>% 
-  bind_rows(readRDS("../../data/interim/wildfires_all3.rds")) %>% 
-  rename(wildfire_id   = Event_ID,
-         wildfire_name = Incid_Name,
-         state         = State_Name,
-         year          = Ig_Year) %>% 
-  mutate(wildfire_id   = as.factor(wildfire_id),
-         wildfire_name = as.factor(wildfire_name),
-         state         = as.factor(state)) %>% 
-  filter(state %in% c("AK", "WA", "OR", "CA", "ID", "NV", "AZ", "MT", "WY", 
-                      "UT", "CO", "NM", "ND", "SD", "NE", "KS", "OK", "TX")) %>% 
-  mutate(year = ifelse(year > 2020, NA, year)) %>% 
-  drop_na(year)
-
+wells_all <- readRDS("../../data/processed/enverus_wells.rds")
+wildfires_all <- readRDS("../../data/processed/wildfires_all.rds")
 ```
 
 
