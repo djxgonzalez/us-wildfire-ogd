@@ -1,49 +1,34 @@
 ##============================================================================##
+## 1.02 - 
 
-# import and Merge csv files. 
-source("code/1-data_tidying/01-fxn-tidy_enverus_data.R")
+## setup ---------------------------------------------------------------------
 
-## original wells data for this project --------------------------------------
+# attaches necessary packages and functions
+source("code/0-setup/01-setup.R")
+source("code/1-data_tidying/01-fxn-tidy_wells_data.R")
 
-# # imports and processes Enverus wells data
-# setwd("data/raw/enverus/")  # need to point working directory to the data
-# enverus_wells <- do.call(rbind,
-#                      lapply(list.files(pattern = ".csv"),
-#                             FUN = read_csv)) %>%
-#   rename('long' = `Surface Hole Longitude (WGS84)`,
-#          'lat'  = `Surface Hole Latitude (WGS84)`) %>% 
-#   drop_na(long,lat) %>% 
-#   st_as_sf(coords = c('long','lat'),
-#            crs = crs_nad83) %>% 
-#   mutate(across(c(`Spud Date`,`First Prod Date`,`Completion Date`,
-#                   `Last Prod Date`,`First Well Test Date`,
-#                   `Last Well Test Date`,`EUR Calc Date`),
-#                 ~ as.Date(as.character(.x),"%Y"))) %>% 
-#   tidyEnverusWellsData() %>% 
-#   st_make_valid()
-# setwd("../../../")  # resets working directory
-# 
-# # exports processed dataset
-# saveRDS(enverus_wells,
-#         file = "data/interim/enverus_wells.rds")
+# data input
+wells_raw <- read_csv("data/raw/enverus/ogd_usa_small.csv") 
 
-## updated wells data as of 11.10.2022  --------------------------------------
 
-enverus_wells <- read_csv("data/raw/enverus2/ogd_usa_small.csv") %>% 
-  filter(API_UWI > 0) %>% 
+## tidies and exports data  --------------------------------------------------
+
+wells_all <- wells_raw %>% 
+  filter(API_UWI > 0) %>%  # drops wells with missing API number
+  # restricts to wells in the study region
   filter(State %in% c("AK", "WA", "OR", "CA", "ID", "NV", "AZ", "MT", "WY", 
                       "UT", "CO", "NM", "ND", "SD", "NE", "KS", "OK", "TX",
                       "MN", "IA", "MO", "AR", "LA")) %>% 
-    ##### data are missing: OK, WA, MN, IA, and ID (known issue?)
-  st_as_sf(coords = c("longitude_WGS84", "latitude_WGS84"), crs = crs_nad83) %>% 
+  tidyWellsData() #%>% 
+  st_as_sf(coords = c("longitude", "latitude"), crs = crs_nad83) %>% 
+    ##### pick up here
   # honestly not sure what this does...
-  mutate(across(c(Spud_Date, Completion_Date, First_Prod_Date, Last_Prod_Date),
-                ~ as.Date(as.character(.x), "%Y"))) %>%
-  tidyEnverusWellsData() %>% 
-  st_make_valid() %>% 
-  distinct(api_number, .keep_all = TRUE) # do something else to retain dates?
+  # mutate(across(c(Spud_Date, Completion_Date, First_Prod_Date, Last_Prod_Date),
+  #               ~ as.Date(as.character(.x), "%Y"))) %>%
+  st_make_valid() #%>% 
+  #distinct(api_number, .keep_all = TRUE) ##### do something else to retain dates across rows
 
 # exports processed data
-saveRDS(enverus_wells, file = "data/interim/enverus_wells.rds")
+saveRDS(wells_all, file = "data/processed/wells_all.rds")
 
 ##============================================================================##
