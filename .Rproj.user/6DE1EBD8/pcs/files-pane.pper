@@ -3,7 +3,11 @@
         {
             "columnIndex": 2,
             "ascending": true
+        },
+        {
+            "columnIndex": 4,
+            "ascending": true
         }
     ],
-    "path": "~/Documents/Professional/research/projects active/us wildfire ogd/us-wildfire-ogd/code/1-data_tidying"
+    "path": "~/Documents/Professional/research/projects active/us wildfire ogd/us-wildfire-ogd/data/processed"
 }
