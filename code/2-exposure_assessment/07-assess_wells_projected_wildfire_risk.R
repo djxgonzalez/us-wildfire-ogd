@@ -12,11 +12,11 @@ source("code/0-setup/01-setup.R")
 
 # only need to run this once; un-comment and run if needed:
 # study_region_sf <- st_read("data/raw/noaa/us_states/s_22mr22.shp") %>%
-#   filter(STATE %in% c("WA", "OR", "CA", "ID", "NV", "AZ", "MT", "WY",
-#                       "UT", "CO", "NM", "ND", "SD", "NE", "KS", "OK", "TX",
-#                        "IA", "MO", "AR", "LA")) %>%  # MN isn't working
+#   filter(STATE %in% c("WA", "OR", "CA", "ID", "NV", "AZ", "MT", "WY", "UT", 
+#                       "CO", "NM", "ND", "SD", "NE", "KS", "OK", "TX", "MO",
+#                       "AR", "LA")) %>%
 #   st_make_valid() %>%
-#   st_transform() %>% 
+#   st_transform() %>%
 #   st_union() %>%
 #   st_geometry()
 # # exports processed data sine this step takes a minute
@@ -40,8 +40,7 @@ kbdi_max_2090_sf <- readRDS("data/processed/kbdi_max_2090.rds") %>%
   st_as_sf(coords = c("x", "y"), crs = crs_nad83) %>% 
   st_intersection(study_region_sf)
 
-wells_sf <- readRDS("data/interim/enverus_wells.rds") %>% 
-  filter(api_number != "0")
+wells_all <- readRDS("data/processed/wells_all.rds")
 
 
 ## exposure assessment -------------------------------------------------------
@@ -49,9 +48,9 @@ wells_sf <- readRDS("data/interim/enverus_wells.rds") %>%
 ## 2017 ....................................................................
 # for each well, gets index of nearest KBDI point
 wells_kbdi_index_2017 <- 
-  st_nearest_feature(wells_sf, kbdi_max_2017_sf)
+  st_nearest_feature(wells_all, kbdi_max_2017_sf)
 # we use that index to attach the nearest KBDI to each well
-wells_kbdi_2017 <- wells_sf %>% 
+wells_kbdi_2017 <- wells_all %>% 
   dplyr::select(api_number) %>% 
   as_tibble() %>% 
   mutate(kbdi_max_2017_index = wells_kbdi_index_2017) %>% 
@@ -62,9 +61,9 @@ wells_kbdi_2017 <- wells_sf %>%
 ## 2050 ....................................................................
 # for each well, gets index of nearest KBDI point
 wells_kbdi_index_2050 <- 
-  st_nearest_feature(wells_sf, kbdi_max_2050_sf)
+  st_nearest_feature(wells_all, kbdi_max_2050_sf)
 # we use that index to attach the nearest KBDI to each well
-wells_kbdi_2050 <- wells_sf %>% 
+wells_kbdi_2050 <- wells_all %>% 
   dplyr::select(api_number) %>% 
   as_tibble() %>% 
   mutate(kbdi_max_2050_index = wells_kbdi_index_2050) %>% 
@@ -75,9 +74,9 @@ wells_kbdi_2050 <- wells_sf %>%
 ## 2090 ....................................................................
 # for each well, gets index of nearest KBDI point
 wells_kbdi_index_2090 <- 
-  st_nearest_feature(wells_sf, kbdi_max_2090_sf)
+  st_nearest_feature(wells_all, kbdi_max_2090_sf)
 # we use that index to attach the nearest KBDI to each well
-wells_kbdi_2090 <- wells_sf %>% 
+wells_kbdi_2090 <- wells_all %>% 
   dplyr::select(api_number) %>% 
   as_tibble() %>% 
   mutate(kbdi_max_2090_index = wells_kbdi_index_2090) %>% 
@@ -91,7 +90,7 @@ wells_kbdi_2090 <- wells_sf %>%
 rm(kbdi_max_2017_sf, kbdi_max_2050_sf, kbdi_max_2090_sf, study_region_sf)
 
 # binds columns for max KBDI for each well and each time period
-wells_kbdi <- wells_sf %>% 
+wells_kbdi <- wells_all %>% 
   filter(api_number != "0") %>% 
   as_tibble() %>% 
   left_join(wells_kbdi_2017, by = "api_number") %>% 

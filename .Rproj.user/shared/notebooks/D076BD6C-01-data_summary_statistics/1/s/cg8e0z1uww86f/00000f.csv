@@ -1,5 +1,2 @@
-"0","wildfires_all <- readRDS(""../../data/interim/wildfires_all.rds"")
-"
-"2","Warning: cannot open compressed file '../../data/interim/wildfires_all.rds', probable reason 'No such file or directory'"
-"2","Error in gzfile(file, ""rb"") : cannot open the connection
-"
+"0","wells_all     <- readRDS(""../../data/processed/wells_all.rds"")"
+"0","wildfires_all <- readRDS(""../../data/processed/wildfires_all.rds"")"

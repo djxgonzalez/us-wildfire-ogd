@@ -63,13 +63,13 @@ wildfires_all <- bind_rows(wildfires_nifc2, wildfires_mtbs) %>%
   bind_rows(wildfires_nifc4) %>% 
   # restricts to wildfires in the study region
   filter(state %in% c("WA", "OR", "CA", "ID", "NV", "AZ", "MT", "WY", "UT", 
-                      "CO", "NM", "ND", "SD", "NE", "KS", "OK", "TX", "MN", 
-                      "IA", "MO", "AR", "LA", "AK")) %>% 
+                      "CO", "NM", "ND", "SD", "NE", "KS", "OK", "TX", "MO", 
+                      "AR", "LA", "AK")) %>% 
   drop_na(year) %>% 
   filter(year %in% c(1984:2020))
 
+
 # exports final wildfires dataset
 saveRDS(wildfires_all, "data/processed/wildfires_all.rds")
-
 
 #=============================================================================##

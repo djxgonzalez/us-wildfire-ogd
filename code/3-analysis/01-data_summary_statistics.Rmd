@@ -16,7 +16,7 @@ source("../../code/0-setup/01-setup.R")
 ```
 
 ```{r data_input, include=FALSE}
-wells_all <- readRDS("../../data/processed/enverus_wells.rds")
+wells_all     <- readRDS("../../data/processed/wells_all.rds")
 wildfires_all <- readRDS("../../data/processed/wildfires_all.rds")
 ```
 
@@ -25,19 +25,20 @@ wildfires_all <- readRDS("../../data/processed/wildfires_all.rds")
 
 ### Summary stats
 
-**n = 45,671 unique wildfire IDs**
+ - n = `r length(unique(wildfires_all$wildfire_id))` unique wildfires
 
 **Mean wildfire area:**
 
 ```{r echo=FALSE}
-wildfires_sf <- wildfires_all %>% st_as_sf(crs = crs_nad83) ##### change to WGS84
-wildfires_sf <- wildfires_sf %>% 
-  st_make_valid() %>% 
-  # group_by(wildfire_id) %>% 
-  # summarize(geometry = st_union(geometry)) %>% 
-  mutate(area = st_area(wildfires_sf)) ####
-  ##### adapted from redlining study:
-  #mutate(area_sqkm = (as.numeric(st_area(wildfires_all)) / 1000000))
+####### pick up here; do we need this?
+# wildfires_sf <- wildfires_all %>% st_as_sf(crs = crs_nad83) ##### change to WGS84
+# wildfires_sf <- wildfires_sf %>% 
+#   st_make_valid() %>% 
+#   # group_by(wildfire_id) %>% 
+#   # summarize(geometry = st_union(geometry)) %>% 
+#   mutate(area = st_area(wildfires_sf)) ####
+#   ##### adapted from redlining study:
+#   #mutate(area_sqkm = (as.numeric(st_area(wildfires_all)) / 1000000))
 ```
 
 
