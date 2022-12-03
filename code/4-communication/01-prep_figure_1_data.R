@@ -6,125 +6,111 @@
 
 ## setup ---------------------------------------------------------------------
 
-# setup and data input ...................................................
+# attaches packages ........................................................
+source("code/0-setup/01-setup.R")
 library("lubridate")
 
-# wells drilled in or before 2020 + wells with no dates, presumed to have 
-# been drilled before 
-wells_in <- readRDS("data/interim/enverus_wells.rds") %>% 
-  mutate(plugged_no_dates = 
-           ifelse(well_status %in% c("ABANDONED", "P & A") &
-                    (is.na(spud_date) * is.na(completion_date) &
-                       is.na(first_prod_date) & is.na(last_prod_date) &
-                       is.na(first_test_date) & is.na(last_test_date)),
-                  1, 0),) %>% 
-  filter(plugged_no_dates == 1 |
-           (year(spud_date)         <= 2020 |
-              year(completion_date) <= 2020 |
-              year(first_prod_date) <= 2020 |
-              year(last_prod_date)  <= 2020 |
-              year(first_test_date) <= 2020 |
-              year(last_test_date)  <= 2020))
+# data input
+wells_all <- readRDS("data/processed/wells_all.rds")
 
-
-# processing and export ..................................................
-wells_ak_buffer_1km <- wells_in %>% 
+# processing and export ....................................................
+wells_ak_buffer_1km <- wells_all %>% 
   filter(state == "AK") %>% 
   st_buffer(dist = 1000) %>%
   st_union()
-saveRDS(wells_ak_buffer_1km, "data/interim/wells_ak_buffer_1km.rds")
-wells_az_buffer_1km <- wells_in %>% 
+saveRDS(wells_ak_buffer_1km, "data/interim/wells/buffers_ak_buffer_1km.rds")
+wells_az_buffer_1km <- wells_all %>% 
   filter(state == "AZ") %>% 
   st_buffer(dist = 1000) %>%
   st_union()
-saveRDS(wells_az_buffer_1km, "data/interim/wells_az_buffer_1km.rds")
-wells_ca_buffer_1km <- wells_in %>% 
+saveRDS(wells_az_buffer_1km, "data/interim/wells/buffers_az_buffer_1km.rds")
+wells_ca_buffer_1km <- wells_all %>% 
   filter(state == "CA") %>% 
   st_buffer(dist = 1000) %>%
   st_union()
-saveRDS(wells_ca_buffer_1km, "data/interim/wells_ca_buffer_1km.rds")
-wells_co_buffer_1km <- wells_in %>% 
+saveRDS(wells_ca_buffer_1km, "data/interim/wells/buffers_ca_buffer_1km.rds")
+wells_co_buffer_1km <- wells_all %>% 
   filter(state == "CO") %>% 
   st_buffer(dist = 1000) %>%
   st_union()
-saveRDS(wells_co_buffer_1km, "data/interim/wells_co_buffer_1km.rds")
-wells_id_buffer_1km <- wells_in %>% 
+saveRDS(wells_co_buffer_1km, "data/interim/wells/buffers_co_buffer_1km.rds")
+wells_id_buffer_1km <- wells_all %>% 
   filter(state == "ID") %>% 
   st_buffer(dist = 1000) %>%
   st_union()
-saveRDS(wells_id_buffer_1km, "data/interim/wells_id_buffer_1km.rds")
-wells_ks_buffer_1km <- wells_in %>% 
+saveRDS(wells_id_buffer_1km, "data/interim/wells/buffers_id_buffer_1km.rds")
+wells_ks_buffer_1km <- wells_all %>% 
   filter(state == "KS") %>% 
   st_buffer(dist = 1000) %>%
   st_union()
-saveRDS(wells_ks_buffer_1km, "data/interim/wells_ks_buffer_1km.rds")
-wells_mt_buffer_1km <- wells_in %>% 
+saveRDS(wells_ks_buffer_1km, "data/interim/wells/buffers_ks_buffer_1km.rds")
+wells_mt_buffer_1km <- wells_all %>% 
   filter(state == "MT") %>% 
   st_buffer(dist = 1000) %>%
   st_union()
-saveRDS(wells_mt_buffer_1km, "data/interim/wells_mt_buffer_1km.rds")
-wells_nd_buffer_1km <- wells_in %>% 
+saveRDS(wells_mt_buffer_1km, "data/interim/wells/buffers_mt_buffer_1km.rds")
+wells_nd_buffer_1km <- wells_all %>% 
   filter(state == "ND") %>% 
   st_buffer(dist = 1000) %>%
   st_union()
-saveRDS(wells_nd_buffer_1km, "data/interim/wells_nd_buffer_1km.rds")
-wells_ne_buffer_1km <- wells_in %>% 
+saveRDS(wells_nd_buffer_1km, "data/interim/wells/buffers_nd_buffer_1km.rds")
+wells_ne_buffer_1km <- wells_all %>% 
   filter(state == "NE") %>% 
   st_buffer(dist = 1000) %>%
   st_union()
-saveRDS(wells_ne_buffer_1km, "data/interim/wells_ne_buffer_1km.rds")
-wells_nm_buffer_1km <- wells_in %>% 
+saveRDS(wells_ne_buffer_1km, "data/interim/wells/buffers_ne_buffer_1km.rds")
+wells_nm_buffer_1km <- wells_all %>% 
   filter(state == "NM") %>% 
   st_buffer(dist = 1000) %>%
   st_union()
-saveRDS(wells_nm_buffer_1km, "data/interim/wells_nm_buffer_1km.rds")
-wells_nv_buffer_1km <- wells_in %>% 
+saveRDS(wells_nm_buffer_1km, "data/interim/wells/buffers_nm_buffer_1km.rds")
+wells_nv_buffer_1km <- wells_all %>% 
   filter(state == "NV") %>% 
   st_buffer(dist = 1000) %>%
   st_union()
-saveRDS(wells_nv_buffer_1km, "data/interim/wells_nv_buffer_1km.rds")
-wells_ok_buffer_1km <- wells_in %>% 
+saveRDS(wells_nv_buffer_1km, "data/interim/wells/buffers_nv_buffer_1km.rds")
+wells_ok_buffer_1km <- wells_all %>% 
   filter(state == "OK") %>% 
   st_buffer(dist = 1000) %>%
   st_union()
-saveRDS(wells_ok_buffer_1km, "data/interim/wells_ok_buffer_1km.rds")
-wells_or_buffer_1km <- wells_in %>% 
+saveRDS(wells_ok_buffer_1km, "data/interim/wells/buffers_ok_buffer_1km.rds")
+wells_or_buffer_1km <- wells_all %>% 
   filter(state == "OR") %>% 
   st_buffer(dist = 1000) %>%
   st_union()
-saveRDS(wells_or_buffer_1km, "data/interim/wells_or_buffer_1km.rds")
-# wells_sd_buffer_1km <- wells_in %>% 
-#   filter(state == "SD") %>% 
-#   st_buffer(dist = 1000) %>%
-#   st_union()
-#saveRDS(wells_sd_buffer_1km, "data/interim/wells_sd_buffer_1km.rds")
-wells_tx_buffer_1km <- wells_in %>% 
+saveRDS(wells_or_buffer_1km, "data/interim/wells/buffers_or_buffer_1km.rds")
+wells_sd_buffer_1km <- wells_all %>%
+  filter(state == "SD") %>%
+  st_buffer(dist = 1000) %>%
+  st_union()
+saveRDS(wells_sd_buffer_1km, "data/interim/wells/buffers_sd_buffer_1km.rds")
+wells_tx_buffer_1km <- wells_all %>% 
   filter(state == "TX") %>% 
   st_buffer(dist = 1000) %>%
   st_union()
-saveRDS(wells_tx_buffer_1km, "data/interim/wells_tx_buffer_1km.rds")
-wells_ut_buffer_1km <- wells_in %>% 
+saveRDS(wells_tx_buffer_1km, "data/interim/wells/buffers_tx_buffer_1km.rds")
+wells_ut_buffer_1km <- wells_all %>% 
   filter(state == "UT") %>% 
   st_buffer(dist = 1000) %>%
   st_union()
-saveRDS(wells_ut_buffer_1km, "data/interim/wells_ut_buffer_1km.rds")
-wells_wa_buffer_1km <- wells_in %>% 
+saveRDS(wells_ut_buffer_1km, "data/interim/wells/buffers_ut_buffer_1km.rds")
+wells_wa_buffer_1km <- wells_all %>% 
   filter(state == "WA") %>% 
   st_buffer(dist = 1000) %>%
   st_union()
-saveRDS(wells_wa_buffer_1km, "data/interim/wells_wa_buffer_1km.rds")
-wells_wy_buffer_1km <- wells_in %>% 
+saveRDS(wells_wa_buffer_1km, "data/interim/wells/buffers_wa_buffer_1km.rds")
+wells_wy_buffer_1km <- wells_all %>% 
   filter(state == "WY") %>% 
   st_buffer(dist = 1000) %>%
   st_union()
-saveRDS(wells_wy_buffer_1km, "data/interim/wells_wy_buffer_1km.rds")
+saveRDS(wells_wy_buffer_1km, "data/interim/wells/buffers_wy_buffer_1km.rds")
 
 
 # union-izes and exports wells buffers ...................................
-wells_in_buffer_1km <- wells_az_buffer_1km %>% 
+wells_all_buffer_1km <- wells_az_buffer_1km %>% 
   st_union(wells_ca_buffer_1km)
   ##### fill in the rest of the states
-saveRDS(wells_in_buffer_1km, "data/interim/wells_in_buffer_1km.rds")
+saveRDS(wells_all_buffer_1km, "data/interim/wells/buffers_all_buffer_1km.rds")
 
 
 ##---------------------------------------------------------------------------
