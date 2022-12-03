@@ -1,62 +1,23 @@
 ##============================================================================##
 ## 2.04 - need to re-write this header
 
-##---------------------------------------------------------------------------
-## setup
+## setup ---------------------------------------------------------------------
 
 # attaches functions .....................................................
 library("parallel")  # for the `mclapply()` fxn
 source("./code/2-exposure_assessment/02-fxn_assess_exposure_count.R")
 
 # data input .............................................................
-## Large fires
-fire_large = read_sf('./data/mtbs_perimeter_data/mtbs_perims_DD.shp') %>% 
-  tidyFires() #%>% filter(str_detect(Event_ID, 'ID') == TRUE)
+wells_all     <- readRDS("data/processed/wells_all.rds")
+wildfires_all <- readRDS("data/processed/wildfires_all.rds")
 
-## Small Fires (<1000 acres)
-fire_nifc = nifc_1000_state %>% 
-  mutate(Ig_Date = FIRE_YEAR_INT,
-         Event_ID = OBJECTID,
-         geometry = SHAPE,
-         Incid_Name = INCIDENT) %>% 
-  transform(Ig_Date = as.Date(as.character(Ig_Date), "%Y")) %>% 
-  select(Ig_Date, Event_ID, geometry, Incid_Name, Ig_Date, STUSPS10) %>% 
-  tidyFire2()
+## assessments by state ------------------------------------------------------
 
-## Tidied combined fires
-fire_all = rbind(fire_large,st_transform(fire_nifc, crs = "NAD83")) %>% 
-  st_make_valid() %>% 
-  select(c(Event_ID, Incid_Name, Ig_Year, State_Name))
+###### pick up here; maybe look at CA as model for this?
 
-## Oklahoma
-fire_OK <- fire_all %>% filter(State_Name == "OK") %>% st_make_valid()
-wells_interim       <- readRDS("data/interim/wells_interim.rds")
+# OK .......................................................................
+wildfires_ok <- wildfires_all %>% filter(state == "OK")
 
-# data prep ..............................................................
-## Tidied combined wells (ALL)
-setwd("/Users/leomultiverse2/Documents/us-wildfire-drilling/data/wells")
-files = list.files(path = "/Users/leomultiverse2/Documents/us-wildfire-drilling/data/wells", 
-                   pattern = ".csv")
-wells_all = do.call(rbind, lapply(files, read_csv)) %>% 
-  rename('long' = `Surface Hole Longitude (WGS84)`,
-         'lat' = `Surface Hole Latitude (WGS84)`) %>% 
-  drop_na(long,lat) %>% 
-  st_as_sf(coords = c('long','lat'),
-           crs = crs_nad83) %>% 
-  mutate(across(c(`Spud Date`,`First Prod Date`,`Completion Date`,
-                  `Last Prod Date`,`First Well Test Date`,
-                  `Last Well Test Date`,`EUR Calc Date`),
-                ~ as.Date(as.character(.x),"%Y"))) %>% 
-  tidyWells() %>% st_make_valid()
-
-wells_all <- wells_all %>%
-  filter(earliest_date > '1859-01-01') %>% 
-  filter(is.na(earliest_date) == FALSE) %>% 
-  mutate(lon = st_coordinates(.)[,1],
-         lat = st_coordinates(.)[,2]) %>% 
-  select(API14, lon, lat, State_Name) %>%
-  st_as_sf(coords = c("lon", "lat"), crs = crs_nad83) %>% 
-  st_make_valid()
 
 ## Oklahoma Wells
 OK_buffer_fire <- fire_OK %>% st_union() %>% 
@@ -75,7 +36,7 @@ wells_OK_buffer_1km <- wells_OK %>%
 # wells for counting . . . . . . . . . . . . . . . . . . . . . . . . . 
 
 # removes data we don't need to improve efficiency
-rm(wells_interim)
+rm(wells_all)
 
 
 ##---------------------------------------------------------------------------
@@ -115,9 +76,9 @@ saveRDS(fire_OK_exp_buffer1,
 # between states, make sure to `rm()` data we don't need anymore
 
 
-##============================================================================##
 ## California
-CA_buffer_fire <- fire_all %>% filter(State_Name == "CA") %>% st_make_valid() %>% 
+CA_buffer_fire <- wildfires_all %>% 
+  filter(State_Name == "CA") %>% st_make_valid() %>% 
   st_union() %>% st_transform(26911) %>% st_buffer(1000) %>% st_transform(crs_nad83) 
 
 ## Wells
@@ -128,7 +89,7 @@ wells_CA_buffer_1km <- wells_CA %>%
   makeWellBuffer(radius = 1000, epsg = 26911)
 
 # 0 km . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
-fire_data_in <- fire_all %>%
+fire_data_in <- wildfires_all %>%
   filter(State_Name == "CA") %>% 
   st_intersection(wells_CA_buffer_1km)
 fire_data_in <- fire_data_in %>% filter(Event_ID %in% fire_data_in$Event_ID)  # verify Event_id
@@ -162,7 +123,7 @@ saveRDS(fire_CA_exp_buffer1,
 
 ##============================================================================##
 ## Texas
-TX_buffer_fire <- fire_all %>% filter(State_Name == "TX") %>% st_make_valid() %>% 
+TX_buffer_fire <- wildfires_all %>% filter(State_Name == "TX") %>% st_make_valid() %>% 
   st_union() %>% st_transform(2267) %>% st_buffer(1000) %>% st_transform(crs_nad83) 
 
 ## Wells
@@ -173,7 +134,7 @@ wells_TX_buffer_1km <- wells_TX %>%
   makeWellBuffer(radius = 1000, epsg = 2267)
 
 # 0 km . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
-fire_data_in <- fire_all %>%
+fire_data_in <- wildfires_all %>%
   filter(State_Name == "TX") %>% 
   st_intersection(wells_TX_buffer_1km)
 fire_data_in <- fire_data_in %>% filter(Event_ID %in% fire_data_in$Event_ID)  # verify Event_id
@@ -207,7 +168,7 @@ saveRDS(fire_TX_exp_buffer1,
 
 ##============================================================================##
 ## Colorado
-CO_buffer_fire <- fire_all %>% filter(State_Name == "CO") %>% st_make_valid() %>% 
+CO_buffer_fire <- wildfires_all %>% filter(State_Name == "CO") %>% st_make_valid() %>% 
   st_union() %>% st_transform(2231) %>% st_buffer(1000) %>% st_transform(crs_nad83) 
 
 ## Wells
@@ -218,7 +179,7 @@ wells_CO_buffer_1km <- wells_CO %>%
   makeWellBuffer(radius = 1000, epsg = 2231)
 
 # 0 km . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
-fire_data_in <- fire_all %>%
+fire_data_in <- wildfires_all %>%
   filter(State_Name == "CO") %>% 
   st_intersection(wells_CO_buffer_1km)
 fire_data_in <- fire_data_in %>% filter(Event_ID %in% fire_data_in$Event_ID)  # verify Event_id
@@ -252,7 +213,7 @@ saveRDS(fire_CO_exp_buffer1,
 
 ##============================================================================##
 ## Arizona
-AZ_buffer_fire <- fire_all %>% filter(State_Name == "AZ") %>% st_make_valid() %>% 
+AZ_buffer_fire <- wildfires_all %>% filter(State_Name == "AZ") %>% st_make_valid() %>% 
   st_union() %>% st_transform(26712) %>% st_buffer(1000) %>% st_transform(crs_nad83) 
 
 ## Wells
@@ -263,7 +224,7 @@ wells_AZ_buffer_1km <- wells_AZ %>%
   makeWellBuffer(radius = 1000, epsg = 26712)
 
 # 0 km . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
-fire_data_in <- fire_all %>%
+fire_data_in <- wildfires_all %>%
   filter(State_Name == "AZ") %>% 
   st_intersection(wells_AZ_buffer_1km)
 fire_data_in <- fire_data_in %>% filter(Event_ID %in% fire_data_in$Event_ID)  # verify Event_id
@@ -297,7 +258,7 @@ saveRDS(fire_AZ_exp_buffer1,
 
 ##============================================================================##
 ## New Mexico
-NM_buffer_fire <- fire_all %>% filter(State_Name == "NM") %>% st_make_valid() %>% 
+NM_buffer_fire <- wildfires_all %>% filter(State_Name == "NM") %>% st_make_valid() %>% 
   st_union() %>% st_transform(26715) %>% st_buffer(1000) %>% st_transform(crs_nad83) 
 
 ## Wells
@@ -308,7 +269,7 @@ wells_NM_buffer_1km <- wells_NM %>%
   makeWellBuffer(radius = 1000, epsg = 26715)
 
 # 0 km . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
-fire_data_in <- fire_all %>%
+fire_data_in <- wildfires_all %>%
   filter(State_Name == "NM") %>% 
   st_intersection(wells_NM_buffer_1km)
 fire_data_in <- fire_data_in %>% filter(Event_ID %in% fire_data_in$Event_ID)  # verify Event_id
@@ -342,7 +303,7 @@ saveRDS(fire_NM_exp_buffer1,
 
 ##============================================================================##
 ## Utah
-UT_buffer_fire <- fire_all %>% filter(State_Name == "UT") %>% st_make_valid() %>% 
+UT_buffer_fire <- wildfires_all %>% filter(State_Name == "UT") %>% st_make_valid() %>% 
   st_union() %>% st_transform(2281) %>% st_buffer(1000) %>% st_transform(crs_nad83) 
 
 ## Wells
@@ -353,7 +314,7 @@ wells_UT_buffer_1km <- wells_UT %>%
   makeWellBuffer(radius = 1000, epsg = 2281)
 
 # 0 km . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . 
-fire_data_in <- fire_all %>%
+fire_data_in <- wildfires_all %>%
   filter(State_Name == "UT") %>% 
   st_intersection(wells_UT_buffer_1km)
 fire_data_in <- fire_data_in %>% filter(Event_ID %in% fire_data_in$Event_ID)  # verify Event_id
