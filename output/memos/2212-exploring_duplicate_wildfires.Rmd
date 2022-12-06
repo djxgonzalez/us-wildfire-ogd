@@ -1,0 +1,64 @@
+---
+title: "Exploring duplicate wildfires data"
+subtitle: "December 2022"
+output: html_notebook
+---
+
+## Memo
+
+In current draft Figure 1 there appears to be duplicate wildfires in Kansas and Oklahoma. In this memo I explore those data to confirm whether there are in fact duplicates and, if so, will seek to resolve the issue.
+
+
+```{r setup, include=FALSE}
+source("../../code/0-setup/01-setup.R")
+```
+
+```{r data_input, include=FALSE}
+wells_all     <- readRDS("../../data/processed/wells_all.rds")
+wildfires_all <- readRDS("../../data/processed/wildfires_all.rds")
+```
+
+
+**Plot. Wildfires in Kansas and Oklahoma**
+
+```{r echo=FALSE}
+wildfires_ks_ok <- wildfires_all %>%
+  filter(state %in% c("KS", "OK")) %>% 
+  st_as_sf()
+plot(st_geometry(wildfires_ks_ok))
+```
+
+Question - are these potentially duplicate wells potentially of relevance in the context of this study, by which I mean, are they near the wells in Kansas?
+
+```{r echo=FALSE}
+wildfires_ks <- wildfires_all %>% filter(state == "KS") %>% st_as_sf()
+wells_ks <- wells_all %>% filter(state == "KS")
+
+plot(st_geometry(wells_ks), pch = 4)
+plot(st_geometry(wildfires_ks), add = T, col = "red")
+```
+There are a lotof wells in KS it seems (n = 55,626) and many of them are in the eastern part of the state where we're seeing this potential duplication issue. So it is salient!
+
+Next step is to see if there is a way to identify duplicate geometries using dplyr.
+
+```{r echo=FALSE}
+wildfires_ks_ok2 <- wildfires_ks_ok %>% 
+  as.data.frame() %>% 
+  distinct(geometry)
+```
+
+This did result in two fewer wildfires (3,261 vs. 3,259 after distinct). Let's try this using sf methods.
+
+```{r echo=FALSE}
+wildfires_ks_ok3 <- wildfires_ks_ok %>% 
+  mutate(eq     = st_equals(wildfires_ks_ok$geometry)) %>% 
+  mutate(eq_dup = duplicated(eq))
+```
+
+Same answer as above; 2 duplicate fires. Let's take a look at them.
+
+```{r echo=FALSE}
+wildfires_ks_ok3 %>% filter(eq_dup == T) %>% View
+```
+
+
