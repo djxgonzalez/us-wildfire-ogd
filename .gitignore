@@ -3,5 +3,6 @@
 data/
 notes/
 output/figures/
+output/figures/components/
 output/results/
-output/tables
+output/tables/

@@ -10,8 +10,8 @@ library("ggspatial")
 # data input, prep layers for mapping ......................................
 us_states_west <- st_read("data/raw/us_census/tl_2018_us_state.shp") %>% 
   filter(STUSPS %in% c("WA", "OR", "CA", "ID", "NV", "AZ", "MT", "WY", "UT",
-                       "CO", "NM", "ND", "SD", "NE", "KS", "OK", "TX", "MO",
-                       "AR", "LA")) %>%
+                      "CO", "NM", "ND", "SD", "NE", "KS", "OK", "TX", "MO",
+                      "AR", "LA")) %>%
   st_geometry() %>%
   st_transform(crs_nad83)
 us_states_east <- st_read("data/raw/us_census/tl_2018_us_state.shp") %>%
@@ -160,7 +160,7 @@ wildfires_2020 <-
 # makes figure
 figure_1a <- ggplot() +
   # geom_sf(data = mex_can, fill = "#DCDCDC", color = NA, alpha = 0.7) +
-  # geom_sf(data = us_states_east, fill = "#DCDCDC", color = "#ffffff", lwd = 0.3) +
+  geom_sf(data = us_states_east, fill = "#DCDCDC", color = "#ffffff", lwd = 0.3) +
   geom_sf(data = us_states_west, fill = "#E6E9E0", color = "#ffffff", lwd = 0.3) +
   geom_sf(data = wildfires_1984, fill = "purple", color = NA, alpha = 0.3) +
   geom_sf(data = wildfires_1985, fill = "purple", color = NA, alpha = 0.3) +
@@ -201,7 +201,7 @@ figure_1a <- ggplot() +
   geom_sf(data = wildfires_2020, fill = "red",    color = NA, alpha = 0.6) +
   #geom_sf(data = lakes, fill = "#e9f5f8", color = NA) +  ##### may not need this
   ##### add wildfires layer
-  #xlim(-125, -89) + ylim(26, 49) +
+  xlim(-125, -88.5) + ylim(26, 49) +
   labs(x = "", y = "") +
   theme_bw() +
   theme(panel.background = element_rect(fill  = "#e9f5f8"),  # d0ecfd
