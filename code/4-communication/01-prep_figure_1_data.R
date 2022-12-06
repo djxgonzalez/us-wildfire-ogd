@@ -17,44 +17,54 @@ wells_all <- readRDS("data/processed/wells_all.rds")
 ##### add more states, finalize
 wells_ak_buffer_1km <- wells_all %>% 
   filter(state == "AK") %>% 
+  ##### add st_transform to appropriate projected CRS for each state
   st_buffer(dist = 0.00898) %>%  # 0.00898 decimal degrees = 1,000 m
+  ##### transform back into CRS nad83; dot his for all wells
   st_union()
-saveRDS(wells_ak_buffer_1km, "data/interim/buffers_wells/buffers_ak_buffer_1km.rds")
+saveRDS(wells_ak_buffer_1km, 
+        "data/interim/buffers_wells/buffers_ak_buffer_1km.rds")
 wells_az_buffer_1km <- wells_all %>% 
   filter(state == "AZ") %>% 
   st_buffer(dist = 0.00898) %>%
   st_union()
-saveRDS(wells_az_buffer_1km, "data/interim/buffers_wells/buffers_az_buffer_1km.rds")
+saveRDS(wells_az_buffer_1km, 
+        "data/interim/buffers_wells/buffers_az_buffer_1km.rds")
 wells_ca_buffer_1km <- wells_all %>% 
   filter(state == "CA") %>% 
   st_buffer(dist = 0.00898) %>%
   st_union()
-saveRDS(wells_ca_buffer_1km, "data/interim/buffers_wells/buffers_ca_buffer_1km.rds")
+saveRDS(wells_ca_buffer_1km,
+        "data/interim/buffers_wells/buffers_ca_buffer_1km.rds")
 wells_co_buffer_1km <- wells_all %>% 
   filter(state == "CO") %>% 
   st_buffer(dist = 0.00898) %>%
   st_union()
-saveRDS(wells_co_buffer_1km, "data/interim/buffers_wells/buffers_co_buffer_1km.rds")
+saveRDS(wells_co_buffer_1km, 
+        "data/interim/buffers_wells/buffers_co_buffer_1km.rds")
 wells_id_buffer_1km <- wells_all %>% 
   filter(state == "ID") %>% 
   st_buffer(dist = 0.00898) %>%  
   st_union()
-saveRDS(wells_id_buffer_1km, "data/interim/buffers_wells/buffers_id_buffer_1km.rds")
+saveRDS(wells_id_buffer_1km, 
+        "data/interim/buffers_wells/buffers_id_buffer_1km.rds")
 wells_ks_buffer_1km <- wells_all %>% 
   filter(state == "KS") %>% 
   st_buffer(dist = 0.00898) %>%
   st_union()
-saveRDS(wells_ks_buffer_1km, "data/interim/buffers_wells/buffers_ks_buffer_1km.rds")
+saveRDS(wells_ks_buffer_1km,
+        "data/interim/buffers_wells/buffers_ks_buffer_1km.rds")
 wells_mt_buffer_1km <- wells_all %>% 
   filter(state == "MT") %>% 
   st_buffer(dist = 0.00898) %>%
   st_union()
-saveRDS(wells_mt_buffer_1km, "data/interim/buffers_wells/buffers_mt_buffer_1km.rds")
+saveRDS(wells_mt_buffer_1km, 
+        "data/interim/buffers_wells/buffers_mt_buffer_1km.rds")
 wells_nd_buffer_1km <- wells_all %>% 
   filter(state == "ND") %>% 
   st_buffer(dist = 0.00898) %>%
   st_union()
-saveRDS(wells_nd_buffer_1km, "data/interim/buffers_wells/buffers_nd_buffer_1km.rds")
+saveRDS(wells_nd_buffer_1km, 
+        "data/interim/buffers_wells/buffers_nd_buffer_1km.rds")
 wells_ne_buffer_1km <- wells_all %>% 
   filter(state == "NE") %>% 
   st_buffer(dist = 0.00898) %>%
@@ -69,7 +79,8 @@ wells_nv_buffer_1km <- wells_all %>%
   filter(state == "NV") %>% 
   st_buffer(dist = 0.00898) %>%
   st_union()
-saveRDS(wells_nv_buffer_1km, "data/interim/buffers_wells/buffers_nv_buffer_1km.rds")
+saveRDS(wells_nv_buffer_1km, 
+        "data/interim/buffers_wells/buffers_nv_buffer_1km.rds")
 wells_ok_buffer_1km <- wells_all %>% 
   filter(state == "OK") %>% 
   st_buffer(dist = 0.00898) %>%
@@ -111,8 +122,8 @@ saveRDS(wells_wy_buffer_1km, "data/interim/buffers_wells/buffers_wy_buffer_1km.r
 wells_all_buffer_1km <- wells_az_buffer_1km %>% 
   st_union(wells_ca_buffer_1km)
   ##### fill in the rest of the states
-saveRDS(wells_all_buffer_1km, "data/interim/buffers_wells/buffers_all_buffer_1km.rds")
-
+saveRDS(wells_all_buffer_1km,
+        "data/interim/buffers_wells/buffers_all_buffer_1km.rds")
 
 ##---------------------------------------------------------------------------
 ## wildfires data
@@ -125,13 +136,13 @@ wildfires_all <- readRDS("data/processed/wildfires_all.rds")
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 1984) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_1984.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 1984) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_1984.rds")
 
@@ -139,13 +150,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 1985) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_1985.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 1985) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_1985.rds")
 
@@ -153,13 +164,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 1986) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_1986.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 1986) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_1986.rds")
 
@@ -167,13 +178,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 1987) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_1987.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 1987) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_1987.rds")
 
@@ -181,13 +192,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 1988) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_1988.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 1988) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_1988.rds")
 
@@ -195,13 +206,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 1989) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_1989.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 1989) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_1989.rds")
 
@@ -209,13 +220,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 1990) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_1990.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 1990) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_1990.rds")
 
@@ -223,13 +234,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 1991) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_1991.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 1991) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_1991.rds")
 
@@ -237,13 +248,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 1992) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_1992.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 1992) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_1992.rds")
 
@@ -251,13 +262,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 1993) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_1993.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 1993) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_1993.rds")
 
@@ -265,13 +276,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 1994) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_1994.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 1994) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_1994.rds")
 
@@ -279,13 +290,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 1995) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_1995.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 1995) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_1995.rds")
 
@@ -293,13 +304,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 1996) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_1996.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 1996) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_1996.rds")
 
@@ -307,13 +318,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 1997) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_1997.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 1997) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_1997.rds")
 
@@ -321,13 +332,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 1998) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_1998.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 1998) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_1998.rds")
 
@@ -335,13 +346,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 1999) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_1999.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 1999) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_1999.rds")
 
@@ -349,13 +360,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 2000) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_2000.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 2000) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_2000.rds")
 
@@ -363,13 +374,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 2001) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_2001.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 2001) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_2001.rds")
 
@@ -377,13 +388,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 2002) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_2002.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 2002) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_2002.rds")
 
@@ -391,13 +402,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 2003) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_2003.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 2003) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_2003.rds")
 
@@ -405,13 +416,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 2004) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_2004.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 2004) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_2004.rds")
 
@@ -419,13 +430,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 2005) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_2005.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 2005) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_2005.rds")
 
@@ -433,14 +444,14 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>%
   filter(year == 2006) %>%
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_make_valid() %>% 
   st_union() %>%
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_2006.rds")
 wildfires_all %>%
   filter(state == "AK") %>%
   filter(year == 2006) %>%
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>%
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_2006.rds")
 
@@ -448,13 +459,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 2007) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_2007.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 2007) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_2007.rds")
 
@@ -462,13 +473,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 2008) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_2008.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 2008) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_2008.rds")
 
@@ -476,13 +487,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 2009) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_2009.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 2009) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_2009.rds")
 
@@ -490,13 +501,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 2010) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_2010.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 2010) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_2010.rds")
 
@@ -504,13 +515,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 2011) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_2011.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 2011) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_2011.rds")
 
@@ -518,13 +529,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 2012) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_2012.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 2012) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_2012.rds")
 
@@ -532,13 +543,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 2013) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_2013.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 2013) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_2013.rds")
 
@@ -546,13 +557,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 2014) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_2014.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 2014) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_2014.rds")
 
@@ -560,13 +571,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 2015) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_2015.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 2015) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_2015.rds")
 
@@ -574,13 +585,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 2016) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_2016.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 2016) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_2016.rds")
 
@@ -588,13 +599,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 2017) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_2017.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 2017) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_2017.rds")
 
@@ -602,13 +613,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 2018) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_2018.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 2018) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_2018.rds")
 
@@ -616,13 +627,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 2019) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_2019.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 2019) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_2019.rds")
 
@@ -630,13 +641,13 @@ wildfires_all %>%
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 2020) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_2020.rds")
 wildfires_all %>%
   filter(state == "AK") %>% 
   filter(year == 2020) %>% 
-  st_as_sf(crs = crs_nad83) %>%  # confirm CRS
+  st_as_sf() %>%
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_alaska_2020.rds")
 
