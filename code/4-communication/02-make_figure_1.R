@@ -200,8 +200,8 @@ figure_1a <- ggplot() +
   geom_sf(data = wildfires_2019, fill = "red",    color = NA, alpha = 0.6) +
   geom_sf(data = wildfires_2020, fill = "red",    color = NA, alpha = 0.6) +
   #geom_sf(data = lakes, fill = "#e9f5f8", color = NA) +  ##### may not need this
-  ##### add wildfires layer
-  xlim(-125, -88.5) + ylim(26, 49) +
+  ##### add wells buffer layer
+  #xlim(-125, -88.5) + ylim(26, 49) +
   labs(x = "", y = "") +
   theme_bw() +
   theme(panel.background = element_rect(fill  = "#e9f5f8"),  # d0ecfd
