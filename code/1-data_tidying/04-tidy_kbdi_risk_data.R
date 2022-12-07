@@ -79,7 +79,8 @@ rm(fill_value, kbdi_2017_fall, kbdi_2017_spring, kbdi_2017_summer, nc_fall_2017,
 
 # converts raster with maximum 2017 KBDI to a raster for export
 raster_kbdi_max_2017 <- 
-  rasterFromXYZ(kbdi_max_2017,  crs = CRS("+init=epsg:4269"))
+  rasterFromXYZ(kbdi_max_2017,  crs = CRS("+init=epsg:4269")) %>% 
+  st_transform(crs_albers)
 
 # restricts raster to pixels with high KBDI, i.e., ≥ 600; makes this a binary
 # indicator to set up for the next step, which is to intersect with wells

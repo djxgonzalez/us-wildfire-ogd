@@ -12,9 +12,13 @@ library("lubridate")
 
 # data input
 wells_all <- readRDS("data/processed/wells_all.rds")
+wildfires_all <- readRDS("data/processed/wildfires_all.rds")
 
-# processing and export ....................................................
+
+## wells data ----------------------------------------------------------------
+
 ##### add more states, finalize
+# processing and export ....................................................
 wells_ak_buffer_1km <- wells_all %>% 
   filter(state == "AK") %>% 
   ##### add st_transform to appropriate projected CRS for each state
@@ -125,18 +129,14 @@ wells_all_buffer_1km <- wells_az_buffer_1km %>%
 saveRDS(wells_all_buffer_1km,
         "data/interim/buffers_wells/buffers_all_buffer_1km.rds")
 
-##---------------------------------------------------------------------------
-## wildfires data
+## wildfires data -----------------------------------------------------------
 
-# data input
-wildfires_all <- readRDS("data/processed/wildfires_all.rds")
-
-# data processing and export
 # 1984
 wildfires_all %>%
   filter(state != "AK") %>% 
   filter(year == 1984) %>% 
   st_as_sf() %>%
+  st_transform(crs_albers) %>% 
   st_union() %>% 
   saveRDS("data/interim/buffers_wildfire_years/wildfires_union_contiguous_1984.rds")
 wildfires_all %>%

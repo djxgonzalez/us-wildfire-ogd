@@ -18,18 +18,22 @@ library("viridis")
 
 ```{r data_input, include=FALSE}
 wells_kbdi <- readRDS("../../data/processed/wells_kbdi.rds")
-study_region_sf <- readRDS("../../data/interim/study_region_sf.rds")
+study_region_sf <- readRDS("../../data/interim/study_region_sf.rds") %>% 
+  st_transform(crs_albers)
 kbdi_max_2017_sf <- readRDS("../../data/processed/kbdi_max_2017.rds") %>% 
   as_tibble() %>%
-  st_as_sf(coords = c("x", "y"), crs = crs_nad83) %>% 
+  st_as_sf(coords = c("x", "y"), crs = crs_wgs84) %>% 
+  st_transform(crs_albers) %>% 
   st_intersection(study_region_sf)
 kbdi_max_2050_sf <- readRDS("../../data/processed/kbdi_max_2050.rds") %>% 
   as_tibble() %>%
-  st_as_sf(coords = c("x", "y"), crs = crs_nad83) %>% 
+  st_as_sf(coords = c("x", "y"), crs = crs_wgs84) %>% 
+  st_transform(crs_albers) %>% 
   st_intersection(study_region_sf)
 kbdi_max_2090_sf <- readRDS("../../data/processed/kbdi_max_2090.rds") %>% 
   as_tibble() %>%
-  st_as_sf(coords = c("x", "y"), crs = crs_nad83) %>% 
+  st_as_sf(coords = c("x", "y"), crs = crs_wgs84) %>% 
+  st_transform(crs_albers) %>% 
   st_intersection(study_region_sf)
 us_states_west <- st_read("../../data/raw/us_census/tl_2018_us_state.shp") %>% 
   filter(STUSPS %in% c("WA", "OR", "CA", "ID", "NV", "AZ", "MT", "WY",

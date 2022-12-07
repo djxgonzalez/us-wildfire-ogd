@@ -13,7 +13,7 @@ us_states_west <- st_read("data/raw/us_census/tl_2018_us_state.shp") %>%
                       "CO", "NM", "ND", "SD", "NE", "KS", "OK", "TX", "MO",
                       "AR", "LA")) %>%
   st_geometry() %>%
-  st_transform(crs_nad83)
+  st_transform(crs_albers)
 us_states_east <- st_read("data/raw/us_census/tl_2018_us_state.shp") %>%
   filter(STUSPS %!in% c("WA", "OR", "CA", "ID", "NV", "AZ", "MT", "WY", "UT",
                         "CO", "NM", "ND", "SD", "NE", "KS", "OK", "TX", "MO",
@@ -22,15 +22,15 @@ us_states_east <- st_read("data/raw/us_census/tl_2018_us_state.shp") %>%
                       "Commonwealth of the Northern Mariana Islands",
                       "United States Virgin Islands", "Hawaii")) %>%
   st_geometry() %>%
-  st_transform(crs_nad83)
+  st_transform(crs_albers)
 mex_can <- st_read("data/raw/esri/Countries_WGS84.shp") %>% 
   filter(CNTRY_NAME %in% c("Canada", "Mexico")) %>%
   st_geometry() %>%
-  st_transform(crs_nad83)
+  st_transform(crs_albers)
 rus_can <- st_read("data/raw/esri/Countries_WGS84.shp") %>% 
   filter(CNTRY_NAME %in% c("Canada", "Russia")) %>%
   st_geometry() %>%
-  st_transform(crs_nad83)
+  st_transform(crs_albers)
 
 # fires data
 wildfires_1984 <- 
@@ -147,7 +147,7 @@ wildfires_2020 <-
 
 # lakes <- st_read("data/raw/noaa/gshhg-shp-2.3.7/GSHHS_shp/l/GSHHS_l_L2.shp") %>%
 #   st_make_valid() %>%
-#   st_transform(crs_nad83) %>%
+#   st_transform(crs_albers) %>%
 #   st_union()
 
 
