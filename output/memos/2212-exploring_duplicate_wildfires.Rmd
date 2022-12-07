@@ -61,4 +61,6 @@ Same answer as above; 2 duplicate fires. Let's take a look at them.
 wildfires_ks_ok3 %>% filter(eq_dup == T) %>% View
 ```
 
+Okay, this doesn't seem to be working. As my *next* step, since all of the fires in question appear to be from the 2010s, I'll plot the fires in that decade one year at a time. 
 
+[pick up here]
