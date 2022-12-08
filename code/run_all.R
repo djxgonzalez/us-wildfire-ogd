@@ -43,15 +43,13 @@ source("code/2-exposure_assessment/06-make_analytic_dataset.R")
 ## 4. Communication ==========================================================
 
 # imports raw and processed data, preps data as needed, and generates main 
-# table and figures as well as supplemental figures
-source("code/4-communication/01-make_table_1.R")
-source("code/4-communication/02-make_figure_1.R")
-source("code/4-communication/03-make_figure_2.R")
-source("code/4-communication/04-make_figure_3.R")
-source("code/4-communication/05-make_figure_4.R")
-source("code/4-communication/06-make_figure_s3.R")
-source("code/4-communication/07-make_figure_s5.R")
-source("code/4-communication/08-make_figure_s7.R")
-source("code/4-communication/09-make_figure_s8.R")
+# and supplemental figures and tables
+source("code/4-communication/01-prep_figure_1_data.R")
+source("code/4-communication/02-make_figure_1a.R")
+source("code/4-communication/03-make_figure_1a_inset.R")
+source("code/4-communication/04-make_figure_2.R")
+source("code/4-communication/05-make_figure_3.R")
+source("code/4-communication/06-make_figure_4.R")
+source("code/4-communication/07-make_table_1.R")
 
 ##============================================================================##

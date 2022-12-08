@@ -11,7 +11,7 @@
 source("code/0-setup/01-setup.R")
 
 # data input and prep
-us_states <- st_read("data/raw/us_census/tl_2018_us_state.shp") %>%   
+us_states <- st_read("data/raw/us_census/tl_2018_us_state.shp") %>%    ## update
   filter(STUSPS %in% c("WA", "OR", "CA", "ID", "NV", "AZ", "MT", "WY",
                        "UT", "CO", "NM", "ND", "SD", "NE", "KS", "OK", "TX",
                        "MN", "IA", "MO", "AR", "LA", "WI", "MI", "IL", "IN", 
@@ -22,16 +22,13 @@ mex_can <- st_read("data/raw/esri/Countries_WGS84.shp") %>%
   filter(CNTRY_NAME %in% c("Canada", "Mexico")) %>%
   st_geometry() %>%
   st_transform(crs_nad83)
-lakes <- st_read("data/raw/noaa/gshhg-shp-2.3.7/GSHHS_shp/l/GSHHS_l_L2.shp") %>%
-  st_make_valid() %>%
-  st_transform(crs_nad83) %>%
-  st_union()
-oil_basin_union <- 
+
+oil_basin_union <- ##### replace with wells buffer
   st_read("data/raw/us_eia/SedimentaryBasins_US_EIA/SedimentaryBasins_US_May2011_v2.shp") %>%
   st_transform(crs_nad83) %>%
   st_make_valid() %>% 
   st_union()
-study_region_sf <- readRDS("data/interim/study_region_sf.rds")
+
 kbdi_high_2017_sf <- readRDS("data/processed/kbdi_max_2017.rds") %>% 
   as_tibble() %>%
   st_as_sf(coords = c("x", "y"), crs = crs_nad83) %>% 

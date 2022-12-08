@@ -160,7 +160,7 @@ figure_1a <- ggplot() +
   geom_sf(data = wildfires_2018, fill = "red",    color = NA, alpha = 0.6) +
   geom_sf(data = wildfires_2019, fill = "red",    color = NA, alpha = 0.6) +
   geom_sf(data = wildfires_2020, fill = "red",    color = NA, alpha = 0.6) +
-  geom_sf(data = wells_all_buffer_1km, 
+  geom_sf(data = wells_all_buffer_1km,
           fill = "black", color = NA, alpha = 0.3) +
   xlim(-2400000, 740000) + ylim(350000, 3100000) +  # origin: 96W, 23N
   labs(x = "", y = "") +
@@ -171,7 +171,7 @@ figure_1a <- ggplot() +
 
 # export
 ggsave(filename = "figure_1a.png", plot = figure_1a, device = "png",
-       height = 9.75, width = 10, path = "output/figures/components/")
+       height = 11, width = 13, path = "output/figures/components/")
 
 
 ##============================================================================##
