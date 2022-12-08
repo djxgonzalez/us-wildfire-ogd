@@ -20,7 +20,7 @@ wildfires_all <- readRDS("data/processed/wildfires_all.rds")
 # processing and export ....................................................
 wells_ak_buffer_1km <- wells_all %>%
   filter(state == "AK") %>%
-  st_transform(st_crs(3338)) %>%  # note distinct CRS: NAD83/Alaska Albers
+  st_transform(crs_alaska) %>%  # note distinct CRS: NAD83/Alaska Albers
   st_buffer(dist = 1000) %>%
   st_union()
 saveRDS(wells_ak_buffer_1km,
