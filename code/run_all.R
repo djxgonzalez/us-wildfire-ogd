@@ -3,14 +3,14 @@
 ##          Assessing historical, current, and future risks
 ## AUTHORS: Gonzalez et al. (in prep)
 
-##============================================================================
-## 0. Setup
+
+## 0. Setup ==================================================================
 
 # loads necessary packages and defines global variables
 source("code/0-setup/01-setup.R")
 
-##============================================================================
-## 1. Data Tidying
+
+## 1. Data Tidying ===========================================================
 
 # attaches functions for tidying raw data
 source("code/1-data_tidying/01-tidy_enverus_data.R")
@@ -18,8 +18,8 @@ source("code/1-data_tidying/01-tidy_enverus_data.R")
 # imports raw data, calls tidying functions, exports interim data
 source("code/1-data_tidying/04-call_data_tidying.R")
 
-##============================================================================
-## 2. Exposure Assessment
+
+## 2. Exposure Assessment ====================================================
 
 # attaches functions for tidying raw data
 source("code/2-exposure_assessment/01-fxn_assess_exposure_buffer.R")
@@ -30,8 +30,8 @@ source("code/2-exposure_assessment/02-assess_exposure_cities.R")
 # makes analytic dataset
 source("code/2-exposure_assessment/06-make_analytic_dataset.R")
 
-##============================================================================
-## 3. Analysis
+
+## 3. Analysis ===============================================================
 
 # descriptive statistics are in the Rmd ##### edit this
 
@@ -39,8 +39,8 @@ source("code/2-exposure_assessment/06-make_analytic_dataset.R")
 
 # models are in Rmds ##### edit this
 
-##============================================================================
-## 4. Communication
+
+## 4. Communication ==========================================================
 
 # imports raw and processed data, preps data as needed, and generates main 
 # table and figures as well as supplemental figures

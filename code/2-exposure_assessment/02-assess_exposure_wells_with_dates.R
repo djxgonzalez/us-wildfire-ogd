@@ -11,9 +11,12 @@ source("./code/2-exposure_assessment/02-fxn_assess_exposure_count.R")
 wells_all     <- readRDS("data/processed/wells_all.rds")
 wildfires_all <- readRDS("data/processed/wildfires_all.rds")
 
+
 ## assessments by state ------------------------------------------------------
 
-###### pick up here; maybe look at CA as model for this?
+##### pick up here; maybe look at CA as model for this; edit line-by line
+##### then expand to all states
+##### change projections to (EPSG = 5070 for contiguous U.S., 3338 for AK)
 
 # OK .......................................................................
 wildfires_ok <- wildfires_all %>% filter(state == "OK")

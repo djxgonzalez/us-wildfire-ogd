@@ -16,7 +16,7 @@ library("viridis")
 # coordinate reference system (CRS) for the project
 crs_nad83  <- st_crs(4269)  # NAD83 coordinate reference system
 crs_wgs84  <- st_crs(4326)  # WGS84 coordinate reference system
-crs_albers <- st_crs(5070)  # Albers Equal-AreA Conic projection for N America 
+crs_albers <- st_crs(5070)  # Albers Equal-Area Conic projection for N America 
 
 ##============================================================================##
 
