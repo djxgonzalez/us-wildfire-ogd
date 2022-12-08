@@ -159,9 +159,26 @@ saveRDS(wells_wy_buffer_1km, "data/interim/buffers_wells/buffers_wy_buffer_1km.r
 
 
 # unionizes and exports wells buffers ...................................
-wells_all_buffer_1km <- wells_az_buffer_1km %>% 
-  st_union(wells_ca_buffer_1km)
-  ##### fill in the rest of the states
+wells_all_buffer_1km <- wells_ar_buffer_1km %>% 
+  st_union(wells_az_buffer_1km) %>% 
+  st_union(wells_ca_buffer_1km) %>% 
+  st_union(wells_co_buffer_1km) %>% 
+  st_union(wells_id_buffer_1km) %>% 
+  st_union(wells_ks_buffer_1km) %>% 
+  st_union(wells_mt_buffer_1km) %>% 
+  st_union(wells_nd_buffer_1km) %>% 
+  st_union(wells_ne_buffer_1km) %>% 
+  st_union(wells_la_buffer_1km) %>% 
+  st_union(wells_mo_buffer_1km) %>% 
+  st_union(wells_nm_buffer_1km) %>% 
+  st_union(wells_nv_buffer_1km) %>% 
+  st_union(wells_ok_buffer_1km) %>% 
+  st_union(wells_or_buffer_1km) %>% 
+  st_union(wells_sd_buffer_1km) %>% 
+  st_union(wells_tx_buffer_1km) %>% 
+  st_union(wells_ut_buffer_1km) %>% 
+  st_union(wells_wa_buffer_1km) %>% 
+  st_union(wells_wy_buffer_1km)
 saveRDS(wells_all_buffer_1km,
         "data/interim/buffers_wells/buffers_all_buffer_1km.rds")
 
