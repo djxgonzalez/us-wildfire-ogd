@@ -174,23 +174,4 @@ ggsave(filename = "figure_1a.png", plot = figure_1a, device = "png",
        height = 9.75, width = 10, path = "output/figures/components/")
 
 
-## Figure 1a inset ----------------------------------------------------------
-## Wildfires (shaded by decade) and 1 km buffers around all wells in the 
-## Alaska; similar to code
-
-
-# rus_can <- st_read("data/raw/esri/Countries_WGS84.shp") %>%  # for AK map
-# filter(CNTRY_NAME %in% c("Canada", "Russia")) %>%
-# st_geometry() %>%
-# st_transform(crs_albers)
-
-# makes figure
-figure_1a_inset <- ggplot()
-figure_1a_inset
-
-# export
-ggsave(filename = "figure_1a_inset.png", plot = figure_1a_inset, device = "png",
-       height = 5, width = 5, path = "output/figures/")
-
-
 ##============================================================================##

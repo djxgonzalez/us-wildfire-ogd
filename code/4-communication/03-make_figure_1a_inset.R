@@ -158,7 +158,6 @@ figure_1a_inset <- ggplot() +
   theme(panel.background = element_rect(fill  = "#e9f5f8"),  # d0ecfd
         panel.grid       = element_line(color = "#e9f5f8"),  # e8f4f8
         legend.position = "none")
-figure_1a_inset
 
 # export
 ggsave(filename = "figure_1a_inset.png", plot = figure_1a_inset, device = "png",
