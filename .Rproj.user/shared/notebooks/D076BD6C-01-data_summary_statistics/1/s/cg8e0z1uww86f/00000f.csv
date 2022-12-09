@@ -1,2 +1,0 @@
-"0","wells_all     <- readRDS(""../../data/processed/wells_all.rds"")"
-"0","wildfires_all <- readRDS(""../../data/processed/wildfires_all.rds"")"

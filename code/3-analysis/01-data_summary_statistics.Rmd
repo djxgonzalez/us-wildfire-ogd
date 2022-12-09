@@ -11,7 +11,6 @@ output:
 ---
 
 ```{r setup, include=FALSE}
-# loads necessary packages and defines global variables
 source("../../code/0-setup/01-setup.R")
 ```
 
@@ -82,14 +81,14 @@ wildfires_all %>%
 ### All wells
 
 ```{r echo=FALSE}
-summary(as.factor())
+summary(wells_all)
 ```
 
 ### Wells with dates
 
 ```{r}
 # average duration of operation:
-d <- enverus_wells %>% 
+d <- wells_all %>% 
   drop_na(first_prod_date) %>% 
   drop_na(last_prod_date) %>% 
   mutate(prod_duration = last_prod_date - first_prod_date) %>% 

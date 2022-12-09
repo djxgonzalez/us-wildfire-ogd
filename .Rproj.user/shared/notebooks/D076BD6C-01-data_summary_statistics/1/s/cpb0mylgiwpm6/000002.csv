@@ -1,9 +1,0 @@
-"1","Error in `stopifnot()`:
-! Problem while computing `area = st_area(wildfires_sf)`.
-Caused by error in `s2_geography_from_wkb()`:
-! Evaluation error: Found 1 feature with invalid spherical geometry.
-[5173] Loop 0 is not valid: Edge 293 is degenerate (duplicate vertex).
-Backtrace:
-  1. wildfires_sf %>% st_make_valid() %>% ...
- 25. base::stop(`<Rcpp::v_>`)
-"
