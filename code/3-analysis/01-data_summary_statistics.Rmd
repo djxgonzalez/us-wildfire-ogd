@@ -87,16 +87,16 @@ summary(wells_all)
 ### Wells with dates
 
 ```{r}
-# average duration of operation:
+print("Average duration of operation (years):")
 d <- wells_all %>% 
   drop_na(first_prod_date) %>% 
   drop_na(last_prod_date) %>% 
   mutate(prod_duration = last_prod_date - first_prod_date) %>% 
   select(prod_duration)
 d <- d %>% mutate(prod_duration = as.numeric(prod_duration)) %>%  
-  filter(prod_duration > 0)
-summary(as.numeric(d$prod_duration)/365.25)
-sd(as.numeric(d$prod_duration)/365.25)
+  filter(prod_duration > 0 & prod_duration < 32689)  # known max; removes errors
+summary(as.numeric(d$prod_duration) / 365.25)
+sd(as.numeric(d$prod_duration) / 365.25)
 ```
 
 ### Wells without dates
