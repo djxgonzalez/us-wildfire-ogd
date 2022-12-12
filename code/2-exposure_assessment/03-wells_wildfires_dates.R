@@ -7,7 +7,7 @@
 
 # attaches functions .....................................................
 source("code/2-exposure_assessment/01-fxn-count_wells_in_wildfires.R")
-library("parallel")   # for the `mclapply()` fxn
+library("parallel")   # for the `mclapply()` fxn, if using MacOS
 library("lubridate")  # for `Year()` fxn
 
 # data input .............................................................
@@ -38,7 +38,7 @@ wells_in <- wells_all %>%
 
 # wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
 wildfires_wells_ak <- 
-  mclapply(wildfires_in,  # if not using MacOS, use `lapply()` instead
+  lapply(wildfires_in,  # if not using MacOS, use `lapply()` instead
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer_dist  = 0,  # in meters
@@ -50,7 +50,7 @@ write_csv(wildfires_wells_ak,
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_ak_buffer_1km <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer       = 1000,  # in meters
@@ -85,7 +85,7 @@ wells_in <- wells_all %>%
 
 # wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
 wildfires_wells_ar <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer_dist  = 0,  # in meters
@@ -97,7 +97,7 @@ write_csv(wildfires_wells_ar,
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_ar_buffer_1km <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer       = 1000,  # in meters
@@ -132,7 +132,7 @@ wells_in <- wells_all %>%
 
 # wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
 wildfires_wells_az <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer_dist  = 0,  # in meters
@@ -144,7 +144,7 @@ write_csv(wildfires_wells_az,
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_az_buffer_1km <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer       = 1000,  # in meters
@@ -179,7 +179,7 @@ wells_in <- wells_all %>%
 
 # wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
 wildfires_wells_ca <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer_dist  = 0,  # in meters
@@ -191,7 +191,7 @@ write_csv(wildfires_wells_ca,
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_ca_buffer_1km <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer       = 1000,  # in meters
@@ -226,7 +226,7 @@ wells_in <- wells_all %>%
 
 # wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
 wildfires_wells_co <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer_dist  = 0,  # in meters
@@ -238,7 +238,7 @@ write_csv(wildfires_wells_co,
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_co_buffer_1km <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer       = 1000,  # in meters
@@ -273,7 +273,7 @@ wells_in <- wells_all %>%
 
 # wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
 wildfires_wells_id <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer_dist  = 0,  # in meters
@@ -285,7 +285,7 @@ write_csv(wildfires_wells_id,
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_id_buffer_1km <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer       = 1000,  # in meters
@@ -320,7 +320,7 @@ wells_in <- wells_all %>%
 
 # wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
 wildfires_wells_ks <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer_dist  = 0,  # in meters
@@ -332,7 +332,7 @@ write_csv(wildfires_wells_ks,
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_ks_buffer_1km <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer       = 1000,  # in meters
@@ -367,7 +367,7 @@ wells_in <- wells_all %>%
 
 # wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
 wildfires_wells_la <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer_dist  = 0,  # in meters
@@ -379,7 +379,7 @@ write_csv(wildfires_wells_la,
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_la_buffer_1km <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer       = 1000,  # in meters
@@ -414,7 +414,7 @@ wells_in <- wells_all %>%
 
 # wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
 wildfires_wells_mo <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer_dist  = 0,  # in meters
@@ -426,7 +426,7 @@ write_csv(wildfires_wells_mo,
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_mo_buffer_1km <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer       = 1000,  # in meters
@@ -461,7 +461,7 @@ wells_in <- wells_all %>%
 
 # wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
 wildfires_wells_mt <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer_dist  = 0,  # in meters
@@ -473,7 +473,7 @@ write_csv(wildfires_wells_mt,
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_mt_buffer_1km <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer       = 1000,  # in meters
@@ -508,7 +508,7 @@ wells_in <- wells_all %>%
 
 # wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
 wildfires_wells_nd <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer_dist  = 0,  # in meters
@@ -520,7 +520,7 @@ write_csv(wildfires_wells_nd,
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_nd_buffer_1km <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer       = 1000,  # in meters
@@ -555,7 +555,7 @@ wells_in <- wells_all %>%
 
 # wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
 wildfires_wells_ne <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer_dist  = 0,  # in meters
@@ -567,7 +567,7 @@ write_csv(wildfires_wells_ne,
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_ne_buffer_1km <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer       = 1000,  # in meters
@@ -602,7 +602,7 @@ wells_in <- wells_all %>%
 
 # wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
 wildfires_wells_nm <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer_dist  = 0,  # in meters
@@ -614,7 +614,7 @@ write_csv(wildfires_wells_nm,
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_nm_buffer_1km <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer       = 1000,  # in meters
@@ -649,7 +649,7 @@ wells_in <- wells_all %>%
 
 # wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
 wildfires_wells_nv <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer_dist  = 0,  # in meters
@@ -661,7 +661,7 @@ write_csv(wildfires_wells_nv,
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_nv_buffer_1km <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer       = 1000,  # in meters
@@ -696,7 +696,7 @@ wells_in <- wells_all %>%
 
 # wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
 wildfires_wells_ok <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer_dist  = 0,  # in meters
@@ -708,7 +708,7 @@ write_csv(wildfires_wells_ok,
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_ok_buffer_1km <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer       = 1000,  # in meters
@@ -743,7 +743,7 @@ wells_in <- wells_all %>%
 
 # wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
 wildfires_wells_or <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer_dist  = 0,  # in meters
@@ -755,7 +755,7 @@ write_csv(wildfires_wells_or,
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_or_buffer_1km <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer       = 1000,  # in meters
@@ -790,7 +790,7 @@ wells_in <- wells_all %>%
 
 # wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
 wildfires_wells_sd <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer_dist  = 0,  # in meters
@@ -802,7 +802,7 @@ write_csv(wildfires_wells_sd,
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_sd_buffer_1km <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer       = 1000,  # in meters
@@ -837,7 +837,7 @@ wells_in <- wells_all %>%
 
 # wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
 wildfires_wells_tx <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer_dist  = 0,  # in meters
@@ -849,7 +849,7 @@ write_csv(wildfires_wells_tx,
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_tx_buffer_1km <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer       = 1000,  # in meters
@@ -884,7 +884,7 @@ wells_in <- wells_all %>%
 
 # wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
 wildfires_wells_ut <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer_dist  = 0,  # in meters
@@ -896,7 +896,7 @@ write_csv(wildfires_wells_ut,
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_ut_buffer_1km <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer       = 1000,  # in meters
@@ -931,7 +931,7 @@ wells_in <- wells_all %>%
 
 # wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
 wildfires_wells_wa <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer_dist  = 0,  # in meters
@@ -943,7 +943,7 @@ write_csv(wildfires_wells_wa,
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_wa_buffer_1km <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer       = 1000,  # in meters
@@ -978,7 +978,7 @@ wells_in <- wells_all %>%
 
 # wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
 wildfires_wells_wy <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer_dist  = 0,  # in meters
@@ -990,7 +990,7 @@ write_csv(wildfires_wells_wy,
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_wy_buffer_1km <- 
-  mclapply(wildfires_in,
+  lapply(wildfires_in,
            FUN          = assessExposureCount,
            wells        = wells_in,
            buffer       = 1000,  # in meters
