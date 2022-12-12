@@ -159,7 +159,849 @@ rm(wildfires_in, wells_in, wildfires_wells_az,
    wildfires_wells_az_buffer_1km)
 
 
-##### NEXT: add the rest of the states!
+# CA -----------------------------------------------------------------------
 
+# data prep ..............................................................
+
+# restricts to wildfires near wells (i.e., intersect with 1 km well buffer)
+wildfires_in <- wildfires_all %>%
+  filter(state == "CA") %>% 
+  st_as_sf() %>%
+  st_transform(crs_albers) %>% 
+  st_intersection(readRDS("data/interim/wells_buffers/wells_ca_buffer_1km.rds"))
+wildfires_in <- split(wildfires_in, seq(1, nrow(wildfires_in))) #converts to list
+# restricts to wells near wildfires (i.e., w/in 1 km of wildfire boundaries)
+wells_in <- wells_all %>% 
+  filter(state == "CA") %>% 
+  st_intersection(
+    readRDS("data/interim/wildfires_buffers/wildfires_ca_buffer_1km.rds")) %>% 
+  st_transform(crs_albers)
+
+# wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
+wildfires_wells_ca <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer_dist  = 0,  # in meters
+           exp_variable = "n_wells") 
+wildfires_wells_ca <- 
+  do.call("rbind", wildfires_wells_ca)  # converts from list
+write_csv(wildfires_wells_ca, 
+          "data/processed/wildfires_wells/wildfires_wells_ca.csv")
+
+# wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
+wildfires_wells_ca_buffer_1km <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer       = 1000,  # in meters
+           exp_variable = "n_wells_buffer_1km") 
+wildfires_wells_ca_buffer_1km <- 
+  do.call("rbind", wildfires_wells_ca_buffer_1km)
+write_csv(wildfires_wells_ca_buffer_1km, 
+          "data/processed/wildfires_wells/wildfires_wells_ca_buffer_1km.csv")
+
+# removes datasets before moving on to the next state
+rm(wildfires_in, wells_in, wildfires_wells_ca, 
+   wildfires_wells_ca_buffer_1km)
+
+
+# CO -----------------------------------------------------------------------
+
+# data prep ..............................................................
+
+# restricts to wildfires near wells (i.e., intersect with 1 km well buffer)
+wildfires_in <- wildfires_all %>%
+  filter(state == "CO") %>% 
+  st_as_sf() %>%
+  st_transform(crs_albers) %>% 
+  st_intersection(readRDS("data/interim/wells_buffers/wells_co_buffer_1km.rds"))
+wildfires_in <- split(wildfires_in, seq(1, nrow(wildfires_in))) #converts to list
+# restricts to wells near wildfires (i.e., w/in 1 km of wildfire boundaries)
+wells_in <- wells_all %>% 
+  filter(state == "CO") %>% 
+  st_intersection(
+    readRDS("data/interim/wildfires_buffers/wildfires_co_buffer_1km.rds")) %>% 
+  st_transform(crs_albers)
+
+# wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
+wildfires_wells_co <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer_dist  = 0,  # in meters
+           exp_variable = "n_wells") 
+wildfires_wells_co <- 
+  do.call("rbind", wildfires_wells_co)  # converts from list
+write_csv(wildfires_wells_co, 
+          "data/processed/wildfires_wells/wildfires_wells_co.csv")
+
+# wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
+wildfires_wells_co_buffer_1km <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer       = 1000,  # in meters
+           exp_variable = "n_wells_buffer_1km") 
+wildfires_wells_co_buffer_1km <- 
+  do.call("rbind", wildfires_wells_co_buffer_1km)
+write_csv(wildfires_wells_co_buffer_1km, 
+          "data/processed/wildfires_wells/wildfires_wells_co_buffer_1km.csv")
+
+# removes datasets before moving on to the next state
+rm(wildfires_in, wells_in, wildfires_wells_co, 
+   wildfires_wells_co_buffer_1km)
+
+
+# ID -----------------------------------------------------------------------
+
+# data prep ..............................................................
+
+# restricts to wildfires near wells (i.e., intersect with 1 km well buffer)
+wildfires_in <- wildfires_all %>%
+  filter(state == "ID") %>% 
+  st_as_sf() %>%
+  st_transform(crs_albers) %>%
+  st_intersection(readRDS("data/interim/wells_buffers/wells_id_buffer_1km.rds"))
+wildfires_in <- split(wildfires_in, seq(1, nrow(wildfires_in))) #converts to list
+# restricts to wells near wildfires (i.e., w/in 1 km of wildfire boundaries)
+wells_in <- wells_all %>% 
+  filter(state == "ID") %>% 
+  st_intersection(
+    readRDS("data/interim/wildfires_buffers/wildfires_id_buffer_1km.rds")) %>% 
+  st_transform(crs_albers)
+
+# wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
+wildfires_wells_id <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer_dist  = 0,  # in meters
+           exp_variable = "n_wells") 
+wildfires_wells_id <- 
+  do.call("rbind", wildfires_wells_id)  # converts from list
+write_csv(wildfires_wells_id, 
+          "data/processed/wildfires_wells/wildfires_wells_id.csv")
+
+# wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
+wildfires_wells_id_buffer_1km <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer       = 1000,  # in meters
+           exp_variable = "n_wells_buffer_1km") 
+wildfires_wells_id_buffer_1km <- 
+  do.call("rbind", wildfires_wells_id_buffer_1km)
+write_csv(wildfires_wells_id_buffer_1km, 
+          "data/processed/wildfires_wells/wildfires_wells_id_buffer_1km.csv")
+
+# removes datasets before moving on to the next state
+rm(wildfires_in, wells_in, wildfires_wells_id, 
+   wildfires_wells_id_buffer_1km)
+
+
+# KS -----------------------------------------------------------------------
+
+# data prep ..............................................................
+
+# restricts to wildfires near wells (i.e., intersect with 1 km well buffer)
+wildfires_in <- wildfires_all %>%
+  filter(state == "KS") %>% 
+  st_as_sf() %>%
+  st_transform(crs_albers) %>% 
+  st_intersection(readRDS("data/interim/wells_buffers/wells_ks_buffer_1km.rds"))
+wildfires_in <- split(wildfires_in, seq(1, nrow(wildfires_in))) #converts to list
+# restricts to wells near wildfires (i.e., w/in 1 km of wildfire boundaries)
+wells_in <- wells_all %>% 
+  filter(state == "KS") %>% 
+  st_intersection(
+    readRDS("data/interim/wildfires_buffers/wildfires_ks_buffer_1km.rds")) %>% 
+  st_transform(crs_albers)
+
+# wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
+wildfires_wells_ks <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer_dist  = 0,  # in meters
+           exp_variable = "n_wells") 
+wildfires_wells_ks <- 
+  do.call("rbind", wildfires_wells_ks)  # converts from list
+write_csv(wildfires_wells_ks, 
+          "data/processed/wildfires_wells/wildfires_wells_ks.csv")
+
+# wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
+wildfires_wells_ks_buffer_1km <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer       = 1000,  # in meters
+           exp_variable = "n_wells_buffer_1km") 
+wildfires_wells_ks_buffer_1km <- 
+  do.call("rbind", wildfires_wells_ks_buffer_1km)
+write_csv(wildfires_wells_ks_buffer_1km, 
+          "data/processed/wildfires_wells/wildfires_wells_ks_buffer_1km.csv")
+
+# removes datasets before moving on to the next state
+rm(wildfires_in, wells_in, wildfires_wells_ks, 
+   wildfires_wells_ks_buffer_1km)
+
+
+# LA -----------------------------------------------------------------------
+
+# data prep ..............................................................
+
+# restricts to wildfires near wells (i.e., intersect with 1 km well buffer)
+wildfires_in <- wildfires_all %>%
+  filter(state == "LA") %>% 
+  st_as_sf() %>%
+  st_transform(crs_albers) %>% 
+  st_intersection(readRDS("data/interim/wells_buffers/wells_la_buffer_1km.rds"))
+wildfires_in <- split(wildfires_in, seq(1, nrow(wildfires_in))) #converts to list
+# restricts to wells near wildfires (i.e., w/in 1 km of wildfire boundaries)
+wells_in <- wells_all %>% 
+  filter(state == "LA") %>% 
+  st_intersection(
+    readRDS("data/interim/wildfires_buffers/wildfires_la_buffer_1km.rds")) %>% 
+  st_transform(crs_albers)
+
+# wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
+wildfires_wells_la <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer_dist  = 0,  # in meters
+           exp_variable = "n_wells") 
+wildfires_wells_la <- 
+  do.call("rbind", wildfires_wells_la)  # converts from list
+write_csv(wildfires_wells_la, 
+          "data/processed/wildfires_wells/wildfires_wells_la.csv")
+
+# wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
+wildfires_wells_la_buffer_1km <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer       = 1000,  # in meters
+           exp_variable = "n_wells_buffer_1km") 
+wildfires_wells_la_buffer_1km <- 
+  do.call("rbind", wildfires_wells_la_buffer_1km)
+write_csv(wildfires_wells_la_buffer_1km, 
+          "data/processed/wildfires_wells/wildfires_wells_la_buffer_1km.csv")
+
+# removes datasets before moving on to the next state
+rm(wildfires_in, wells_in, wildfires_wells_la, 
+   wildfires_wells_la_buffer_1km)
+
+
+# MO -----------------------------------------------------------------------
+
+# data prep ..............................................................
+
+# restricts to wildfires near wells (i.e., intersect with 1 km well buffer)
+wildfires_in <- wildfires_all %>%
+  filter(state == "MO") %>% 
+  st_as_sf() %>%
+  st_transform(crs_albers) %>% 
+  st_intersection(readRDS("data/interim/wells_buffers/wells_mo_buffer_1km.rds"))
+wildfires_in <- split(wildfires_in, seq(1, nrow(wildfires_in))) #converts to list
+# restricts to wells near wildfires (i.e., w/in 1 km of wildfire boundaries)
+wells_in <- wells_all %>% 
+  filter(state == "MO") %>% 
+  st_intersection(
+    readRDS("data/interim/wildfires_buffers/wildfires_mo_buffer_1km.rds")) %>% 
+  st_transform(crs_albers)
+
+# wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
+wildfires_wells_mo <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer_dist  = 0,  # in meters
+           exp_variable = "n_wells") 
+wildfires_wells_mo <- 
+  do.call("rbind", wildfires_wells_mo)  # converts from list
+write_csv(wildfires_wells_mo, 
+          "data/processed/wildfires_wells/wildfires_wells_mo.csv")
+
+# wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
+wildfires_wells_mo_buffer_1km <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer       = 1000,  # in meters
+           exp_variable = "n_wells_buffer_1km") 
+wildfires_wells_mo_buffer_1km <- 
+  do.call("rbind", wildfires_wells_mo_buffer_1km)
+write_csv(wildfires_wells_mo_buffer_1km, 
+          "data/processed/wildfires_wells/wildfires_wells_mo_buffer_1km.csv")
+
+# removes datasets before moving on to the next state
+rm(wildfires_in, wells_in, wildfires_wells_mo, 
+   wildfires_wells_mo_buffer_1km)
+
+
+# MT -----------------------------------------------------------------------
+
+# data prep ..............................................................
+
+# restricts to wildfires near wells (i.e., intersect with 1 km well buffer)
+wildfires_in <- wildfires_all %>%
+  filter(state == "MT") %>% 
+  st_as_sf() %>%
+  st_transform(crs_albers) %>% 
+  st_intersection(readRDS("data/interim/wells_buffers/wells_mt_buffer_1km.rds"))
+wildfires_in <- split(wildfires_in, seq(1, nrow(wildfires_in))) #converts to list
+# restricts to wells near wildfires (i.e., w/in 1 km of wildfire boundaries)
+wells_in <- wells_all %>% 
+  filter(state == "MT") %>% 
+  st_intersection(
+    readRDS("data/interim/wildfires_buffers/wildfires_mt_buffer_1km.rds")) %>% 
+  st_transform(crs_albers)
+
+# wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
+wildfires_wells_mt <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer_dist  = 0,  # in meters
+           exp_variable = "n_wells") 
+wildfires_wells_mt <- 
+  do.call("rbind", wildfires_wells_mt)  # converts from list
+write_csv(wildfires_wells_mt, 
+          "data/processed/wildfires_wells/wildfires_wells_mt.csv")
+
+# wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
+wildfires_wells_mt_buffer_1km <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer       = 1000,  # in meters
+           exp_variable = "n_wells_buffer_1km") 
+wildfires_wells_mt_buffer_1km <- 
+  do.call("rbind", wildfires_wells_mt_buffer_1km)
+write_csv(wildfires_wells_mt_buffer_1km, 
+          "data/processed/wildfires_wells/wildfires_wells_mt_buffer_1km.csv")
+
+# removes datasets before moving on to the next state
+rm(wildfires_in, wells_in, wildfires_wells_mt, 
+   wildfires_wells_mt_buffer_1km)
+
+
+# ND -----------------------------------------------------------------------
+
+# data prep ..............................................................
+
+# restricts to wildfires near wells (i.e., intersect with 1 km well buffer)
+wildfires_in <- wildfires_all %>%
+  filter(state == "ND") %>% 
+  st_as_sf() %>%
+  st_transform(crs_albers) %>% 
+  st_intersection(readRDS("data/interim/wells_buffers/wells_nd_buffer_1km.rds"))
+wildfires_in <- split(wildfires_in, seq(1, nrow(wildfires_in))) #converts to list
+# restricts to wells near wildfires (i.e., w/in 1 km of wildfire boundaries)
+wells_in <- wells_all %>% 
+  filter(state == "ND") %>% 
+  st_intersection(
+    readRDS("data/interim/wildfires_buffers/wildfires_nd_buffer_1km.rds")) %>% 
+  st_transform(crs_albers)
+
+# wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
+wildfires_wells_nd <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer_dist  = 0,  # in meters
+           exp_variable = "n_wells") 
+wildfires_wells_nd <- 
+  do.call("rbind", wildfires_wells_nd)  # converts from list
+write_csv(wildfires_wells_nd, 
+          "data/processed/wildfires_wells/wildfires_wells_nd.csv")
+
+# wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
+wildfires_wells_nd_buffer_1km <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer       = 1000,  # in meters
+           exp_variable = "n_wells_buffer_1km") 
+wildfires_wells_nd_buffer_1km <- 
+  do.call("rbind", wildfires_wells_nd_buffer_1km)
+write_csv(wildfires_wells_nd_buffer_1km, 
+          "data/processed/wildfires_wells/wildfires_wells_nd_buffer_1km.csv")
+
+# removes datasets before moving on to the next state
+rm(wildfires_in, wells_in, wildfires_wells_nd, 
+   wildfires_wells_nd_buffer_1km)
+
+
+# NE -----------------------------------------------------------------------
+
+# data prep ..............................................................
+
+# restricts to wildfires near wells (i.e., intersect with 1 km well buffer)
+wildfires_in <- wildfires_all %>%
+  filter(state == "NE") %>% 
+  st_as_sf() %>%
+  st_transform(crs_albers) %>% 
+  st_intersection(readRDS("data/interim/wells_buffers/wells_ne_buffer_1km.rds"))
+wildfires_in <- split(wildfires_in, seq(1, nrow(wildfires_in))) #converts to list
+# restricts to wells near wildfires (i.e., w/in 1 km of wildfire boundaries)
+wells_in <- wells_all %>% 
+  filter(state == "NE") %>% 
+  st_intersection(
+    readRDS("data/interim/wildfires_buffers/wildfires_ne_buffer_1km.rds")) %>% 
+  st_transform(crs_albers)
+
+# wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
+wildfires_wells_ne <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer_dist  = 0,  # in meters
+           exp_variable = "n_wells") 
+wildfires_wells_ne <- 
+  do.call("rbind", wildfires_wells_ne)  # converts from list
+write_csv(wildfires_wells_ne, 
+          "data/processed/wildfires_wells/wildfires_wells_ne.csv")
+
+# wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
+wildfires_wells_ne_buffer_1km <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer       = 1000,  # in meters
+           exp_variable = "n_wells_buffer_1km") 
+wildfires_wells_ne_buffer_1km <- 
+  do.call("rbind", wildfires_wells_ne_buffer_1km)
+write_csv(wildfires_wells_ne_buffer_1km, 
+          "data/processed/wildfires_wells/wildfires_wells_ne_buffer_1km.csv")
+
+# removes datasets before moving on to the next state
+rm(wildfires_in, wells_in, wildfires_wells_ne, 
+   wildfires_wells_ne_buffer_1km)
+
+
+# NM -----------------------------------------------------------------------
+
+# data prep ..............................................................
+
+# restricts to wildfires near wells (i.e., intersect with 1 km well buffer)
+wildfires_in <- wildfires_all %>%
+  filter(state == "NM") %>% 
+  st_as_sf() %>%
+  st_transform(crs_albers) %>% 
+  st_intersection(readRDS("data/interim/wells_buffers/wells_nm_buffer_1km.rds"))
+wildfires_in <- split(wildfires_in, seq(1, nrow(wildfires_in))) #converts to list
+# restricts to wells near wildfires (i.e., w/in 1 km of wildfire boundaries)
+wells_in <- wells_all %>% 
+  filter(state == "NM") %>% 
+  st_intersection(
+    readRDS("data/interim/wildfires_buffers/wildfires_nm_buffer_1km.rds")) %>% 
+  st_transform(crs_albers)
+
+# wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
+wildfires_wells_nm <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer_dist  = 0,  # in meters
+           exp_variable = "n_wells") 
+wildfires_wells_nm <- 
+  do.call("rbind", wildfires_wells_nm)  # converts from list
+write_csv(wildfires_wells_nm, 
+          "data/processed/wildfires_wells/wildfires_wells_nm.csv")
+
+# wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
+wildfires_wells_nm_buffer_1km <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer       = 1000,  # in meters
+           exp_variable = "n_wells_buffer_1km") 
+wildfires_wells_nm_buffer_1km <- 
+  do.call("rbind", wildfires_wells_nm_buffer_1km)
+write_csv(wildfires_wells_nm_buffer_1km, 
+          "data/processed/wildfires_wells/wildfires_wells_nm_buffer_1km.csv")
+
+# removes datasets before moving on to the next state
+rm(wildfires_in, wells_in, wildfires_wells_nm, 
+   wildfires_wells_nm_buffer_1km)
+
+
+# NV -----------------------------------------------------------------------
+
+# data prep ..............................................................
+
+# restricts to wildfires near wells (i.e., intersect with 1 km well buffer)
+wildfires_in <- wildfires_all %>%
+  filter(state == "NV") %>% 
+  st_as_sf() %>%
+  st_transform(crs_albers) %>% 
+  st_intersection(readRDS("data/interim/wells_buffers/wells_nv_buffer_1km.rds"))
+wildfires_in <- split(wildfires_in, seq(1, nrow(wildfires_in))) #converts to list
+# restricts to wells near wildfires (i.e., w/in 1 km of wildfire boundaries)
+wells_in <- wells_all %>% 
+  filter(state == "NV") %>% 
+  st_intersection(
+    readRDS("data/interim/wildfires_buffers/wildfires_nv_buffer_1km.rds")) %>% 
+  st_transform(crs_albers)
+
+# wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
+wildfires_wells_nv <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer_dist  = 0,  # in meters
+           exp_variable = "n_wells") 
+wildfires_wells_nv <- 
+  do.call("rbind", wildfires_wells_nv)  # converts from list
+write_csv(wildfires_wells_nv, 
+          "data/processed/wildfires_wells/wildfires_wells_nv.csv")
+
+# wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
+wildfires_wells_nv_buffer_1km <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer       = 1000,  # in meters
+           exp_variable = "n_wells_buffer_1km") 
+wildfires_wells_nv_buffer_1km <- 
+  do.call("rbind", wildfires_wells_nv_buffer_1km)
+write_csv(wildfires_wells_nv_buffer_1km, 
+          "data/processed/wildfires_wells/wildfires_wells_nv_buffer_1km.csv")
+
+# removes datasets before moving on to the next state
+rm(wildfires_in, wells_in, wildfires_wells_nv, 
+   wildfires_wells_nv_buffer_1km)
+
+
+# OK -----------------------------------------------------------------------
+
+# data prep ..............................................................
+
+# restricts to wildfires near wells (i.e., intersect with 1 km well buffer)
+wildfires_in <- wildfires_all %>%
+  filter(state == "OK") %>% 
+  st_as_sf() %>%
+  st_transform(crs_albers) %>% 
+  st_intersection(readRDS("data/interim/wells_buffers/wells_ok_buffer_1km.rds"))
+wildfires_in <- split(wildfires_in, seq(1, nrow(wildfires_in))) #converts to list
+# restricts to wells near wildfires (i.e., w/in 1 km of wildfire boundaries)
+wells_in <- wells_all %>% 
+  filter(state == "OK") %>% 
+  st_intersection(
+    readRDS("data/interim/wildfires_buffers/wildfires_ok_buffer_1km.rds")) %>% 
+  st_transform(crs_albers)
+
+# wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
+wildfires_wells_ok <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer_dist  = 0,  # in meters
+           exp_variable = "n_wells") 
+wildfires_wells_ok <- 
+  do.call("rbind", wildfires_wells_ok)  # converts from list
+write_csv(wildfires_wells_ok, 
+          "data/processed/wildfires_wells/wildfires_wells_ok.csv")
+
+# wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
+wildfires_wells_ok_buffer_1km <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer       = 1000,  # in meters
+           exp_variable = "n_wells_buffer_1km") 
+wildfires_wells_ok_buffer_1km <- 
+  do.call("rbind", wildfires_wells_ok_buffer_1km)
+write_csv(wildfires_wells_ok_buffer_1km, 
+          "data/processed/wildfires_wells/wildfires_wells_ok_buffer_1km.csv")
+
+# removes datasets before moving on to the next state
+rm(wildfires_in, wells_in, wildfires_wells_ok, 
+   wildfires_wells_ok_buffer_1km)
+
+
+# OR -----------------------------------------------------------------------
+
+# data prep ..............................................................
+
+# restricts to wildfires near wells (i.e., intersect with 1 km well buffer)
+wildfires_in <- wildfires_all %>%
+  filter(state == "OR") %>% 
+  st_as_sf() %>%
+  st_transform(crs_albers) %>% 
+  st_intersection(readRDS("data/interim/wells_buffers/wells_or_buffer_1km.rds"))
+wildfires_in <- split(wildfires_in, seq(1, nrow(wildfires_in))) #converts to list
+# restricts to wells near wildfires (i.e., w/in 1 km of wildfire boundaries)
+wells_in <- wells_all %>% 
+  filter(state == "OR") %>% 
+  st_intersection(
+    readRDS("data/interim/wildfires_buffers/wildfires_or_buffer_1km.rds")) %>% 
+  st_transform(crs_albers)
+
+# wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
+wildfires_wells_or <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer_dist  = 0,  # in meters
+           exp_variable = "n_wells") 
+wildfires_wells_or <- 
+  do.call("rbind", wildfires_wells_or)  # converts from list
+write_csv(wildfires_wells_or, 
+          "data/processed/wildfires_wells/wildfires_wells_or.csv")
+
+# wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
+wildfires_wells_or_buffer_1km <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer       = 1000,  # in meters
+           exp_variable = "n_wells_buffer_1km") 
+wildfires_wells_or_buffer_1km <- 
+  do.call("rbind", wildfires_wells_or_buffer_1km)
+write_csv(wildfires_wells_or_buffer_1km, 
+          "data/processed/wildfires_wells/wildfires_wells_or_buffer_1km.csv")
+
+# removes datasets before moving on to the next state
+rm(wildfires_in, wells_in, wildfires_wells_or, 
+   wildfires_wells_or_buffer_1km)
+
+
+# SD -----------------------------------------------------------------------
+
+# data prep ..............................................................
+
+# restricts to wildfires near wells (i.e., intersect with 1 km well buffer)
+wildfires_in <- wildfires_all %>%
+  filter(state == "SD") %>% 
+  st_as_sf() %>%
+  st_transform(crs_albers) %>% 
+  st_intersection(readRDS("data/interim/wells_buffers/wells_sd_buffer_1km.rds"))
+wildfires_in <- split(wildfires_in, seq(1, nrow(wildfires_in))) #converts to list
+# restricts to wells near wildfires (i.e., w/in 1 km of wildfire boundaries)
+wells_in <- wells_all %>% 
+  filter(state == "SD") %>% 
+  st_intersection(
+    readRDS("data/interim/wildfires_buffers/wildfires_sd_buffer_1km.rds")) %>% 
+  st_transform(crs_albers)
+
+# wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
+wildfires_wells_sd <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer_dist  = 0,  # in meters
+           exp_variable = "n_wells") 
+wildfires_wells_sd <- 
+  do.call("rbind", wildfires_wells_sd)  # converts from list
+write_csv(wildfires_wells_sd, 
+          "data/processed/wildfires_wells/wildfires_wells_sd.csv")
+
+# wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
+wildfires_wells_sd_buffer_1km <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer       = 1000,  # in meters
+           exp_variable = "n_wells_buffer_1km") 
+wildfires_wells_sd_buffer_1km <- 
+  do.call("rbind", wildfires_wells_sd_buffer_1km)
+write_csv(wildfires_wells_sd_buffer_1km, 
+          "data/processed/wildfires_wells/wildfires_wells_sd_buffer_1km.csv")
+
+# removes datasets before moving on to the next state
+rm(wildfires_in, wells_in, wildfires_wells_sd, 
+   wildfires_wells_sd_buffer_1km)
+
+
+# TX -----------------------------------------------------------------------
+
+# data prep ..............................................................
+
+# restricts to wildfires near wells (i.e., intersect with 1 km well buffer)
+wildfires_in <- wildfires_all %>%
+  filter(state == "TX") %>% 
+  st_as_sf() %>%
+  st_transform(crs_albers) %>% 
+  st_intersection(readRDS("data/interim/wells_buffers/wells_tx_buffer_1km.rds"))
+wildfires_in <- split(wildfires_in, seq(1, nrow(wildfires_in))) #converts to list
+# restricts to wells near wildfires (i.e., w/in 1 km of wildfire boundaries)
+wells_in <- wells_all %>% 
+  filter(state == "TX") %>% 
+  st_intersection(
+    readRDS("data/interim/wildfires_buffers/wildfires_tx_buffer_1km.rds")) %>% 
+  st_transform(crs_albers)
+
+# wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
+wildfires_wells_tx <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer_dist  = 0,  # in meters
+           exp_variable = "n_wells") 
+wildfires_wells_tx <- 
+  do.call("rbind", wildfires_wells_tx)  # converts from list
+write_csv(wildfires_wells_tx, 
+          "data/processed/wildfires_wells/wildfires_wells_tx.csv")
+
+# wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
+wildfires_wells_tx_buffer_1km <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer       = 1000,  # in meters
+           exp_variable = "n_wells_buffer_1km") 
+wildfires_wells_tx_buffer_1km <- 
+  do.call("rbind", wildfires_wells_tx_buffer_1km)
+write_csv(wildfires_wells_tx_buffer_1km, 
+          "data/processed/wildfires_wells/wildfires_wells_tx_buffer_1km.csv")
+
+# removes datasets before moving on to the next state
+rm(wildfires_in, wells_in, wildfires_wells_tx, 
+   wildfires_wells_tx_buffer_1km)
+
+
+# UT -----------------------------------------------------------------------
+
+# data prep ..............................................................
+
+# restricts to wildfires near wells (i.e., intersect with 1 km well buffer)
+wildfires_in <- wildfires_all %>%
+  filter(state == "UT") %>% 
+  st_as_sf() %>%
+  st_transform(crs_albers) %>% 
+  st_intersection(readRDS("data/interim/wells_buffers/wells_ut_buffer_1km.rds"))
+wildfires_in <- split(wildfires_in, seq(1, nrow(wildfires_in))) #converts to list
+# restricts to wells near wildfires (i.e., w/in 1 km of wildfire boundaries)
+wells_in <- wells_all %>% 
+  filter(state == "UT") %>% 
+  st_intersection(
+    readRDS("data/interim/wildfires_buffers/wildfires_ut_buffer_1km.rds")) %>% 
+  st_transform(crs_albers)
+
+# wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
+wildfires_wells_ut <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer_dist  = 0,  # in meters
+           exp_variable = "n_wells") 
+wildfires_wells_ut <- 
+  do.call("rbind", wildfires_wells_ut)  # converts from list
+write_csv(wildfires_wells_ut, 
+          "data/processed/wildfires_wells/wildfires_wells_ut.csv")
+
+# wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
+wildfires_wells_ut_buffer_1km <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer       = 1000,  # in meters
+           exp_variable = "n_wells_buffer_1km") 
+wildfires_wells_ut_buffer_1km <- 
+  do.call("rbind", wildfires_wells_ut_buffer_1km)
+write_csv(wildfires_wells_ut_buffer_1km, 
+          "data/processed/wildfires_wells/wildfires_wells_ut_buffer_1km.csv")
+
+# removes datasets before moving on to the next state
+rm(wildfires_in, wells_in, wildfires_wells_ut, 
+   wildfires_wells_ut_buffer_1km)
+
+
+# WA -----------------------------------------------------------------------
+
+# data prep ..............................................................
+
+# restricts to wildfires near wells (i.e., intersect with 1 km well buffer)
+wildfires_in <- wildfires_all %>%
+  filter(state == "WA") %>% 
+  st_as_sf() %>%
+  st_transform(crs_albers) %>% 
+  st_intersection(readRDS("data/interim/wells_buffers/wells_wa_buffer_1km.rds"))
+wildfires_in <- split(wildfires_in, seq(1, nrow(wildfires_in))) #converts to list
+# restricts to wells near wildfires (i.e., w/in 1 km of wildfire boundaries)
+wells_in <- wells_all %>% 
+  filter(state == "WA") %>% 
+  st_intersection(
+    readRDS("data/interim/wildfires_buffers/wildfires_wa_buffer_1km.rds")) %>% 
+  st_transform(crs_albers)
+
+# wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
+wildfires_wells_wa <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer_dist  = 0,  # in meters
+           exp_variable = "n_wells") 
+wildfires_wells_wa <- 
+  do.call("rbind", wildfires_wells_wa)  # converts from list
+write_csv(wildfires_wells_wa, 
+          "data/processed/wildfires_wells/wildfires_wells_wa.csv")
+
+# wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
+wildfires_wells_wa_buffer_1km <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer       = 1000,  # in meters
+           exp_variable = "n_wells_buffer_1km") 
+wildfires_wells_wa_buffer_1km <- 
+  do.call("rbind", wildfires_wells_wa_buffer_1km)
+write_csv(wildfires_wells_wa_buffer_1km, 
+          "data/processed/wildfires_wells/wildfires_wells_wa_buffer_1km.csv")
+
+# removes datasets before moving on to the next state
+rm(wildfires_in, wells_in, wildfires_wells_wa, 
+   wildfires_wells_wa_buffer_1km)
+
+
+# WY -----------------------------------------------------------------------
+
+# data prep ..............................................................
+
+# restricts to wildfires near wells (i.e., intersect with 1 km well buffer)
+wildfires_in <- wildfires_all %>%
+  filter(state == "WY") %>% 
+  st_as_sf() %>%
+  st_transform(crs_albers) %>% 
+  st_intersection(readRDS("data/interim/wells_buffers/wells_wy_buffer_1km.rds"))
+wildfires_in <- split(wildfires_in, seq(1, nrow(wildfires_in))) #converts to list
+# restricts to wells near wildfires (i.e., w/in 1 km of wildfire boundaries)
+wells_in <- wells_all %>% 
+  filter(state == "WY") %>% 
+  st_intersection(
+    readRDS("data/interim/wildfires_buffers/wildfires_wy_buffer_1km.rds")) %>% 
+  st_transform(crs_albers)
+
+# wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
+wildfires_wells_wy <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer_dist  = 0,  # in meters
+           exp_variable = "n_wells") 
+wildfires_wells_wy <- 
+  do.call("rbind", wildfires_wells_wy)  # converts from list
+write_csv(wildfires_wells_wy, 
+          "data/processed/wildfires_wells/wildfires_wells_wy.csv")
+
+# wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
+wildfires_wells_wy_buffer_1km <- 
+  mclapply(wildfires_in,
+           FUN          = assessExposureCount,
+           wells        = wells_in,
+           buffer       = 1000,  # in meters
+           exp_variable = "n_wells_buffer_1km") 
+wildfires_wells_wy_buffer_1km <- 
+  do.call("rbind", wildfires_wells_wy_buffer_1km)
+write_csv(wildfires_wells_wy_buffer_1km, 
+          "data/processed/wildfires_wells/wildfires_wells_wy_buffer_1km.csv")
+
+# removes datasets before moving on to the next state
+rm(wildfires_in, wells_in, wildfires_wells_wy, 
+   wildfires_wells_wy_buffer_1km)
 
 ##============================================================================##
