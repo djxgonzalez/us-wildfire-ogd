@@ -6,6 +6,7 @@
 ## setup ---------------------------------------------------------------------
 
 # attaches functions .....................................................
+source("code/0-setup/01-setup.R")
 source("code/2-exposure_assessment/01-fxn-count_wells_in_wildfires.R")
 library("parallel")   # for the `mclapply()` fxn, if using MacOS
 library("lubridate")  # for `Year()` fxn
