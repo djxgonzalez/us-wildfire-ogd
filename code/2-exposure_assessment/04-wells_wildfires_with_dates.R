@@ -50,7 +50,7 @@ wildfires_wells_dates_ak <-
 wildfires_wells_dates_ak <- 
   do.call("rbind", wildfires_wells_dates_ak)  # converts from list
 write_csv(wildfires_wells_dates_ak, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_ak.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_ak.csv")
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_dates_ak_buffer_1km <- 
@@ -62,7 +62,7 @@ wildfires_wells_dates_ak_buffer_1km <-
 wildfires_wells_dates_ak_buffer_1km <- 
   do.call("rbind", wildfires_wells_dates_ak_buffer_1km)
 write_csv(wildfires_wells_dates_ak_buffer_1km, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_ak_buffer_1km.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_ak_buffer_1km.csv")
 
 # removes datasets before moving on to the next state
 rm(wildfires_in, wells_in, wildfires_wells_dates_ak, 
@@ -97,7 +97,7 @@ wildfires_wells_dates_ar <-
 wildfires_wells_dates_ar <- 
   do.call("rbind", wildfires_wells_dates_ar)  # converts from list
 write_csv(wildfires_wells_dates_ar, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_ar.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_ar.csv")
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_dates_ar_buffer_1km <- 
@@ -109,7 +109,7 @@ wildfires_wells_dates_ar_buffer_1km <-
 wildfires_wells_dates_ar_buffer_1km <- 
   do.call("rbind", wildfires_wells_dates_ar_buffer_1km)
 write_csv(wildfires_wells_dates_ar_buffer_1km, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_ar_buffer_1km.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_ar_buffer_1km.csv")
 
 # removes datasets before moving on to the next state
 rm(wildfires_in, wells_in, wildfires_wells_dates_ar, 
@@ -144,7 +144,7 @@ wildfires_wells_dates_az <-
 wildfires_wells_dates_az <- 
   do.call("rbind", wildfires_wells_dates_az)  # converts from list
 write_csv(wildfires_wells_dates_az, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_az.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_az.csv")
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_dates_az_buffer_1km <- 
@@ -156,7 +156,7 @@ wildfires_wells_dates_az_buffer_1km <-
 wildfires_wells_dates_az_buffer_1km <- 
   do.call("rbind", wildfires_wells_dates_az_buffer_1km)
 write_csv(wildfires_wells_dates_az_buffer_1km, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_az_buffer_1km.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_az_buffer_1km.csv")
 
 # removes datasets before moving on to the next state
 rm(wildfires_in, wells_in, wildfires_wells_dates_az, 
@@ -191,7 +191,7 @@ wildfires_wells_dates_ca <-
 wildfires_wells_dates_ca <- 
   do.call("rbind", wildfires_wells_dates_ca)  # converts from list
 write_csv(wildfires_wells_dates_ca, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_ca.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_ca.csv")
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_dates_ca_buffer_1km <- 
@@ -203,7 +203,7 @@ wildfires_wells_dates_ca_buffer_1km <-
 wildfires_wells_dates_ca_buffer_1km <- 
   do.call("rbind", wildfires_wells_dates_ca_buffer_1km)
 write_csv(wildfires_wells_dates_ca_buffer_1km, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_ca_buffer_1km.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_ca_buffer_1km.csv")
 
 # removes datasets before moving on to the next state
 rm(wildfires_in, wells_in, wildfires_wells_dates_ca, 
@@ -238,7 +238,7 @@ wildfires_wells_dates_co <-
 wildfires_wells_dates_co <- 
   do.call("rbind", wildfires_wells_dates_co)  # converts from list
 write_csv(wildfires_wells_dates_co, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_co.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_co.csv")
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_dates_co_buffer_1km <- 
@@ -250,7 +250,7 @@ wildfires_wells_dates_co_buffer_1km <-
 wildfires_wells_dates_co_buffer_1km <- 
   do.call("rbind", wildfires_wells_dates_co_buffer_1km)
 write_csv(wildfires_wells_dates_co_buffer_1km, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_co_buffer_1km.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_co_buffer_1km.csv")
 
 # removes datasets before moving on to the next state
 rm(wildfires_in, wells_in, wildfires_wells_dates_co, 
@@ -285,7 +285,7 @@ wildfires_wells_dates_id <-
 wildfires_wells_dates_id <- 
   do.call("rbind", wildfires_wells_dates_id)  # converts from list
 write_csv(wildfires_wells_dates_id, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_id.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_id.csv")
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_dates_id_buffer_1km <- 
@@ -297,7 +297,7 @@ wildfires_wells_dates_id_buffer_1km <-
 wildfires_wells_dates_id_buffer_1km <- 
   do.call("rbind", wildfires_wells_dates_id_buffer_1km)
 write_csv(wildfires_wells_dates_id_buffer_1km, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_id_buffer_1km.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_id_buffer_1km.csv")
 
 # removes datasets before moving on to the next state
 rm(wildfires_in, wells_in, wildfires_wells_dates_id, 
@@ -332,7 +332,7 @@ wildfires_wells_dates_ks <-
 wildfires_wells_dates_ks <- 
   do.call("rbind", wildfires_wells_dates_ks)  # converts from list
 write_csv(wildfires_wells_dates_ks, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_ks.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_ks.csv")
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_dates_ks_buffer_1km <- 
@@ -344,7 +344,7 @@ wildfires_wells_dates_ks_buffer_1km <-
 wildfires_wells_dates_ks_buffer_1km <- 
   do.call("rbind", wildfires_wells_dates_ks_buffer_1km)
 write_csv(wildfires_wells_dates_ks_buffer_1km, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_ks_buffer_1km.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_ks_buffer_1km.csv")
 
 # removes datasets before moving on to the next state
 rm(wildfires_in, wells_in, wildfires_wells_dates_ks, 
@@ -379,7 +379,7 @@ wildfires_wells_dates_la <-
 wildfires_wells_dates_la <- 
   do.call("rbind", wildfires_wells_dates_la)  # converts from list
 write_csv(wildfires_wells_dates_la, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_la.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_la.csv")
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_dates_la_buffer_1km <- 
@@ -391,7 +391,7 @@ wildfires_wells_dates_la_buffer_1km <-
 wildfires_wells_dates_la_buffer_1km <- 
   do.call("rbind", wildfires_wells_dates_la_buffer_1km)
 write_csv(wildfires_wells_dates_la_buffer_1km, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_la_buffer_1km.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_la_buffer_1km.csv")
 
 # removes datasets before moving on to the next state
 rm(wildfires_in, wells_in, wildfires_wells_dates_la, 
@@ -426,7 +426,7 @@ wildfires_wells_dates_mo <-
 wildfires_wells_dates_mo <- 
   do.call("rbind", wildfires_wells_dates_mo)  # converts from list
 write_csv(wildfires_wells_dates_mo, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_mo.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_mo.csv")
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_dates_mo_buffer_1km <- 
@@ -438,7 +438,7 @@ wildfires_wells_dates_mo_buffer_1km <-
 wildfires_wells_dates_mo_buffer_1km <- 
   do.call("rbind", wildfires_wells_dates_mo_buffer_1km)
 write_csv(wildfires_wells_dates_mo_buffer_1km, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_mo_buffer_1km.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_mo_buffer_1km.csv")
 
 # removes datasets before moving on to the next state
 rm(wildfires_in, wells_in, wildfires_wells_dates_mo, 
@@ -473,7 +473,7 @@ wildfires_wells_dates_mt <-
 wildfires_wells_dates_mt <- 
   do.call("rbind", wildfires_wells_dates_mt)  # converts from list
 write_csv(wildfires_wells_dates_mt, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_mt.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_mt.csv")
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_dates_mt_buffer_1km <- 
@@ -485,7 +485,7 @@ wildfires_wells_dates_mt_buffer_1km <-
 wildfires_wells_dates_mt_buffer_1km <- 
   do.call("rbind", wildfires_wells_dates_mt_buffer_1km)
 write_csv(wildfires_wells_dates_mt_buffer_1km, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_mt_buffer_1km.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_mt_buffer_1km.csv")
 
 # removes datasets before moving on to the next state
 rm(wildfires_in, wells_in, wildfires_wells_dates_mt, 
@@ -520,7 +520,7 @@ wildfires_wells_dates_nd <-
 wildfires_wells_dates_nd <- 
   do.call("rbind", wildfires_wells_dates_nd)  # converts from list
 write_csv(wildfires_wells_dates_nd, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_nd.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_nd.csv")
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_dates_nd_buffer_1km <- 
@@ -532,7 +532,7 @@ wildfires_wells_dates_nd_buffer_1km <-
 wildfires_wells_dates_nd_buffer_1km <- 
   do.call("rbind", wildfires_wells_dates_nd_buffer_1km)
 write_csv(wildfires_wells_dates_nd_buffer_1km, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_nd_buffer_1km.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_nd_buffer_1km.csv")
 
 # removes datasets before moving on to the next state
 rm(wildfires_in, wells_in, wildfires_wells_dates_nd, 
@@ -567,7 +567,7 @@ wildfires_wells_dates_ne <-
 wildfires_wells_dates_ne <- 
   do.call("rbind", wildfires_wells_dates_ne)  # converts from list
 write_csv(wildfires_wells_dates_ne, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_ne.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_ne.csv")
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_dates_ne_buffer_1km <- 
@@ -579,7 +579,7 @@ wildfires_wells_dates_ne_buffer_1km <-
 wildfires_wells_dates_ne_buffer_1km <- 
   do.call("rbind", wildfires_wells_dates_ne_buffer_1km)
 write_csv(wildfires_wells_dates_ne_buffer_1km, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_ne_buffer_1km.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_ne_buffer_1km.csv")
 
 # removes datasets before moving on to the next state
 rm(wildfires_in, wells_in, wildfires_wells_dates_ne, 
@@ -614,7 +614,7 @@ wildfires_wells_dates_nm <-
 wildfires_wells_dates_nm <- 
   do.call("rbind", wildfires_wells_dates_nm)  # converts from list
 write_csv(wildfires_wells_dates_nm, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_nm.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_nm.csv")
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_dates_nm_buffer_1km <- 
@@ -626,7 +626,7 @@ wildfires_wells_dates_nm_buffer_1km <-
 wildfires_wells_dates_nm_buffer_1km <- 
   do.call("rbind", wildfires_wells_dates_nm_buffer_1km)
 write_csv(wildfires_wells_dates_nm_buffer_1km, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_nm_buffer_1km.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_nm_buffer_1km.csv")
 
 # removes datasets before moving on to the next state
 rm(wildfires_in, wells_in, wildfires_wells_dates_nm, 
@@ -661,7 +661,7 @@ wildfires_wells_dates_nv <-
 wildfires_wells_dates_nv <- 
   do.call("rbind", wildfires_wells_dates_nv)  # converts from list
 write_csv(wildfires_wells_dates_nv, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_nv.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_nv.csv")
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_dates_nv_buffer_1km <- 
@@ -673,7 +673,7 @@ wildfires_wells_dates_nv_buffer_1km <-
 wildfires_wells_dates_nv_buffer_1km <- 
   do.call("rbind", wildfires_wells_dates_nv_buffer_1km)
 write_csv(wildfires_wells_dates_nv_buffer_1km, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_nv_buffer_1km.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_nv_buffer_1km.csv")
 
 # removes datasets before moving on to the next state
 rm(wildfires_in, wells_in, wildfires_wells_dates_nv, 
@@ -708,7 +708,7 @@ wildfires_wells_dates_ok <-
 wildfires_wells_dates_ok <- 
   do.call("rbind", wildfires_wells_dates_ok)  # converts from list
 write_csv(wildfires_wells_dates_ok, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_ok.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_ok.csv")
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_dates_ok_buffer_1km <- 
@@ -720,7 +720,7 @@ wildfires_wells_dates_ok_buffer_1km <-
 wildfires_wells_dates_ok_buffer_1km <- 
   do.call("rbind", wildfires_wells_dates_ok_buffer_1km)
 write_csv(wildfires_wells_dates_ok_buffer_1km, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_ok_buffer_1km.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_ok_buffer_1km.csv")
 
 # removes datasets before moving on to the next state
 rm(wildfires_in, wells_in, wildfires_wells_dates_ok, 
@@ -755,7 +755,7 @@ wildfires_wells_dates_or <-
 wildfires_wells_dates_or <- 
   do.call("rbind", wildfires_wells_dates_or)  # converts from list
 write_csv(wildfires_wells_dates_or, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_or.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_or.csv")
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_dates_or_buffer_1km <- 
@@ -767,7 +767,7 @@ wildfires_wells_dates_or_buffer_1km <-
 wildfires_wells_dates_or_buffer_1km <- 
   do.call("rbind", wildfires_wells_dates_or_buffer_1km)
 write_csv(wildfires_wells_dates_or_buffer_1km, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_or_buffer_1km.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_or_buffer_1km.csv")
 
 # removes datasets before moving on to the next state
 rm(wildfires_in, wells_in, wildfires_wells_dates_or, 
@@ -802,7 +802,7 @@ wildfires_wells_dates_sd <-
 wildfires_wells_dates_sd <- 
   do.call("rbind", wildfires_wells_dates_sd)  # converts from list
 write_csv(wildfires_wells_dates_sd, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_sd.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_sd.csv")
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_dates_sd_buffer_1km <- 
@@ -814,7 +814,7 @@ wildfires_wells_dates_sd_buffer_1km <-
 wildfires_wells_dates_sd_buffer_1km <- 
   do.call("rbind", wildfires_wells_dates_sd_buffer_1km)
 write_csv(wildfires_wells_dates_sd_buffer_1km, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_sd_buffer_1km.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_sd_buffer_1km.csv")
 
 # removes datasets before moving on to the next state
 rm(wildfires_in, wells_in, wildfires_wells_dates_sd, 
@@ -849,7 +849,7 @@ wildfires_wells_dates_tx <-
 wildfires_wells_dates_tx <- 
   do.call("rbind", wildfires_wells_dates_tx)  # converts from list
 write_csv(wildfires_wells_dates_tx, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_tx.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_tx.csv")
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_dates_tx_buffer_1km <- 
@@ -861,7 +861,7 @@ wildfires_wells_dates_tx_buffer_1km <-
 wildfires_wells_dates_tx_buffer_1km <- 
   do.call("rbind", wildfires_wells_dates_tx_buffer_1km)
 write_csv(wildfires_wells_dates_tx_buffer_1km, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_tx_buffer_1km.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_tx_buffer_1km.csv")
 
 # removes datasets before moving on to the next state
 rm(wildfires_in, wells_in, wildfires_wells_dates_tx, 
@@ -896,7 +896,7 @@ wildfires_wells_dates_ut <-
 wildfires_wells_dates_ut <- 
   do.call("rbind", wildfires_wells_dates_ut)  # converts from list
 write_csv(wildfires_wells_dates_ut, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_ut.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_ut.csv")
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_dates_ut_buffer_1km <- 
@@ -908,7 +908,7 @@ wildfires_wells_dates_ut_buffer_1km <-
 wildfires_wells_dates_ut_buffer_1km <- 
   do.call("rbind", wildfires_wells_dates_ut_buffer_1km)
 write_csv(wildfires_wells_dates_ut_buffer_1km, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_ut_buffer_1km.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_ut_buffer_1km.csv")
 
 # removes datasets before moving on to the next state
 rm(wildfires_in, wells_in, wildfires_wells_dates_ut, 
@@ -943,7 +943,7 @@ wildfires_wells_dates_wa <-
 wildfires_wells_dates_wa <- 
   do.call("rbind", wildfires_wells_dates_wa)  # converts from list
 write_csv(wildfires_wells_dates_wa, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_wa.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_wa.csv")
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_dates_wa_buffer_1km <- 
@@ -955,7 +955,7 @@ wildfires_wells_dates_wa_buffer_1km <-
 wildfires_wells_dates_wa_buffer_1km <- 
   do.call("rbind", wildfires_wells_dates_wa_buffer_1km)
 write_csv(wildfires_wells_dates_wa_buffer_1km, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_wa_buffer_1km.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_wa_buffer_1km.csv")
 
 # removes datasets before moving on to the next state
 rm(wildfires_in, wells_in, wildfires_wells_dates_wa, 
@@ -990,7 +990,7 @@ wildfires_wells_dates_wy <-
 wildfires_wells_dates_wy <- 
   do.call("rbind", wildfires_wells_dates_wy)  # converts from list
 write_csv(wildfires_wells_dates_wy, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_wy.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_wy.csv")
 
 # wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
 wildfires_wells_dates_wy_buffer_1km <- 
@@ -1002,10 +1002,11 @@ wildfires_wells_dates_wy_buffer_1km <-
 wildfires_wells_dates_wy_buffer_1km <- 
   do.call("rbind", wildfires_wells_dates_wy_buffer_1km)
 write_csv(wildfires_wells_dates_wy_buffer_1km, 
-          "data/processed/wildfires_wells/wildfires_wells_dates_wy_buffer_1km.csv")
+          "data/processed/wildfires_wells_dates/wildfires_wells_dates_wy_buffer_1km.csv")
 
 # removes datasets before moving on to the next state
 rm(wildfires_in, wells_in, wildfires_wells_dates_wy, 
    wildfires_wells_dates_wy_buffer_1km)
 
 ##============================================================================##
+
