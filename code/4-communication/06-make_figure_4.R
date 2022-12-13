@@ -85,15 +85,14 @@ rm(kbdi_high_2017_sf, kbdi_high_2050_sf, kbdi_high_2090_sf)
 figure_4a <- ggplot() +
   geom_sf(data = mex_can,   color = NA, fill = "#DCDCDC", alpha = 0.7) +
   geom_sf(data = us_states, color = NA, fill = "white") +
-  geom_sf(data = kbdi_450_2090,  color = "#7a0177", size = 0.2) +
-  geom_sf(data = kbdi_450_2050,  color = "#f768a1", size = 0.2) +
-  geom_sf(data = kbdi_450_2017,  color = "#fcc5c0", size = 0.05) +
+  geom_sf(data = kbdi_450_2090, shape = 15, color = "#FDD3DD", size = 0.4) +
+  geom_sf(data = kbdi_450_2050, shape = 15, color = "#F0A3D0", size = 0.4) +
+  geom_sf(data = kbdi_450_2017, shape = 15, color = "#AD8ABB", size = 0.0001) +
   geom_sf(data = us_states_east, 
-          color = "black", fill = "#DCDCDC", lwd = 0.2, alpha = 0.7) +
+          color = "black", fill = "#DCDCDC", lwd = 0.2, alpha = 0.8) +
   geom_sf(data = us_states,   color = "black", fill = NA, lwd = 0.2) +
   geom_sf(data = us_boundary, color = "black", fill = NA, lwd = 0.4) +
-  geom_sf(data = wells_all_buffer_1km,
-          fill = "black", color = NA, alpha = 0.2) +
+  geom_sf(data = wells_all_buffer_1km, fill = "black", color = NA, alpha = 0.5) +
   xlim(-2300000, 560000) + ylim(340000, 3100000) +  # origin: 96W, 23N
   labs(x = "", y = "") +
   theme_void() +  
@@ -108,15 +107,14 @@ ggsave(filename = "figure_4a.png", plot = figure_4a, device = "png",
 figure_4b <- ggplot() +
   geom_sf(data = mex_can,   color = NA, fill = "#DCDCDC", alpha = 0.7) +
   geom_sf(data = us_states, color = NA, fill = "white") +
-  geom_sf(data = kbdi_600_2090,  color = "#7a0177", size = 0.2) +
-  geom_sf(data = kbdi_600_2050,  color = "#f768a1", size = 0.2) +
-  geom_sf(data = kbdi_600_2017,  color = "#fcc5c0", size = 0.05) +
+  geom_sf(data = kbdi_600_2090, shape = 15, color = "#FDD3DD", size = 0.4) +
+  geom_sf(data = kbdi_600_2050, shape = 15, color = "#F0A3D0", size = 0.4) +
+  geom_sf(data = kbdi_600_2017, shape = 15, color = "#AD8ABB", size = 0.0001) +
   geom_sf(data = us_states_east, 
-          color = "black", fill = "#DCDCDC", lwd = 0.2, alpha = 0.7) +
+          color = "black", fill = "#DCDCDC", lwd = 0.2, alpha = 0.8) +
   geom_sf(data = us_states,   color = "black", fill = NA, lwd = 0.2) +
   geom_sf(data = us_boundary, color = "black", fill = NA, lwd = 0.4) +
-  geom_sf(data = wells_all_buffer_1km,
-          fill = "black", color = NA, alpha = 0.2) +
+  geom_sf(data = wells_all_buffer_1km, fill = "black", color = NA, alpha = 0.5) +
   xlim(-2300000, 560000) + ylim(340000, 3100000) +  # origin: 96W, 23N
   labs(x = "", y = "") +
   theme_void() +  
