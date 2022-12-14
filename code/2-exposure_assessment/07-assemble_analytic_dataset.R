@@ -24,17 +24,18 @@ wildfires_wells <-
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_az.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_ca.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_co.csv")) %>% 
-  bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_id.csv")) %>% 
+  # I commented out states that have no wildfires with wells due to bind issue
+  #bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_id.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_ks.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_la.csv")) %>% 
-  bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_mo.csv")) %>% 
+  #bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_mo.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_mt.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_nd.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_ne.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_nm.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_nv.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_ok.csv")) %>% 
-  bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_or.csv")) %>% 
+  #bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_or.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_sd.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_tx.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_ut.csv")) %>% 
@@ -42,7 +43,9 @@ wildfires_wells <-
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_wy.csv")) %>% 
   as_tibble() %>% 
   # retain wildfire_id to join with other datasets below
-  select(wildfire_id, data_source, n_wells)
+  mutate(wildfire_id = as.factor(wildfire_id),
+         state       = as.factor(state)) %>% 
+  select(wildfire_id, state, n_wells)
 
 
 ## n wells by wildfire, operate dates before fire, 1 km buffer  --------------
@@ -57,25 +60,28 @@ wildfires_wells_buffer_1km <-
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_az_buffer_1km.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_ca_buffer_1km.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_co_buffer_1km.csv")) %>% 
-  bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_id_buffer_1km.csv")) %>% 
+  # I commented out states that have no wildfires with wells due to bind issue
+  #bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_id_buffer_1km.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_ks_buffer_1km.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_la_buffer_1km.csv")) %>% 
-  bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_mo_buffer_1km.csv")) %>% 
+  #bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_mo_buffer_1km.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_mt_buffer_1km.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_nd_buffer_1km.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_ne_buffer_1km.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_nm_buffer_1km.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_nv_buffer_1km.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_ok_buffer_1km.csv")) %>% 
-  bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_or_buffer_1km.csv")) %>% 
+  #bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_or_buffer_1km.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_sd_buffer_1km.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_tx_buffer_1km.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_ut_buffer_1km.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_wa_buffer_1km.csv")) %>% 
   bind_rows(read_csv("data/processed/wildfires_wells/wildfires_wells_wy_buffer_1km.csv")) %>% 
   as_tibble() %>% 
-  # retain wildfire_id to join with other datasets below
-  select(wildfire_id, data_source, n_wells_buffer_1km)
+  # retain wildfire_id to join with other datasets below 
+  mutate(wildfire_id = as.factor(wildfire_id),
+         state       = as.factor(state)) %>% 
+  select(wildfire_id, state, n_wells_buffer_1km)
 
 
 ## population exposed to wells in wildfires ----------------------------------
@@ -106,25 +112,31 @@ wildfires_wells_population <-
   bind_rows(read_csv("data/processed/wildfires_wells_population/wildfires_wells_pop_wy.csv")) %>% 
   as_tibble() %>% 
   # retain wildfire_id to join with other datasets below
-  select(wildfire_id, data_source, n_population_exposed)
+  mutate(wildfire_id = as.factor(wildfire_id),
+         state       = as.factor(data_source)) %>% 
+  select(wildfire_id, state, n_population_exposed)
 
 
 ## merge and export analytic dataset -----------------------------------------
 
 # merges assessments of wells in/near wildfires and exposed populations
 wildfires_wells_population <- wildfires_all %>% 
-  left_join(wildfires_wells_dates, by = c(wildfire_id, data_source)) %>% 
-  left_join(wildfires_wells_dates_buffer_1km, by = c(wildfire_id, data_source)) %>% 
-  left_join(wildfires_wells_dates, by = c(wildfire_id, data_source)) %>% 
+  left_join(wildfires_wells,            by = c("wildfire_id", "state")) %>% 
+  left_join(wildfires_wells_buffer_1km, by = c("wildfire_id", "state")) %>% 
+  #left_join(wildfires_wells_population, by = c(wildfire_id, data_source)) %>% 
   # replaces NAs with 0s, for wildfires omitted from above analyses because
   # they were not near wells
   mutate(n_wells              = replace_na(n_wells, 0),
-         n_wells_buffer_1km   = replace_na(n_wells_buffer_1km, 0),
-         n_population_exposed = replace_na(n_population_exposed, 0))
-
+         n_wells_buffer_1km   = replace_na(n_wells_buffer_1km, 0)) %>% #,
+         #n_population_exposed = replace_na(n_population_exposed, 0)) %>% 
+  as_tibble() %>% 
+  select(-geometry)
+  
 # export
-saveRDS("data/processed/wildfires_wells_population.rds")
-write_csv("data/processed/wildfires_wells_population.csv")
+saveRDS(wildfires_wells_population, 
+        "data/processed/wildfires_wells_population.rds")
+write_csv(wildfires_wells_population,
+          "data/processed/wildfires_wells_population.csv")
 
 
 ##============================================================================##

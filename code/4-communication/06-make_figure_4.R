@@ -1,5 +1,6 @@
 ##============================================================================##
-## 4.06 - makes Figure 4...
+## 4.06 - makes Figure 4, which shows area with high and extreme wildfire risk
+## in the study region as well as a 1 km buffer around oil and gas wells
 
 ## setup ---------------------------------------------------------------------
 
