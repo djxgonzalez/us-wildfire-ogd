@@ -15,7 +15,8 @@ library("lubridate")  # for `Year()` fxn
 
 # data input .............................................................
 wells_with_dates <- readRDS("data/processed/wells_all.rds") %>% 
-  drop_na(date_earliest)
+  drop_na(date_earliest) %>% 
+  st_as_sf()
 wildfires_all <- readRDS("data/processed/wildfires_all.rds")
 
 
