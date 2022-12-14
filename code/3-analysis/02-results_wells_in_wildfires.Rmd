@@ -29,9 +29,9 @@ These are results aggregated across all 21 states included in the analysis.
 
 ## Summary statistics
 
-* n wildfires with ≥ 1 well: `r `
-* % of all wildfires with ≥ 1 well: `r `
-* n wells that have been in wildfire burn areas: `r ` (with replacement, i.e., may have been burned multiple times)
+* n wildfires with ≥ 1 well: `r wildfires_wells_population %>% filter(n_wells > 0) %>% nrow()`
+* % of all `r length(unique(wildfires_wells_population$wildfire_id)) ` wildfires with ≥ 1 well: `r round((100 * nrow(subset(wildfires_wells_population, n_wells > 0)) / nrow(wildfires_wells_population)), digits = 3)`%
+* n wells that have been in wildfire burn areas: `r sum(wildfires_wells_population$n_wells)` (with replacement, i.e., may have been burned multiple times)
 
 ## Table. All wildfires by number of wells within wildfire boundaries
 
@@ -69,6 +69,68 @@ wildfires_wells_population %>%
   theme_classic()
 ```
 
+## Plot. Proportion of wildfires that burned ≥ 1 wells by year
+
+```{r echo=FALSE}
+wildfires_wells_population %>% 
+  mutate(wildfire_burned_wells = case_when(n_wells >= 1 ~ 1,
+                                           n_wells == 0 ~ 0)) %>% 
+  group_by(year) %>% 
+  summarize(n_wildfires = n(),
+            n_wildfires_with_wells = sum(wildfire_burned_wells)) %>% 
+  mutate(perc_wildfires_with_wells = 
+           round((100 * n_wildfires_with_wells / n_wildfires), digits = 2))
+```
+
+
+## Plot. Proportion of wildfires that burned ≥ 1 wells by year
+
+```{r echo=FALSE}
+wildfires_wells_population %>% 
+  mutate(wildfire_burned_wells = case_when(n_wells >= 1 ~ 1,
+                                           n_wells == 0 ~ 0)) %>% 
+  group_by(year) %>% 
+  summarize(n_wildfires = n(),
+            n_wildfires_with_wells = sum(wildfire_burned_wells)) %>% 
+  mutate(proportion_wildfires_with_wells = 
+           round((n_wildfires_with_wells / n_wildfires), digits = 2)) %>% 
+  ggplot(aes(year, proportion_wildfires_with_wells)) +
+  geom_bar(stat = "identity") +
+  theme_classic()
+```
+
+
+## Plot. Proportion of wildfires that burned ≥ 1 wells by year with best fit line
+
+```{r echo=FALSE}
+wildfires_wells_population %>% 
+  mutate(wildfire_burned_wells = case_when(n_wells >= 1 ~ 1,
+                                           n_wells == 0 ~ 0)) %>% 
+  group_by(year) %>% 
+  summarize(n_wildfires = n(),
+            n_wildfires_with_wells = sum(wildfire_burned_wells)) %>% 
+  mutate(proportion_wildfires_with_wells = 
+           round((n_wildfires_with_wells / n_wildfires), digits = 2)) %>% 
+  ggplot(aes(year, proportion_wildfires_with_wells)) +
+  geom_point() +
+  geom_smooth(method = lm, formula = "y ~ x") +
+  theme_classic()
+```
+
+There a trend over increasing proportion of wildfires burning wells through the study period. This trend held even when omitting 2011, when 15.5% of wildfires burned wells.
+
+
+## Table. Wells in wildfire burn areas by state
+
+```{r echo=FALSE}
+wildfires_wells_population %>% 
+  group_by(state) %>% 
+  summarize(n_wells_by_state = sum(n_wells),
+            n_wells_buffer_1km_by_state = sum(n_wells_buffer_1km)) %>% 
+  arrange(desc(n_wells_by_state))
+```
+
+
 ## Plot. Wells in wildfire burn areas by year
 
 ```{r echo=FALSE}
@@ -90,7 +152,6 @@ wildfires_wells_population %>%
   group_by(year) %>% 
   summarize(n = sum(n_wells)) %>% 
   ggplot() +
-  #geom_bar(aes(year, n), stat = "identity") +
   geom_point(aes(year, n)) +
   geom_smooth(aes(year, n), method = lm, formula = "y ~ x") +
   labs(x = "Year", y = "Wells, n") +
@@ -128,7 +189,21 @@ wildfires_wells_population %>%
   theme_classic()
 ```
 
-Worth noting: It looks like \~25-50% of California wildfires are in areas with wells each year and nearly all Oklahoma wildfires are in areas with wells.
+## Plot. Proportion of wildfires that burned ≥ 1 wells by state
+
+```{r echo=FALSE}
+wildfires_wells_population %>% 
+  mutate(wildfire_burned_wells = case_when(n_wells >= 1 ~ 1,
+                                           n_wells == 0 ~ 0)) %>% 
+  group_by(state) %>% 
+  summarize(n_wildfires = n(),
+            n_wildfires_with_wells = sum(wildfire_burned_wells)) %>% 
+  mutate(proportion_wildfires_with_wells = 
+           round((n_wildfires_with_wells / n_wildfires), digits = 2)) %>% 
+  ggplot(aes(state, proportion_wildfires_with_wells)) +
+  geom_bar(stat = "identity") +
+  theme_classic()
+```
 
 ## Plot. Wells in wildfire burn areas by year and by state
 
@@ -145,99 +220,3 @@ wildfires_wells_population %>%
 ```
 
 
-
-# All included states
-
-## Table. All wildfires by number of wells within wildfire boundaries
-
-```{r echo=FALSE}
-wildfires_wells_all_dates_1km %>% 
-  arrange(desc(wells_all_dates_1km))
-```
-
-## Plot. Wildfires by year
-
-```{r echo=FALSE}
-wildfires_wells_all_dates_1km %>% 
-  filter(year %in% c(1984:2020)) %>% 
-  group_by(year) %>% 
-  summarize(n = n()) %>% 
-  ggplot() +
-  geom_bar(aes(year, n), stat = "identity") +
-  labs(x = "Year", y = "Wildfires, n") +
-  theme_classic()
-```
-
-## Plot. Wildfires that burned ≥ 1 well by year
-
-```{r echo=FALSE}
-wildfires_wells_all_dates_1km$wells_all_dates_1km %>% 
-  filter(year %in% c(1984:2020)) %>% 
-  filter(wells_all_dates_1km > 0) %>% nrow
-  group_by(year) %>% 
-  summarize(n = n()) %>% 
-  ggplot() +
-  geom_bar(aes(year, n), stat = "identity") +
-  labs(x = "Year", y = "Wildfires, n") +
-  theme_classic()
-```
-
-## Plot. Wells in wildfire burn areas by year
-
-```{r echo=FALSE}
-wildfires_wells_all_dates_1km %>% 
-  filter(year %in% c(1984:2020)) %>% 
-  group_by(year) %>% 
-  summarize(n = sum(wells_all_dates_1km)) %>% 
-  ggplot() +
-  geom_bar(aes(year, n), stat = "identity") +
-  labs(x = "Year", y = "Wells, n") +
-  theme_classic()
-```
-
-# Stratified by state
-
-## Plot. Wildfires by year and by state
-
-```{r echo=FALSE}
-wildfires_wells_all_dates_1km %>% 
-  filter(year %in% c(1984:2020)) %>% 
-  group_by(year, state) %>% 
-  summarize(n = n()) %>% 
-  ggplot() +
-  geom_bar(aes(year, n), stat = "identity") +
-  labs(x = "Year", y = "Wildfires, n") +
-  facet_wrap(~ state) +
-  theme_classic()
-```
-
-## Plot. Wildfires that burned ≥ 1 well by year and by state
-
-```{r echo=FALSE}
-wildfires_wells_all_dates_1km %>% 
-  filter(year %in% c(1984:2020)) %>% 
-  filter(wells_all_dates_1km > 0) %>% 
-  group_by(year, state) %>% 
-  summarize(n     = n()) %>% 
-  ggplot() +
-  geom_bar(aes(year, n), stat = "identity") +
-  labs(x = "Year", y = "Wildfires, n") +
-  facet_wrap(~ state) +
-  theme_classic()
-```
-
-Worth noting: It looks like \~25-50% of California wildfires are in areas with wells each year and nearly all Oklahoma wildfires are in areas with wells.
-
-## Plot. Wells in wildfire burn areas by year and by state
-
-```{r echo=FALSE}
-wildfires_wells_all_dates_1km %>% 
-  filter(year %in% c(1984:2020)) %>% 
-  group_by(year, state) %>% 
-  summarize(n     = sum(wells_all_dates_1km)) %>% 
-  ggplot() +
-  geom_bar(aes(year, n), stat = "identity") +
-  labs(x = "Year", y = "Wells, n") +
-  facet_wrap(. ~ state) +
-  theme_classic()
-```

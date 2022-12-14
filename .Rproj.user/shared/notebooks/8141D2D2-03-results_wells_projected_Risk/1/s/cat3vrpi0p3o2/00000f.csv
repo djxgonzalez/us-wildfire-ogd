@@ -1,7 +1,0 @@
-"0","wildfires_ca %>% "
-"0","  distinct(wildfire_id, .keep_all = TRUE) %>%"
-"0","  ggplot() +"
-"0","  geom_bar(aes(year)) +"
-"0","  xlab(""Year"") + "
-"0","  ylab(""Wildfires (n)"") +"
-"0","  theme_classic()"

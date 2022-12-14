@@ -23,7 +23,7 @@ wildfires_all <- readRDS("data/processed/wildfires_all.rds")
 
 # AK -----------------------------------------------------------------------
 
-# data prep ..............................................................``
+# data prep ..............................................................
 
 # restricts to wildfires near wells (i.e., intersect with 1 km well buffer)
 wildfires_in <- wildfires_all %>%
