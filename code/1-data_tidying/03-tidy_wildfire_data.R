@@ -66,8 +66,13 @@ wildfires_all <- bind_rows(wildfires_nifc2, wildfires_mtbs) %>%
                       "CO", "NM", "ND", "SD", "NE", "KS", "OK", "TX", "MO", 
                       "AR", "LA", "AK")) %>% 
   drop_na(year) %>% 
-  filter(year %in% c(1984:2020))
-
+  filter(year %in% c(1984:2020)) %>% 
+  st_as_sf() %>% 
+  st_transform(crs_albers)
+# adds column with wildfire area in m^2
+wildfires_all <- wildfires_all %>% 
+  mutate(wildfire_area_km2 = st_area()) %>% 
+  as_tibble()
 
 # exports final wildfires dataset
 saveRDS(wildfires_all, "data/processed/wildfires_all.rds")
