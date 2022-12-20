@@ -35,7 +35,7 @@ wells_in <- wells_all %>%
   st_intersection(
     readRDS("data/interim/wildfires_buffers/wildfires_nm_buffer_1km.rds")) %>% 
   st_transform(crs_albers)
-pop_in <- 
+pop_in <- 1
 
 # wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
 pop_wells_wildfires_nm <- 

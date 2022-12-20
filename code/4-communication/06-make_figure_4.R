@@ -89,26 +89,7 @@ figure_4a <- ggplot() +
   geom_sf(data = kbdi_450_2017, shape = 15, color = "#AD8ABB", size = 0.0001) +
   geom_sf(data = us_states_east, color = NA, fill = "#D4D4D4") +
   geom_sf(data = us_states,   color = "white", fill = NA, lwd = 0.2) +
-  geom_sf(data = us_boundary, color = "black", fill = NA, lwd = 0.3) +
-  geom_sf(data = wells_all_buffer_1km, fill = "black", color = NA, alpha = 0.6) +
-  xlim(-2300000, 560000) + ylim(340000, 3100000) +  # origin: 96W, 23N
-  labs(x = "", y = "") +
-  theme_void() +  
-  theme(panel.background = element_rect(fill  = "#e9f5f8"),
-        panel.grid       = element_line(color = "#e9f5f8"),
-        legend.position = "none")
-# export
-ggsave(filename = "figure_4a.png", plot = figure_4a, device = "png",
-       height = 5.25, width = 5, path = "output/figures/components/")
-
-# figure 4b ................................................................
-figure_4b <- ggplot() +
-  geom_sf(data = mex_can,   color = NA, fill = "#D4D4D4") +
-  geom_sf(data = us_states, color = NA, fill = "#E5E5E5", alpha = 0.7) +
-  geom_sf(data = kbdi_450_2050, shape = 15, color = "#AD8ABB", size = 0.4) +
-  geom_sf(data = us_states_east, color = NA, fill = "#D4D4D4") +
-  geom_sf(data = us_states,   color = "white", fill = NA, lwd = 0.2) +
-  geom_sf(data = us_boundary, color = "black", fill = NA, lwd = 0.3) +
+  geom_sf(data = us_boundary, color = "white", fill = NA, lwd = 0.3) +
   # geom_sf(data = wells_all_buffer_1km, fill = "black", color = NA, alpha = 0.6) +
   xlim(-2300000, 560000) + ylim(340000, 3100000) +  # origin: 96W, 23N
   labs(x = "", y = "") +
@@ -117,8 +98,27 @@ figure_4b <- ggplot() +
         panel.grid       = element_line(color = "#e9f5f8"),
         legend.position = "none")
 # export
+ggsave(filename = "figure_4a.png", plot = figure_4a, device = "png",
+       height = 4.818, width = 5, path = "output/figures/components/")
+
+# figure 4b ................................................................
+figure_4b <- ggplot() +
+  geom_sf(data = mex_can,   color = NA, fill = "#D4D4D4") +
+  geom_sf(data = us_states, color = NA, fill = "#E5E5E5", alpha = 0.7) +
+  geom_sf(data = kbdi_450_2050, shape = 15, color = "#AD8ABB", size = 0.4) +
+  geom_sf(data = us_states_east, color = NA, fill = "#D4D4D4") +
+  geom_sf(data = us_states,   color = "white", fill = NA, lwd = 0.2) +
+  geom_sf(data = us_boundary, color = "white", fill = NA, lwd = 0.3) +
+  geom_sf(data = wells_all_buffer_1km, fill = "black", color = NA, alpha = 0.6) +
+  xlim(-2300000, 560000) + ylim(340000, 3100000) +  # origin: 96W, 23N
+  labs(x = "", y = "") +
+  theme_void() +  
+  theme(panel.background = element_rect(fill  = "#e9f5f8"),
+        panel.grid       = element_line(color = "#e9f5f8"),
+        legend.position = "none")
+# export
 ggsave(filename = "figure_4b.png", plot = figure_4b, device = "png",
-       height = 5.25, width = 5, path = "output/figures/components/")
+       height = 4.818, width = 5, path = "output/figures/components/")
 
 # figure 4c ................................................................
 figure_4c <- ggplot() +
@@ -127,7 +127,7 @@ figure_4c <- ggplot() +
   geom_sf(data = kbdi_450_2090, shape = 15, color = "#AD8ABB", size = 0.4) +
   geom_sf(data = us_states_east, color = NA, fill = "#D4D4D4") +
   geom_sf(data = us_states,   color = "white", fill = NA, lwd = 0.2) +
-  geom_sf(data = us_boundary, color = "black", fill = NA, lwd = 0.3) +
+  geom_sf(data = us_boundary, color = "white", fill = NA, lwd = 0.3) +
   geom_sf(data = wells_all_buffer_1km, fill = "black", color = NA, alpha = 0.6) +
   xlim(-2300000, 560000) + ylim(340000, 3100000) +  # origin: 96W, 23N
   labs(x = "", y = "") +
@@ -137,7 +137,7 @@ figure_4c <- ggplot() +
         legend.position = "none")
 # export
 ggsave(filename = "figure_4c.png", plot = figure_4c, device = "png",
-       height = 5.25, width = 5, path = "output/figures/components/")
+       height = 4.818, width = 5, path = "output/figures/components/")
 
 # figure 4d ................................................................
 figure_4d <- ggplot() +
@@ -146,7 +146,7 @@ figure_4d <- ggplot() +
   geom_sf(data = kbdi_600_2017, shape = 15, color = "#F0A3D0", size = 0.0001) +
   geom_sf(data = us_states_east, color = NA, fill = "#D4D4D4") +
   geom_sf(data = us_states,   color = "white", fill = NA, lwd = 0.2) +
-  geom_sf(data = us_boundary, color = "black", fill = NA, lwd = 0.3) +
+  geom_sf(data = us_boundary, color = "white", fill = NA, lwd = 0.3) +
   geom_sf(data = wells_all_buffer_1km, fill = "black", color = NA, alpha = 0.6) +
   xlim(-2300000, 560000) + ylim(340000, 3100000) +  # origin: 96W, 23N
   labs(x = "", y = "") +
@@ -156,7 +156,7 @@ figure_4d <- ggplot() +
         legend.position = "none")
 # export
 ggsave(filename = "figure_4d.png", plot = figure_4d, device = "png",
-       height = 5.25, width = 5, path = "output/figures/components/")
+       height = 4.818, width = 5, path = "output/figures/components/")
 
 # figure 4e ................................................................
 figure_4e <- ggplot() +
@@ -165,7 +165,7 @@ figure_4e <- ggplot() +
   geom_sf(data = kbdi_600_2050, shape = 15, color = "#F0A3D0", size = 0.4) +
   geom_sf(data = us_states_east, color = NA, fill = "#D4D4D4") +
   geom_sf(data = us_states,   color = "white", fill = NA, lwd = 0.2) +
-  geom_sf(data = us_boundary, color = "black", fill = NA, lwd = 0.3) +
+  geom_sf(data = us_boundary, color = "white", fill = NA, lwd = 0.3) +
   geom_sf(data = wells_all_buffer_1km, fill = "black", color = NA, alpha = 0.6) +
   xlim(-2300000, 560000) + ylim(340000, 3100000) +  # origin: 96W, 23N
   labs(x = "", y = "") +
@@ -175,7 +175,7 @@ figure_4e <- ggplot() +
         legend.position = "none")
 # export
 ggsave(filename = "figure_4e.png", plot = figure_4e, device = "png",
-       height = 5.25, width = 5, path = "output/figures/components/")
+       height = 4.818, width = 5, path = "output/figures/components/")
 
 # figure 4f ................................................................
 figure_4f <- ggplot() +
@@ -184,7 +184,7 @@ figure_4f <- ggplot() +
   geom_sf(data = kbdi_600_2090, shape = 15, color = "#F0A3D0", size = 0.4) +
   geom_sf(data = us_states_east, color = NA, fill = "#D4D4D4") +
   geom_sf(data = us_states,   color = "white", fill = NA, lwd = 0.2) +
-  geom_sf(data = us_boundary, color = "black", fill = NA, lwd = 0.3) +
+  geom_sf(data = us_boundary, color = "white", fill = NA, lwd = 0.3) +
   geom_sf(data = wells_all_buffer_1km, fill = "black", color = NA, alpha = 0.6) +
   xlim(-2300000, 560000) + ylim(340000, 3100000) +  # origin: 96W, 23N
   labs(x = "", y = "") +
@@ -194,6 +194,6 @@ figure_4f <- ggplot() +
         legend.position = "none")
 # export
 ggsave(filename = "figure_4f.png", plot = figure_4f, device = "png",
-       height = 5.25, width = 5, path = "output/figures/components/")
+       height = 4.818, width = 5, path = "output/figures/components/")
 
 ##============================================================================##
