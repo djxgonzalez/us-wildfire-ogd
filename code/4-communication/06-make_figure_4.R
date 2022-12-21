@@ -90,7 +90,7 @@ figure_4a <- ggplot() +
   geom_sf(data = us_states_east, color = NA, fill = "#D4D4D4") +
   geom_sf(data = us_states,   color = "white", fill = NA, lwd = 0.2) +
   geom_sf(data = us_boundary, color = "white", fill = NA, lwd = 0.3) +
-  # geom_sf(data = wells_all_buffer_1km, fill = "black", color = NA, alpha = 0.6) +
+  geom_sf(data = wells_all_buffer_1km, fill = "black", color = NA, alpha = 0.6) +
   xlim(-2300000, 560000) + ylim(340000, 3100000) +  # origin: 96W, 23N
   labs(x = "", y = "") +
   theme_void() +  
