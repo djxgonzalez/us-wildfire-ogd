@@ -1,5 +1,5 @@
 ##============================================================================##
-## 4.06 -  makes Figure 3 plots the top four wildfires with the most oil and gas 
+## 4.06 -  makes Figure 2 plots the top four wildfires with the most oil and gas 
 ## wells drilled before the fire year, including wells without operation dates,
 ## presumed to have been drilled before 1984
 
