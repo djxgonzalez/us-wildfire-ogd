@@ -1,0 +1,41 @@
+---
+title: "Memo: Comparing wells data"
+output:
+  html_notebook:
+    theme: flatly
+    highlight: haddock 
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+    number_sections: true
+---
+
+# Purpose
+
+This memo compares old wells dataset we've been using up to this point with a revised wells dataset provided by Mary Willis and her group. If there are differences in the number of wells in each study state, we'll re-do those analyses.
+
+
+```{r setup, include=FALSE}
+source("../../code/0-setup/01-setup.R")
+```
+
+```{r data_input, include=FALSE}
+wells_all_old <- readRDS("../../data/processed/wells_all.rds")
+wells_all_new <- read_csv("../../data/raw/enverus/US_Wells.csv")
+```
+
+### Table: Well count by state
+
+**Old dataset:**
+
+```{r}
+summary(as.factor(wells_all$state))
+```
+
+**New dataset:**
+
+```{r}
+summary(as.factor(wells_all_new$State))
+```
+
+There are some substantial differences, especially for CA: 110,000 fewer wells in the new dataset. What's going on there?
