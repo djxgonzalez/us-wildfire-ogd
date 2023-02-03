@@ -1,8 +1,9 @@
 ##============================================================================##
-## TITLE:   Wildfire and oil and gas development in the western United States: 
-##          Assessing historical, current, and future risks
-## AUTHORS: Gonzalez et al. (in prep)
-
+## run_all - This script is a sort of table of contents for this R project.
+## Most of the scripts necessary to conduct this project were written to run
+## independently. In this `run_all` script, we assembled the elements of the 
+## R project sequentially. However, we do not advise running this script in 
+## whole, as the memory demands may cause R to crash.
 
 ## 0. Setup ==================================================================
 
@@ -19,19 +20,19 @@ source("code/1-data_tidying/01-tidy_enverus_data.R")
 source("code/1-data_tidying/04-call_data_tidying.R")
 
 
-## 2. Exposure Assessment ====================================================
+## 2. Assessment of Wells in Wildfires =======================================
 
 # attaches functions for tidying raw data
-source("code/2-exposure_assessment/01-fxn_assess_exposure_buffer.R")
+source("code/2-assessment/01-fxn_assess_exposure_buffer.R")
 
 # imports raw data, calls tidying functions, exports interim data
-source("code/2-exposure_assessment/02-assess_exposure_cities.R")
+source("code/2-assessment/02-assess_exposure_cities.R")
 
 # makes analytic dataset
-source("code/2-exposure_assessment/06-make_analytic_dataset.R")
+source("code/2-assessment/06-make_analytic_dataset.R")
 
 
-## 3. Analysis ===============================================================
+## 3. Analyses ===============================================================
 
 # descriptive statistics are in the Rmd ##### edit this
 
