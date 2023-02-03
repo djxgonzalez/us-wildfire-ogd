@@ -13,16 +13,16 @@
 source("code/0-setup/01-setup.R")
 
 # data input, prep layers for mapping ......................................
-us_states_west <- st_read("data/raw/esri/USA_States_Generalized.shp") %>% 
-  filter(STATE_ABBR %in% c("WA", "OR", "CA", "ID", "NV", "AZ", "MT", "WY", "UT",
-                           "CO", "NM", "ND", "SD", "NE", "KS", "OK", "TX", "MO",
-                           "AR", "LA")) %>%
+us_states_included <- st_read("data/raw/esri/USA_States_Generalized.shp") %>% 
+  filter(STATE_ABBR %in% 
+           c("OR", "CA", "NV", "AZ", "MT", "WY", "UT", "CO", "NM",
+             "ND", "SD", "NE", "KS", "OK", "TX", "MO", "AR", "LA")) %>%
   st_geometry() %>%
   st_transform(crs_albers)
-us_states_east <- st_read("data/raw/esri/USA_States_Generalized.shp") %>% 
-  filter(STATE_ABBR %!in% c("WA", "OR", "CA", "ID", "NV", "AZ", "MT", "WY", "UT",
-                            "CO", "NM", "ND", "SD", "NE", "KS", "OK", "TX", "MO",
-                            "AR", "LA")) %>% 
+us_states_excluded <- st_read("data/raw/esri/USA_States_Generalized.shp") %>% 
+  filter(STATE_ABBR %!in% 
+           c("OR", "CA", "NV", "AZ", "MT", "WY", "UT", "CO", "NM",
+             "ND", "SD", "NE", "KS", "OK", "TX", "MO", "AR", "LA")) %>% 
   st_geometry() %>%
   st_transform(crs_albers)
 mex_can <- st_read("data/raw/esri/Countries_WGS84.shp", crs = crs_wgs84) %>% 
@@ -119,47 +119,11 @@ wildfires_2020 <-
 figure_1a <- ggplot() +
   geom_sf(data = mex_can, 
           fill = "#DCDCDC", color = "white", lwd = 0.3, alpha = 0.7) +
-  geom_sf(data = us_states_east, 
+  geom_sf(data = us_states_excluded, 
           fill = "#DCDCDC", color = "white", lwd = 0.3, alpha = 0.7) +
-  geom_sf(data = us_states_west, 
+  geom_sf(data = us_states_included, 
           fill = "#E6E9E0", color = "white", lwd = 0.5, alpha = 0.5) +
-  geom_sf(data = wildfires_1984, fill = "#ffffb2", color = NA, alpha = 0.3) +
-  geom_sf(data = wildfires_1985, fill = "#ffffb2", color = NA, alpha = 0.3) +
-  geom_sf(data = wildfires_1986, fill = "#ffffb2", color = NA, alpha = 0.3) +
-  geom_sf(data = wildfires_1987, fill = "#ffffb2", color = NA, alpha = 0.3) +
-  geom_sf(data = wildfires_1988, fill = "#ffffb2", color = NA, alpha = 0.3) +
-  geom_sf(data = wildfires_1989, fill = "#ffffb2", color = NA, alpha = 0.3) +
-  geom_sf(data = wildfires_1990, fill = "#fecc5c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_1991, fill = "#fecc5c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_1992, fill = "#fecc5c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_1993, fill = "#fecc5c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_1994, fill = "#fecc5c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_1995, fill = "#fecc5c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_1996, fill = "#fecc5c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_1997, fill = "#fecc5c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_1998, fill = "#fecc5c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_1999, fill = "#fecc5c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_2000, fill = "#fd8d3c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_2001, fill = "#fd8d3c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_2002, fill = "#fd8d3c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_2003, fill = "#fd8d3c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_2004, fill = "#fd8d3c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_2005, fill = "#fd8d3c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_2006, fill = "#fd8d3c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_2007, fill = "#fd8d3c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_2008, fill = "#fd8d3c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_2009, fill = "#fd8d3c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_2010, fill = "#e31a1c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_2011, fill = "#e31a1c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_2012, fill = "#e31a1c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_2013, fill = "#e31a1c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_2014, fill = "#e31a1c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_2015, fill = "#e31a1c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_2016, fill = "#e31a1c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_2017, fill = "#e31a1c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_2018, fill = "#e31a1c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_2019, fill = "#e31a1c", color = NA, alpha = 0.6) +
-  geom_sf(data = wildfires_2020, fill = "#e31a1c", color = NA, alpha = 0.6) +
+  geom_sf(data = wildfires_all_union, fill = "#ffffb2", color = NA, alpha = 0.3) +
   geom_sf(data = wells_all_buffer_1km,
           fill = "black", color = NA, alpha = 0.2) +
   xlim(-2300000, 560000) + ylim(340000, 3100000) +  # origin: 96W, 23N

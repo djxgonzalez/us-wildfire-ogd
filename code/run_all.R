@@ -6,51 +6,40 @@
 ## whole, as the memory demands may cause R to crash.
 
 ## 0. Setup ==================================================================
-
 # loads necessary packages and defines global variables
 source("code/0-setup/01-setup.R")
 
 
 ## 1. Data Tidying ===========================================================
-
 # attaches functions for tidying raw data
-source("code/1-data_tidying/01-tidy_enverus_data.R")
-
+source("code/1-data_tidying/01-fxn-tidy_wells_data.R")
 # imports raw data, calls tidying functions, exports interim data
-source("code/1-data_tidying/04-call_data_tidying.R")
+source("code/1-data_tidying/02-tidy_wells_data.R")
+source("code/1-data_tidying/03-tidy_wildfire_data.R")
+source("code/1-data_tidying/04-tidy_kbdi_risk_data.R")
+source("code/1-data_tidying/05-tidy_gridded_pop_data.R")
 
 
 ## 2. Assessment of Wells in Wildfires =======================================
-
-# attaches functions for tidying raw data
-source("code/2-assessment/01-fxn_assess_exposure_buffer.R")
-
-# imports raw data, calls tidying functions, exports interim data
-source("code/2-assessment/02-assess_exposure_cities.R")
-
-# makes analytic dataset
-source("code/2-assessment/06-make_analytic_dataset.R")
-
+# 
+source("code/2-assessment/.R")
+source("code/2-assessment/.R")
+source("code/2-assessment/.R")
+source("code/2-assessment/.R")
+source("code/2-assessment/.R")
+source("code/2-assessment/.R")
+source("code/2-assessment/.R")
+source("code/2-assessment/.R")
 
 ## 3. Analyses ===============================================================
-
-# descriptive statistics are in the Rmd ##### edit this
-
-# propensity scores ##### edit this
-
-# models are in Rmds ##### edit this
+# 
+source("code/3-analysis/.R")
+source("code/3-analysis/.R")
 
 
 ## 4. Communication ==========================================================
+#
+source("code/4-communication/.R")
 
-# imports raw and processed data, preps data as needed, and generates main 
-# and supplemental figures and tables
-source("code/4-communication/01-prep_figure_1_data.R")
-source("code/4-communication/02-make_figure_1a.R")
-source("code/4-communication/03-make_figure_1a_inset.R")
-source("code/4-communication/04-make_figure_2.R")
-source("code/4-communication/05-make_figure_3.R")
-source("code/4-communication/06-make_figure_4.R")
-source("code/4-communication/07-make_table_1.R")
 
 ##============================================================================##

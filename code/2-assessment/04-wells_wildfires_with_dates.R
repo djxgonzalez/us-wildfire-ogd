@@ -258,53 +258,6 @@ rm(wildfires_in, wells_in, wildfires_wells_dates_co,
    wildfires_wells_dates_co_buffer_1km)
 
 
-# ID -----------------------------------------------------------------------
-
-# data prep ..............................................................
-
-# restricts to wildfires near wells (i.e., intersect with 1 km well buffer)
-wildfires_in <- wildfires_all %>%
-  filter(state == "ID") %>% 
-  st_as_sf() %>%
-  st_transform(crs_albers) %>%
-  st_intersection(readRDS("data/interim/wells_buffers/wells_id_buffer_1km.rds"))
-wildfires_in <- split(wildfires_in, seq(1, nrow(wildfires_in))) #converts to list
-# restricts to wells near wildfires (i.e., w/in 1 km of wildfire boundaries)
-wells_in <- wells_with_dates %>% 
-  filter(state == "ID") %>% 
-  st_intersection(
-    readRDS("data/interim/wildfires_buffers/wildfires_id_buffer_1km.rds")) %>% 
-  st_transform(crs_albers)
-
-# wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
-wildfires_wells_dates_id <- 
-  lapply(wildfires_in,
-         FUN          = assessExposureCount,
-         wells        = wells_in,
-         buffer_dist  = 0,  # in meters
-         exp_variable = "n_wells") 
-wildfires_wells_dates_id <- 
-  do.call("rbind", wildfires_wells_dates_id)  # converts from list
-write_csv(wildfires_wells_dates_id, 
-          "data/processed/wildfires_wells_dates/wildfires_wells_dates_id.csv")
-
-# wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
-wildfires_wells_dates_id_buffer_1km <- 
-  lapply(wildfires_in,
-         FUN          = assessExposureCount,
-         wells        = wells_in,
-         buffer       = 1000,  # in meters
-         exp_variable = "n_wells_buffer_1km") 
-wildfires_wells_dates_id_buffer_1km <- 
-  do.call("rbind", wildfires_wells_dates_id_buffer_1km)
-write_csv(wildfires_wells_dates_id_buffer_1km, 
-          "data/processed/wildfires_wells_dates/wildfires_wells_dates_id_buffer_1km.csv")
-
-# removes datasets before moving on to the next state
-rm(wildfires_in, wells_in, wildfires_wells_dates_id, 
-   wildfires_wells_dates_id_buffer_1km)
-
-
 # KS -----------------------------------------------------------------------
 
 # data prep ..............................................................
@@ -914,53 +867,6 @@ write_csv(wildfires_wells_dates_ut_buffer_1km,
 # removes datasets before moving on to the next state
 rm(wildfires_in, wells_in, wildfires_wells_dates_ut, 
    wildfires_wells_dates_ut_buffer_1km)
-
-
-# WA -----------------------------------------------------------------------
-
-# data prep ..............................................................
-
-# restricts to wildfires near wells (i.e., intersect with 1 km well buffer)
-wildfires_in <- wildfires_all %>%
-  filter(state == "WA") %>% 
-  st_as_sf() %>%
-  st_transform(crs_albers) %>% 
-  st_intersection(readRDS("data/interim/wells_buffers/wells_wa_buffer_1km.rds"))
-wildfires_in <- split(wildfires_in, seq(1, nrow(wildfires_in))) #converts to list
-# restricts to wells near wildfires (i.e., w/in 1 km of wildfire boundaries)
-wells_in <- wells_with_dates %>% 
-  filter(state == "WA") %>% 
-  st_intersection(
-    readRDS("data/interim/wildfires_buffers/wildfires_wa_buffer_1km.rds")) %>% 
-  st_transform(crs_albers)
-
-# wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
-wildfires_wells_dates_wa <- 
-  lapply(wildfires_in,
-         FUN          = assessExposureCount,
-         wells        = wells_in,
-         buffer_dist  = 0,  # in meters
-         exp_variable = "n_wells") 
-wildfires_wells_dates_wa <- 
-  do.call("rbind", wildfires_wells_dates_wa)  # converts from list
-write_csv(wildfires_wells_dates_wa, 
-          "data/processed/wildfires_wells_dates/wildfires_wells_dates_wa.csv")
-
-# wells w/in 1km of wildfire boundary  . . . . . . . . . . . . . . . . 
-wildfires_wells_dates_wa_buffer_1km <- 
-  lapply(wildfires_in,
-         FUN          = assessExposureCount,
-         wells        = wells_in,
-         buffer       = 1000,  # in meters
-         exp_variable = "n_wells_buffer_1km") 
-wildfires_wells_dates_wa_buffer_1km <- 
-  do.call("rbind", wildfires_wells_dates_wa_buffer_1km)
-write_csv(wildfires_wells_dates_wa_buffer_1km, 
-          "data/processed/wildfires_wells_dates/wildfires_wells_dates_wa_buffer_1km.csv")
-
-# removes datasets before moving on to the next state
-rm(wildfires_in, wells_in, wildfires_wells_dates_wa, 
-   wildfires_wells_dates_wa_buffer_1km)
 
 
 # WY -----------------------------------------------------------------------
