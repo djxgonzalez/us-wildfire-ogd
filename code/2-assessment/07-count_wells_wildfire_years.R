@@ -17,9 +17,10 @@ us_states <- st_read("data/raw/esri/USA_States_Generalized.shp") %>%
            c("OR", "CA", "NV", "AZ", "MT", "WY", "UT", "CO", "NM",
              "ND", "SD", "NE", "KS", "OK", "TX", "MO", "AR", "LA")) %>%
   st_transform(crs_albers)
-alaska    <- st_read("data/raw/esri/USA_States_Generalized.shp") %>% 
-  filter(STATE_ABBR == "AK") %>%
-  st_geometry() %>% 
+alaska    <- st_read("data/raw/esri/USA_States_Generalized.shp")# %>% 
+  rename(state = STATE_ABBR) %>% 
+  select(state, geometry) %>% 
+  filter(state == "AK") %>%
   st_transform(crs_alaska)
 wells_all <- readRDS("data/processed/wells_all.rds")
 
