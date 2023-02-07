@@ -141,37 +141,6 @@ wildfires_wells_dates_buffer_1km <-
   select(wildfire_id, state, n_wells_dates_buffer_1km)
 
 
-## population exposed to wells in wildfires ----------------------------------
-
-# assembles dataset with the estimated number of residents within 1 km of wells
-# that were situated in wildfire burn areas
-# wildfires_wells_population <- 
-#   read_csv("data/processed/wildfires_wells_population/wildfires_wells_pop_ak.csv") %>% 
-#   bind_rows(read_csv("data/processed/wildfires_wells_population/wildfires_wells_pop_ar.csv")) %>% 
-#   bind_rows(read_csv("data/processed/wildfires_wells_population/wildfires_wells_pop_az.csv")) %>% 
-#   bind_rows(read_csv("data/processed/wildfires_wells_population/wildfires_wells_pop_ca.csv")) %>% 
-#   bind_rows(read_csv("data/processed/wildfires_wells_population/wildfires_wells_pop_co.csv")) %>% 
-#   bind_rows(read_csv("data/processed/wildfires_wells_population/wildfires_wells_pop_ks.csv")) %>% 
-#   bind_rows(read_csv("data/processed/wildfires_wells_population/wildfires_wells_pop_la.csv")) %>% 
-#   bind_rows(read_csv("data/processed/wildfires_wells_population/wildfires_wells_pop_mo.csv")) %>% 
-#   bind_rows(read_csv("data/processed/wildfires_wells_population/wildfires_wells_pop_mt.csv")) %>% 
-#   bind_rows(read_csv("data/processed/wildfires_wells_population/wildfires_wells_pop_nd.csv")) %>% 
-#   bind_rows(read_csv("data/processed/wildfires_wells_population/wildfires_wells_pop_ne.csv")) %>% 
-#   bind_rows(read_csv("data/processed/wildfires_wells_population/wildfires_wells_pop_nm.csv")) %>% 
-#   bind_rows(read_csv("data/processed/wildfires_wells_population/wildfires_wells_pop_nv.csv")) %>% 
-#   bind_rows(read_csv("data/processed/wildfires_wells_population/wildfires_wells_pop_ok.csv")) %>% 
-#   bind_rows(read_csv("data/processed/wildfires_wells_population/wildfires_wells_pop_or.csv")) %>% 
-#   bind_rows(read_csv("data/processed/wildfires_wells_population/wildfires_wells_pop_sd.csv")) %>% 
-#   bind_rows(read_csv("data/processed/wildfires_wells_population/wildfires_wells_pop_tx.csv")) %>% 
-#   bind_rows(read_csv("data/processed/wildfires_wells_population/wildfires_wells_pop_ut.csv")) %>% 
-#   bind_rows(read_csv("data/processed/wildfires_wells_population/wildfires_wells_pop_wy.csv")) %>% 
-#   as_tibble() %>% 
-#   # retain wildfire_id to join with other datasets below
-#   mutate(wildfire_id = as.factor(wildfire_id),
-#          state       = as.factor(data_source)) %>% 
-#   select(wildfire_id, state, n_population_exposed)
-
-
 ## merge and export analytic dataset -----------------------------------------
 
 # merges assessments of wells in/near wildfires and exposed populations
@@ -180,15 +149,13 @@ wildfires_wells_population <- wildfires_all %>%
   left_join(wildfires_wells_buffer_1km,       by = c("wildfire_id", "state")) %>% 
   left_join(wildfires_wells_dates,            by = c("wildfire_id", "state")) %>% 
   left_join(wildfires_wells_dates_buffer_1km, by = c("wildfire_id", "state")) %>% 
-  #left_join(wildfires_wells_population, by = c(wildfire_id, data_source)) %>% 
   # replaces NAs with 0s, for wildfires omitted from above analyses because
   # they were not near wells
   mutate(wildfire_area_km2        = as.numeric(wildfire_area_m2) / 1000000,
          n_wells                  = replace_na(n_wells, 0),
          n_wells_buffer_1km       = replace_na(n_wells_buffer_1km, 0),
          n_wells_dates            = replace_na(n_wells_dates, 0),
-         n_wells_dates_buffer_1km = replace_na(n_wells_dates_buffer_1km, 0)) %>% #,
-         #n_population_exposed = replace_na(n_population_exposed, 0)) %>% 
+         n_wells_dates_buffer_1km = replace_na(n_wells_dates_buffer_1km, 0)) %>%
   as_tibble() %>% 
   select(-geometry)
   
