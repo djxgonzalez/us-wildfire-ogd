@@ -1,5 +1,5 @@
 ##============================================================================##
-## 2.06 - Sets up and runs assessment, for all states included in study, of
+## 2.07 - Sets up and runs assessment, for all states included in study, of
 ## the count of wells in wildfires (excluding wells known to have been drilled
 ## after the wildfire occurred)
 
@@ -1224,3 +1224,4 @@ rm(wells_state, wells_wildfire_year_wy)
 
 
 ##============================================================================##
+
