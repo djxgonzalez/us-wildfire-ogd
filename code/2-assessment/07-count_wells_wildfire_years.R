@@ -17,7 +17,7 @@ us_states <- st_read("data/raw/esri/USA_States_Generalized.shp") %>%
            c("OR", "CA", "NV", "AZ", "MT", "WY", "UT", "CO", "NM",
              "ND", "SD", "NE", "KS", "OK", "TX", "MO", "AR", "LA")) %>%
   st_transform(crs_albers)
-alaska    <- st_read("data/raw/esri/USA_States_Generalized.shp")# %>% 
+alaska    <- st_read("data/raw/esri/USA_States_Generalized.shp") %>% 
   rename(state = STATE_ABBR) %>% 
   select(state, geometry) %>% 
   filter(state == "AK") %>%
@@ -59,6 +59,7 @@ for(year in c(1984:2020)) {
                   ".rds",
                   sep = "")) %>% 
     st_transform(crs = crs_alaska) %>% 
+    st_buffer(dist = 0) %>% 
     st_intersection(alaska)
   # same as above, but creates a 1 km buffer around the wildfire burn areas
   # for each year so that we can assess wells near the burn areas
@@ -67,14 +68,14 @@ for(year in c(1984:2020)) {
                   year,
                   ".rds",
                   sep = "")) %>% 
+    st_buffer(dist = 1000) %>% 
     st_transform(crs = crs_alaska) %>% 
-    st_intersection(alaska) %>% 
-    st_buffer(dist = 1000)
+    st_intersection(alaska)
   # counts the number of wells that intersect with wildfire-year
   n_wells <- sum(unlist(st_intersects(wells_state_year, wildfire_state_year)))
   # counts the number of wells that intersect with wildfire-year + 1 km buffer
-  n_wells_buffer_1km <- sum(unlist(st_intersects(wells_state_year,
-                                                 wildfire_state_year_buffer_1km)))
+  n_wells_buffer_1km <- 
+    sum(unlist(st_intersects(wells_state_year, wildfire_state_year_buffer_1km)))
   output <- tibble(state              = "AK",
                    year               = year,
                    n_wells            = n_wells,
@@ -116,27 +117,30 @@ for(year in c(1984:2020)) {
     filter(year(date_earliest) <= year | is.na(date_earliest))
   # restricts to wildfire burn areas in each year in the state
   wildfire_state_year <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
+    st_buffer(dist = 0) %>% 
     st_intersection(subset(us_states, state == "AR"))
   # same as above, but creates a 1 km buffer around the wildfire burn areas
   # for each year so that we can assess wells near the burn areas
   wildfire_state_year_buffer_1km <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
-    st_intersection(subset(us_states, state == "AR")) %>% 
-    st_buffer(dist = 1000)
+    st_buffer(dist = 1000) %>% 
+    st_intersection(subset(us_states, state == "AR"))
   # counts the number of wells that intersect with wildfire-year
   n_wells <- sum(unlist(st_intersects(wells_state_year, wildfire_state_year)))
   # counts the number of wells that intersect with wildfire-year + 1 km buffer
-  n_wells_buffer_1km <- sum(unlist(st_intersects(wells_state_year,
-                                                 wildfire_state_year_buffer_1km)))
+  n_wells_buffer_1km <-
+    sum(unlist(st_intersects(wells_state_year, wildfire_state_year_buffer_1km)))
   output <- tibble(state              = "AR",
                    year               = year,
                    n_wells            = n_wells,
@@ -179,27 +183,30 @@ for(year in c(1984:2020)) {
     filter(year(date_earliest) <= year | is.na(date_earliest))
   # restricts to wildfire burn areas in each year in the state
   wildfire_state_year <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
+    st_buffer(dist = 0) %>% 
     st_intersection(subset(us_states, state == "AZ"))
   # same as above, but creates a 1 km buffer around the wildfire burn areas
   # for each year so that we can assess wells near the burn areas
   wildfire_state_year_buffer_1km <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
-    st_intersection(subset(us_states, state == "AZ")) %>% 
-    st_buffer(dist = 1000)
+    st_buffer(dist = 1000) %>% 
+    st_intersection(subset(us_states, state == "AZ"))
   # counts the number of wells that intersect with wildfire-year
   n_wells <- sum(unlist(st_intersects(wells_state_year, wildfire_state_year)))
   # counts the number of wells that intersect with wildfire-year + 1 km buffer
-  n_wells_buffer_1km <- sum(unlist(st_intersects(wells_state_year,
-                                                 wildfire_state_year_buffer_1km)))
+  n_wells_buffer_1km <- 
+    sum(unlist(st_intersects(wells_state_year, wildfire_state_year_buffer_1km)))
   output <- tibble(state              = "AZ",
                    year               = year,
                    n_wells            = n_wells,
@@ -242,27 +249,30 @@ for(year in c(1984:2020)) {
     filter(year(date_earliest) <= year | is.na(date_earliest))
   # restricts to wildfire burn areas in each year in the state
   wildfire_state_year <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
+    st_buffer(dist = 0) %>% 
     st_intersection(subset(us_states, state == "CA"))
   # same as above, but creates a 1 km buffer around the wildfire burn areas
   # for each year so that we can assess wells near the burn areas
   wildfire_state_year_buffer_1km <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
-    st_intersection(subset(us_states, state == "CA")) %>% 
-    st_buffer(dist = 1000)
+    st_buffer(dist = 1000) %>% 
+    st_intersection(subset(us_states, state == "CA"))
   # counts the number of wells that intersect with wildfire-year
   n_wells <- sum(unlist(st_intersects(wells_state_year, wildfire_state_year)))
   # counts the number of wells that intersect with wildfire-year + 1 km buffer
-  n_wells_buffer_1km <- sum(unlist(st_intersects(wells_state_year,
-                                                 wildfire_state_year_buffer_1km)))
+  n_wells_buffer_1km <- 
+    sum(unlist(st_intersects(wells_state_year, wildfire_state_year_buffer_1km)))
   output <- tibble(state              = "CA",
                    year               = year,
                    n_wells            = n_wells,
@@ -305,27 +315,30 @@ for(year in c(1984:2020)) {
     filter(year(date_earliest) <= year | is.na(date_earliest))
   # restricts to wildfire burn areas in each year in the state
   wildfire_state_year <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
+    st_buffer(dist = 0) %>% 
     st_intersection(subset(us_states, state == "CO"))
   # same as above, but creates a 1 km buffer around the wildfire burn areas
   # for each year so that we can assess wells near the burn areas
   wildfire_state_year_buffer_1km <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
-    st_intersection(subset(us_states, state == "CO")) %>% 
-    st_buffer(dist = 1000)
+    st_buffer(dist = 1000) %>% 
+    st_intersection(subset(us_states, state == "CO"))
   # counts the number of wells that intersect with wildfire-year
   n_wells <- sum(unlist(st_intersects(wells_state_year, wildfire_state_year)))
   # counts the number of wells that intersect with wildfire-year + 1 km buffer
-  n_wells_buffer_1km <- sum(unlist(st_intersects(wells_state_year,
-                                                 wildfire_state_year_buffer_1km)))
+  n_wells_buffer_1km <- 
+    sum(unlist(st_intersects(wells_state_year, wildfire_state_year_buffer_1km)))
   output <- tibble(state              = "CO",
                    year               = year,
                    n_wells            = n_wells,
@@ -368,27 +381,32 @@ for(year in c(1984:2020)) {
     filter(year(date_earliest) <= year | is.na(date_earliest))
   # restricts to wildfire burn areas in each year in the state
   wildfire_state_year <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
-    st_transform(crs = crs_albers) %>% 
+    st_make_valid(
+      readRDS(
+        paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+              year,
+              ".rds",
+              sep = ""))) %>% 
+    st_transform(crs = crs_albers) %>%
+    st_buffer(dist = 0) %>% 
     st_intersection(subset(us_states, state == "KS"))
   # same as above, but creates a 1 km buffer around the wildfire burn areas
   # for each year so that we can assess wells near the burn areas
   wildfire_state_year_buffer_1km <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(
+        paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+              year,
+              ".rds",
+              sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
-    st_intersection(subset(us_states, state == "KS")) %>% 
-    st_buffer(dist = 1000)
+    st_buffer(dist = 1000) %>% 
+    st_intersection(subset(us_states, state == "KS"))
   # counts the number of wells that intersect with wildfire-year
   n_wells <- sum(unlist(st_intersects(wells_state_year, wildfire_state_year)))
   # counts the number of wells that intersect with wildfire-year + 1 km buffer
-  n_wells_buffer_1km <- sum(unlist(st_intersects(wells_state_year,
-                                                 wildfire_state_year_buffer_1km)))
+  n_wells_buffer_1km <- 
+    sum(unlist(st_intersects(wells_state_year, wildfire_state_year_buffer_1km)))
   output <- tibble(state              = "KS",
                    year               = year,
                    n_wells            = n_wells,
@@ -431,27 +449,30 @@ for(year in c(1984:2020)) {
     filter(year(date_earliest) <= year | is.na(date_earliest))
   # restricts to wildfire burn areas in each year in the state
   wildfire_state_year <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
+    st_buffer(dist = 0) %>% 
     st_intersection(subset(us_states, state == "LA"))
   # same as above, but creates a 1 km buffer around the wildfire burn areas
   # for each year so that we can assess wells near the burn areas
   wildfire_state_year_buffer_1km <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
-    st_intersection(subset(us_states, state == "LA")) %>% 
-    st_buffer(dist = 1000)
+    st_buffer(dist = 1000) %>% 
+    st_intersection(subset(us_states, state == "LA"))
   # counts the number of wells that intersect with wildfire-year
   n_wells <- sum(unlist(st_intersects(wells_state_year, wildfire_state_year)))
   # counts the number of wells that intersect with wildfire-year + 1 km buffer
-  n_wells_buffer_1km <- sum(unlist(st_intersects(wells_state_year,
-                                                 wildfire_state_year_buffer_1km)))
+  n_wells_buffer_1km <-
+    sum(unlist(st_intersects(wells_state_year, wildfire_state_year_buffer_1km)))
   output <- tibble(state              = "LA",
                    year               = year,
                    n_wells            = n_wells,
@@ -494,27 +515,30 @@ for(year in c(1984:2020)) {
     filter(year(date_earliest) <= year | is.na(date_earliest))
   # restricts to wildfire burn areas in each year in the state
   wildfire_state_year <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
+    st_buffer(dist = 0) %>% 
     st_intersection(subset(us_states, state == "MO"))
   # same as above, but creates a 1 km buffer around the wildfire burn areas
   # for each year so that we can assess wells near the burn areas
   wildfire_state_year_buffer_1km <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
-    st_intersection(subset(us_states, state == "MO")) %>% 
-    st_buffer(dist = 1000)
+    st_buffer(dist = 1000) %>% 
+    st_intersection(subset(us_states, state == "MO"))
   # counts the number of wells that intersect with wildfire-year
   n_wells <- sum(unlist(st_intersects(wells_state_year, wildfire_state_year)))
   # counts the number of wells that intersect with wildfire-year + 1 km buffer
-  n_wells_buffer_1km <- sum(unlist(st_intersects(wells_state_year,
-                                                 wildfire_state_year_buffer_1km)))
+  n_wells_buffer_1km <-
+    sum(unlist(st_intersects(wells_state_year, wildfire_state_year_buffer_1km)))
   output <- tibble(state              = "MO",
                    year               = year,
                    n_wells            = n_wells,
@@ -557,27 +581,30 @@ for(year in c(1984:2020)) {
     filter(year(date_earliest) <= year | is.na(date_earliest))
   # restricts to wildfire burn areas in each year in the state
   wildfire_state_year <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
+    st_buffer(dist = 0) %>% 
     st_intersection(subset(us_states, state == "MT"))
   # same as above, but creates a 1 km buffer around the wildfire burn areas
   # for each year so that we can assess wells near the burn areas
   wildfire_state_year_buffer_1km <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
-    st_intersection(subset(us_states, state == "MT")) %>% 
-    st_buffer(dist = 1000)
+    st_buffer(dist = 1000) %>% 
+    st_intersection(subset(us_states, state == "MT"))
   # counts the number of wells that intersect with wildfire-year
   n_wells <- sum(unlist(st_intersects(wells_state_year, wildfire_state_year)))
   # counts the number of wells that intersect with wildfire-year + 1 km buffer
-  n_wells_buffer_1km <- sum(unlist(st_intersects(wells_state_year,
-                                                 wildfire_state_year_buffer_1km)))
+  n_wells_buffer_1km <- 
+    sum(unlist(st_intersects(wells_state_year, wildfire_state_year_buffer_1km)))
   output <- tibble(state              = "MT",
                    year               = year,
                    n_wells            = n_wells,
@@ -620,27 +647,30 @@ for(year in c(1984:2020)) {
     filter(year(date_earliest) <= year | is.na(date_earliest))
   # restricts to wildfire burn areas in each year in the state
   wildfire_state_year <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
+    st_buffer(dist = 0) %>% 
     st_intersection(subset(us_states, state == "ND"))
   # same as above, but creates a 1 km buffer around the wildfire burn areas
   # for each year so that we can assess wells near the burn areas
   wildfire_state_year_buffer_1km <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
-    st_intersection(subset(us_states, state == "ND")) %>% 
-    st_buffer(dist = 1000)
+    st_buffer(dist = 1000) %>% 
+    st_intersection(subset(us_states, state == "ND"))
   # counts the number of wells that intersect with wildfire-year
   n_wells <- sum(unlist(st_intersects(wells_state_year, wildfire_state_year)))
   # counts the number of wells that intersect with wildfire-year + 1 km buffer
-  n_wells_buffer_1km <- sum(unlist(st_intersects(wells_state_year,
-                                                 wildfire_state_year_buffer_1km)))
+  n_wells_buffer_1km <-
+    sum(unlist(st_intersects(wells_state_year, wildfire_state_year_buffer_1km)))
   output <- tibble(state              = "ND",
                    year               = year,
                    n_wells            = n_wells,
@@ -683,27 +713,30 @@ for(year in c(1984:2020)) {
     filter(year(date_earliest) <= year | is.na(date_earliest))
   # restricts to wildfire burn areas in each year in the state
   wildfire_state_year <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
+    st_buffer(dist = 0) %>% 
     st_intersection(subset(us_states, state == "NE"))
   # same as above, but creates a 1 km buffer around the wildfire burn areas
   # for each year so that we can assess wells near the burn areas
   wildfire_state_year_buffer_1km <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
-    st_intersection(subset(us_states, state == "NE")) %>% 
-    st_buffer(dist = 1000)
+    st_buffer(dist = 1000) %>% 
+    st_intersection(subset(us_states, state == "NE"))
   # counts the number of wells that intersect with wildfire-year
   n_wells <- sum(unlist(st_intersects(wells_state_year, wildfire_state_year)))
   # counts the number of wells that intersect with wildfire-year + 1 km buffer
-  n_wells_buffer_1km <- sum(unlist(st_intersects(wells_state_year,
-                                                 wildfire_state_year_buffer_1km)))
+  n_wells_buffer_1km <-
+    sum(unlist(st_intersects(wells_state_year, wildfire_state_year_buffer_1km)))
   output <- tibble(state              = "NE",
                    year               = year,
                    n_wells            = n_wells,
@@ -746,27 +779,30 @@ for(year in c(1984:2020)) {
     filter(year(date_earliest) <= year | is.na(date_earliest))
   # restricts to wildfire burn areas in each year in the state
   wildfire_state_year <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
+    st_buffer(dist = 0) %>% 
     st_intersection(subset(us_states, state == "NM"))
   # same as above, but creates a 1 km buffer around the wildfire burn areas
   # for each year so that we can assess wells near the burn areas
   wildfire_state_year_buffer_1km <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
-    st_intersection(subset(us_states, state == "NM")) %>% 
-    st_buffer(dist = 1000)
+    st_buffer(dist = 1000) %>% 
+    st_intersection(subset(us_states, state == "NM"))
   # counts the number of wells that intersect with wildfire-year
   n_wells <- sum(unlist(st_intersects(wells_state_year, wildfire_state_year)))
   # counts the number of wells that intersect with wildfire-year + 1 km buffer
-  n_wells_buffer_1km <- sum(unlist(st_intersects(wells_state_year,
-                                                 wildfire_state_year_buffer_1km)))
+  n_wells_buffer_1km <- 
+    sum(unlist(st_intersects(wells_state_year, wildfire_state_year_buffer_1km)))
   output <- tibble(state              = "NM",
                    year               = year,
                    n_wells            = n_wells,
@@ -809,27 +845,30 @@ for(year in c(1984:2020)) {
     filter(year(date_earliest) <= year | is.na(date_earliest))
   # restricts to wildfire burn areas in each year in the state
   wildfire_state_year <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
+    st_buffer(dist = 0) %>% 
     st_intersection(subset(us_states, state == "NV"))
   # same as above, but creates a 1 km buffer around the wildfire burn areas
   # for each year so that we can assess wells near the burn areas
   wildfire_state_year_buffer_1km <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
-    st_intersection(subset(us_states, state == "NV")) %>% 
-    st_buffer(dist = 1000)
+    st_buffer(dist = 1000) %>% 
+    st_intersection(subset(us_states, state == "NV"))
   # counts the number of wells that intersect with wildfire-year
   n_wells <- sum(unlist(st_intersects(wells_state_year, wildfire_state_year)))
   # counts the number of wells that intersect with wildfire-year + 1 km buffer
-  n_wells_buffer_1km <- sum(unlist(st_intersects(wells_state_year,
-                                                 wildfire_state_year_buffer_1km)))
+  n_wells_buffer_1km <- 
+    sum(unlist(st_intersects(wells_state_year, wildfire_state_year_buffer_1km)))
   output <- tibble(state              = "NV",
                    year               = year,
                    n_wells            = n_wells,
@@ -872,27 +911,30 @@ for(year in c(1984:2020)) {
     filter(year(date_earliest) <= year | is.na(date_earliest))
   # restricts to wildfire burn areas in each year in the state
   wildfire_state_year <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
+    st_buffer(dist = 0) %>% 
     st_intersection(subset(us_states, state == "OK"))
   # same as above, but creates a 1 km buffer around the wildfire burn areas
   # for each year so that we can assess wells near the burn areas
   wildfire_state_year_buffer_1km <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
-    st_intersection(subset(us_states, state == "OK")) %>% 
-    st_buffer(dist = 1000)
+    st_buffer(dist = 1000) %>% 
+    st_intersection(subset(us_states, state == "OK"))
   # counts the number of wells that intersect with wildfire-year
   n_wells <- sum(unlist(st_intersects(wells_state_year, wildfire_state_year)))
   # counts the number of wells that intersect with wildfire-year + 1 km buffer
-  n_wells_buffer_1km <- sum(unlist(st_intersects(wells_state_year,
-                                                 wildfire_state_year_buffer_1km)))
+  n_wells_buffer_1km <-
+    sum(unlist(st_intersects(wells_state_year, wildfire_state_year_buffer_1km)))
   output <- tibble(state              = "OK",
                    year               = year,
                    n_wells            = n_wells,
@@ -935,27 +977,30 @@ for(year in c(1984:2020)) {
     filter(year(date_earliest) <= year | is.na(date_earliest))
   # restricts to wildfire burn areas in each year in the state
   wildfire_state_year <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
+    st_buffer(dist = 0) %>% 
     st_intersection(subset(us_states, state == "OR"))
   # same as above, but creates a 1 km buffer around the wildfire burn areas
   # for each year so that we can assess wells near the burn areas
   wildfire_state_year_buffer_1km <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
-    st_intersection(subset(us_states, state == "OR")) %>% 
-    st_buffer(dist = 1000)
+    st_buffer(dist = 1000) %>% 
+    st_intersection(subset(us_states, state == "OR"))
   # counts the number of wells that intersect with wildfire-year
   n_wells <- sum(unlist(st_intersects(wells_state_year, wildfire_state_year)))
   # counts the number of wells that intersect with wildfire-year + 1 km buffer
-  n_wells_buffer_1km <- sum(unlist(st_intersects(wells_state_year,
-                                                 wildfire_state_year_buffer_1km)))
+  n_wells_buffer_1km <-
+    sum(unlist(st_intersects(wells_state_year, wildfire_state_year_buffer_1km)))
   output <- tibble(state              = "OR",
                    year               = year,
                    n_wells            = n_wells,
@@ -998,27 +1043,30 @@ for(year in c(1984:2020)) {
     filter(year(date_earliest) <= year | is.na(date_earliest))
   # restricts to wildfire burn areas in each year in the state
   wildfire_state_year <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
+    st_buffer(dist = 0) %>% 
     st_intersection(subset(us_states, state == "SD"))
   # same as above, but creates a 1 km buffer around the wildfire burn areas
   # for each year so that we can assess wells near the burn areas
   wildfire_state_year_buffer_1km <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
-    st_intersection(subset(us_states, state == "SD")) %>% 
-    st_buffer(dist = 1000)
+    st_buffer(dist = 1000) %>% 
+    st_intersection(subset(us_states, state == "SD"))
   # counts the number of wells that intersect with wildfire-year
   n_wells <- sum(unlist(st_intersects(wells_state_year, wildfire_state_year)))
   # counts the number of wells that intersect with wildfire-year + 1 km buffer
-  n_wells_buffer_1km <- sum(unlist(st_intersects(wells_state_year,
-                                                 wildfire_state_year_buffer_1km)))
+  n_wells_buffer_1km <- 
+    sum(unlist(st_intersects(wells_state_year, wildfire_state_year_buffer_1km)))
   output <- tibble(state              = "SD",
                    year               = year,
                    n_wells            = n_wells,
@@ -1061,27 +1109,30 @@ for(year in c(1984:2020)) {
     filter(year(date_earliest) <= year | is.na(date_earliest))
   # restricts to wildfire burn areas in each year in the state
   wildfire_state_year <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
+    st_buffer(dist = 0) %>% 
     st_intersection(subset(us_states, state == "TX"))
   # same as above, but creates a 1 km buffer around the wildfire burn areas
   # for each year so that we can assess wells near the burn areas
   wildfire_state_year_buffer_1km <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
-    st_intersection(subset(us_states, state == "TX")) %>% 
-    st_buffer(dist = 1000)
+    st_buffer(dist = 1000) %>% 
+    st_intersection(subset(us_states, state == "TX"))
   # counts the number of wells that intersect with wildfire-year
   n_wells <- sum(unlist(st_intersects(wells_state_year, wildfire_state_year)))
   # counts the number of wells that intersect with wildfire-year + 1 km buffer
-  n_wells_buffer_1km <- sum(unlist(st_intersects(wells_state_year,
-                                                 wildfire_state_year_buffer_1km)))
+  n_wells_buffer_1km <- 
+    sum(unlist(st_intersects(wells_state_year, wildfire_state_year_buffer_1km)))
   output <- tibble(state              = "TX",
                    year               = year,
                    n_wells            = n_wells,
@@ -1124,27 +1175,30 @@ for(year in c(1984:2020)) {
     filter(year(date_earliest) <= year | is.na(date_earliest))
   # restricts to wildfire burn areas in each year in the state
   wildfire_state_year <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
+    st_buffer(dist = 0) %>% 
     st_intersection(subset(us_states, state == "UT"))
   # same as above, but creates a 1 km buffer around the wildfire burn areas
   # for each year so that we can assess wells near the burn areas
   wildfire_state_year_buffer_1km <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
-    st_intersection(subset(us_states, state == "UT")) %>% 
-    st_buffer(dist = 1000)
+    st_buffer(dist = 1000) %>% 
+    st_intersection(subset(us_states, state == "UT"))
   # counts the number of wells that intersect with wildfire-year
   n_wells <- sum(unlist(st_intersects(wells_state_year, wildfire_state_year)))
   # counts the number of wells that intersect with wildfire-year + 1 km buffer
-  n_wells_buffer_1km <- sum(unlist(st_intersects(wells_state_year,
-                                                 wildfire_state_year_buffer_1km)))
+  n_wells_buffer_1km <- 
+    sum(unlist(st_intersects(wells_state_year, wildfire_state_year_buffer_1km)))
   output <- tibble(state              = "UT",
                    year               = year,
                    n_wells            = n_wells,
@@ -1187,27 +1241,30 @@ for(year in c(1984:2020)) {
     filter(year(date_earliest) <= year | is.na(date_earliest))
   # restricts to wildfire burn areas in each year in the state
   wildfire_state_year <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
+    st_buffer(dist = 0) %>% 
     st_intersection(subset(us_states, state == "WY"))
   # same as above, but creates a 1 km buffer around the wildfire burn areas
   # for each year so that we can assess wells near the burn areas
   wildfire_state_year_buffer_1km <-
-    readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
-                  year,
-                  ".rds",
-                  sep = "")) %>% 
+    st_make_valid(
+      readRDS(paste("data/interim/wildfire_years/wildfires_union_contiguous_",
+                    year,
+                    ".rds",
+                    sep = ""))) %>% 
     st_transform(crs = crs_albers) %>% 
-    st_intersection(subset(us_states, state == "WY")) %>% 
-    st_buffer(dist = 1000)
+    st_buffer(dist = 1000) %>% 
+    st_intersection(subset(us_states, state == "WY"))
   # counts the number of wells that intersect with wildfire-year
   n_wells <- sum(unlist(st_intersects(wells_state_year, wildfire_state_year)))
   # counts the number of wells that intersect with wildfire-year + 1 km buffer
-  n_wells_buffer_1km <- sum(unlist(st_intersects(wells_state_year,
-                                                 wildfire_state_year_buffer_1km)))
+  n_wells_buffer_1km <- 
+    sum(unlist(st_intersects(wells_state_year, wildfire_state_year_buffer_1km)))
   output <- tibble(state              = "WY",
                    year               = year,
                    n_wells            = n_wells,
@@ -1225,4 +1282,3 @@ rm(wells_state, wells_wildfire_year_wy)
 
 
 ##============================================================================##
-
