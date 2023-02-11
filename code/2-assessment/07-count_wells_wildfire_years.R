@@ -43,7 +43,8 @@ wells_state <- wells_all %>%
   st_transform(crs_alaska) %>% 
   st_intersection(
     st_make_valid(
-      st_transform(readRDS("data/interim/wildfires_buffers/wildfires_ak_buffer_1km.rds"),
+      st_transform(
+        readRDS("data/interim/wildfires_buffers/wildfires_ak_buffer_1km.rds"),
                    crs_alaska)))
 
 # assessment of wells in wildfire areas  . . . . . . . . . . . . . . . . . .
