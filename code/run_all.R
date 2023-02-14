@@ -41,8 +41,15 @@ source("code/3-analysis/.R")
 
 
 ## 4. Communication ==========================================================
-#
-source("code/4-communication/.R")
+# generates figures and tables for main text
+source("code/4-communication/01-make_figure_1a.R")
+source("code/4-communication/02-make_figure_1a_inset.R")
+source("code/4-communication/03-make_figure_1b_1c.R")
+source("code/4-communication/04-make_figure_2.R")
+source("code/4-communication/05-make_figure_3.R")
+source("code/4-communication/06-make_figure_4.R")
+source("code/4-communication/07-make_table_1.R")
+# generates figures and tables for supplemental materials
 
 
 ##============================================================================##

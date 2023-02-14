@@ -14,15 +14,15 @@ us_states <- st_read("data/raw/esri/USA_States_Generalized.shp") %>%
   st_transform(crs_albers)
 us_boundary <- us_states %>% st_union()
 us_states_west <- st_read("data/raw/esri/USA_States_Generalized.shp") %>% 
-  filter(STATE_ABBR %in% c("WA", "OR", "CA", "ID", "NV", "AZ", "MT", "WY", "UT",
-                           "CO", "NM", "ND", "SD", "NE", "KS", "OK", "TX", "MO",
-                           "AR", "LA")) %>%
+  filter(STATE_ABBR %in% 
+           c("OR", "CA", "NV", "AZ", "MT", "WY", "UT", "CO", "NM",
+             "ND", "SD", "NE", "KS", "OK", "TX", "MO", "AR", "LA")) %>%
   st_geometry() %>%
   st_transform(crs_albers)
 us_states_east <- st_read("data/raw/esri/USA_States_Generalized.shp") %>% 
-  filter(STATE_ABBR %!in% c("WA", "OR", "CA", "ID", "NV", "AZ", "MT", "WY", "UT",
-                            "CO", "NM", "ND", "SD", "NE", "KS", "OK", "TX", "MO",
-                            "AR", "LA")) %>%
+  filter(STATE_ABBR %!in%
+           c("OR", "CA", "NV", "AZ", "MT", "WY", "UT", "CO", "NM",
+             "ND", "SD", "NE", "KS", "OK", "TX", "MO", "AR", "LA")) %>%
   st_geometry() %>%
   st_transform(crs_albers)
 mex_can <- st_read("data/raw/esri/Countries_WGS84.shp", crs = crs_wgs84) %>% 

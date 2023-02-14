@@ -49,13 +49,6 @@ wells_co_buffer_1km <- wells_all %>%
   st_union()
 saveRDS(wells_co_buffer_1km, 
         "data/interim/wells_buffers/wells_co_buffer_1km.rds")
-wells_id_buffer_1km <- wells_all %>% 
-  filter(state == "ID") %>% 
-  st_transform(crs_albers) %>% 
-  st_buffer(dist = 1000) %>%  
-  st_union()
-saveRDS(wells_id_buffer_1km, 
-        "data/interim/wells_buffers/wells_id_buffer_1km.rds")
 wells_ks_buffer_1km <- wells_all %>% 
   filter(state == "KS") %>% 
   st_transform(crs_albers) %>% 
@@ -140,12 +133,6 @@ wells_ut_buffer_1km <- wells_all %>%
   st_buffer(dist = 1000) %>%
   st_union()
 saveRDS(wells_ut_buffer_1km, "data/interim/wells_buffers/wells_ut_buffer_1km.rds")
-wells_wa_buffer_1km <- wells_all %>% 
-  filter(state == "WA") %>% 
-  st_transform(crs_albers) %>% 
-  st_buffer(dist = 1000) %>%
-  st_union()
-saveRDS(wells_wa_buffer_1km, "data/interim/wells_buffers/wells_wa_buffer_1km.rds")
 wells_wy_buffer_1km <- wells_all %>% 
   filter(state == "WY") %>% 
   st_transform(crs_albers) %>% 
@@ -158,7 +145,6 @@ wells_all_buffer_1km <- wells_ar_buffer_1km %>%
   st_union(wells_az_buffer_1km) %>% 
   st_union(wells_ca_buffer_1km) %>% 
   st_union(wells_co_buffer_1km) %>% 
-  st_union(wells_id_buffer_1km) %>% 
   st_union(wells_ks_buffer_1km) %>% 
   st_union(wells_mt_buffer_1km) %>% 
   st_union(wells_nd_buffer_1km) %>% 
@@ -172,7 +158,6 @@ wells_all_buffer_1km <- wells_ar_buffer_1km %>%
   st_union(wells_sd_buffer_1km) %>% 
   st_union(wells_tx_buffer_1km) %>% 
   st_union(wells_ut_buffer_1km) %>% 
-  st_union(wells_wa_buffer_1km) %>% 
   st_union(wells_wy_buffer_1km)
 saveRDS(wells_all_buffer_1km,
         "data/interim/wells_buffers/wells_all_buffer_1km.rds")
