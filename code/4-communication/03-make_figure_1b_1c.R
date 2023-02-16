@@ -20,6 +20,7 @@ wildfires_wells_population <-
 # figure 1b ................................................................
 # total area burned by year
 figure_1b <- wildfires_wells_population %>%
+  filter(year %in% c(1984:2019)) %>% 
   mutate(year = as.factor(year),
          wildfire_area_km2 = (as.numeric(wildfire_area_m2) / 1000000)) %>%  
   group_by(year) %>% 
@@ -27,7 +28,7 @@ figure_1b <- wildfires_wells_population %>%
   ggplot() +
   geom_bar(aes(year, area_burned_km2), stat = "identity") + 
   labs(x = "", y = "") + 
-  theme_classic() #+
+  theme_classic() +
   theme(axis.line.x  = element_blank(),  # removes x-axis
         axis.ticks.x = element_blank(),
         axis.text.x  = element_blank(),axis.text.y  = element_blank(),
@@ -48,7 +49,7 @@ data_1c <- wells_all %>%
   group_by(year) %>% 
   summarize(n_wells = n()) %>% 
   mutate(n_wells_cumulative = cumsum(n_wells)) %>% 
-  filter(year >= 1984) %>% 
+  filter(year %in% c(1984:2019)) %>% 
   mutate(year = as.factor(year))
 
 # makes figure

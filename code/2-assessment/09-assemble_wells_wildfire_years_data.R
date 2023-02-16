@@ -8,11 +8,9 @@
 # attaches functions .....................................................
 source("code/0-setup/01-setup.R")
 
-## data inpjt ---------------------------------------------------------------------
+## data input and processing--------------------------------------------------
 
-
-
-## assessments by state-year =================================================
+## assessments by state-year
 wells_wildfire_state_year <- 
   read_csv("data/interim/wells_wildfire_year/wells_wildfire_year_ak.csv") %>% 
   bind_rows(read_csv("data/interim/wells_wildfire_year/wells_wildfire_year_ar.csv")) %>% 
@@ -28,11 +26,11 @@ wells_wildfire_state_year <-
   bind_rows(read_csv("data/interim/wells_wildfire_year/wells_wildfire_year_nm.csv")) %>% 
   bind_rows(read_csv("data/interim/wells_wildfire_year/wells_wildfire_year_nv.csv")) %>%
   bind_rows(read_csv("data/interim/wells_wildfire_year/wells_wildfire_year_ok.csv")) %>%
-  bind_rows(read_csv("data/interim/wells_wildfire_year/wells_wildfire_year_or.csv")) #%>%
-  # bind_rows(read_csv("data/interim/wells_wildfire_year/wells_wildfire_year_sd.csv")) %>% 
-  # bind_rows(read_csv("data/interim/wells_wildfire_year/wells_wildfire_year_tx.csv")) %>% 
-  # bind_rows(read_csv("data/interim/wells_wildfire_year/wells_wildfire_year_ut.csv")) %>% 
-  # bind_rows(read_csv("data/interim/wells_wildfire_year/wells_wildfire_year_wy.csv"))
+  bind_rows(read_csv("data/interim/wells_wildfire_year/wells_wildfire_year_or.csv")) %>%
+  bind_rows(read_csv("data/interim/wells_wildfire_year/wells_wildfire_year_sd.csv")) %>%
+  bind_rows(read_csv("data/interim/wells_wildfire_year/wells_wildfire_year_tx.csv")) %>%
+  bind_rows(read_csv("data/interim/wells_wildfire_year/wells_wildfire_year_ut.csv")) %>%
+  bind_rows(read_csv("data/interim/wells_wildfire_year/wells_wildfire_year_wy.csv"))
 
 saveRDS(wells_wildfire_state_year,  
         "data/processed/wells_wildfire_state_year.rds")

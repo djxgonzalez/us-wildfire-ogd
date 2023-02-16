@@ -17,7 +17,8 @@ source("../../code/0-setup/01-setup.R")
 
 ```{r data_input, include=FALSE}
 wells_wildfire_state_year <- 
-  readRDS("../../data/processed/wells_wildfire_state_year.rds")
+  readRDS("../../data/processed/wells_wildfire_state_year.rds") %>% 
+  filter(year %in% c(1984:2019))
 ```
 
 # Description
@@ -66,12 +67,13 @@ wells_wildfire_state_year %>%
 
 ```{r echo=FALSE}
 wells_wildfire_state_year %>% 
+  filter(year %in% c(1984:2019)) %>%  # omitting 2020 with incomplete fire data
   group_by(year) %>% 
   summarize(n = sum(n_wells)) %>% 
   ggplot(aes(year, n)) +
   geom_point() +
-  geom_smooth(method = "loess", color = "green") +
-  geom_smooth(method = "lm", color = "blue") +
+  geom_smooth(method = "lm", color = "black") +
+  geom_smooth(method = "lm", color = "blue", formula = y ~ poly(x, 2)) +
   labs(x = "Year", y = "Wells (n)") +
   theme_classic()
 ```
@@ -84,7 +86,7 @@ model_fit <- glm(n_wells ~ year + factor(state),
 summary(model_fit)
 ```
 
-In models adjusted for state, the number of wells in wildfire burn areas increased throughout the study period, 1984-2020 (p = 0.001).
+In models adjusted for state, the number of wells in wildfire burn areas increased throughout the study period, 1984-2020 (p < 0.001). Unclear if this holds up when we use a non-linear model, given peaks in the mid-2010s. Getting 2020 wildfire data would help resolve this.
 
 
 ## Wells within 1 km of wildfire burn areas
@@ -105,12 +107,13 @@ wells_wildfire_state_year %>%
 
 ```{r echo=FALSE}
 wells_wildfire_state_year %>% 
+  filter(year %in% c(1984:2019)) %>%  # omitting 2020 with incomplete fire data
   group_by(year) %>% 
   summarize(n = sum(n_wells_buffer_1km)) %>% 
   ggplot(aes(year, n)) +
   geom_point() +
-  geom_smooth(method = "loess", color = "green") +
-  geom_smooth(method = "lm", color = "blue") +
+  geom_smooth(method = "lm", color = "black") +
+  geom_smooth(method = "lm", color = "blue", formula = y ~ poly(x, 2)) +
   labs(x = "Year", y = "Wells (n)") +
   theme_classic()
 ```
@@ -178,16 +181,21 @@ wells_wildfire_state_year %>%
 
 ```{r echo=FALSE}
 wells_wildfire_state_year %>% 
+  filter(year %in% c(1984:2019)) %>%  # omitting 2020 with incomplete fire data
   group_by(state, year) %>% 
   summarize(n = sum(n_wells)) %>% 
   ggplot(aes(year, n)) +
   geom_point() +
-  geom_smooth(method = "loess", color = "green") +
-  geom_smooth(method = "lm", color = "blue") +
+  geom_smooth(method = "lm", color = "black") +
+  geom_smooth(method = "lm", color = "blue", formula = y ~ poly(x, 2)) +
   labs(x = "Year", y = "Wells (n)") +
   facet_wrap(. ~ state) +
   theme_classic()
 ```
+
+## Investigating time trends by state
+
+Fit OLS linear regression models to look at the association between n wells in burn areas and time (in years). Some notable heterogeneity among the three states with the most wells in burn areas.
 
 ### Model. Wells in burn area ~ year * state (CA)
 
@@ -207,4 +215,44 @@ model_fit <- glm(n_wells ~ year,
 summary(model_fit)
 ```
 
-Increasing number of wells in burn areas in Oklahoma.
+Increasing number of wells in burn areas in Oklahoma (p < 0.01).
+
+### Model. Wells in burn area ~ year * state (TX)
+
+```{r}
+model_fit <- glm(n_wells ~ year,
+                 data = subset(wells_wildfire_state_year, state == "TX"))
+summary(model_fit)
+```
+
+Trend of increasing number of wells in burn areas in Texas, not statistically significant (p = 0.13).
+
+### Model. Wells in burn area ~ year * state (KS)
+
+```{r}
+model_fit <- glm(n_wells ~ year,
+                 data = subset(wells_wildfire_state_year, state == "KS"))
+summary(model_fit)
+```
+
+Positive time trend in KS (p = 0.001)
+
+### Model. Wells in burn area ~ year * state (NM)
+
+```{r}
+model_fit <- glm(n_wells ~ year,
+                 data = subset(wells_wildfire_state_year, state == "NM"))
+summary(model_fit)
+```
+
+No time trend in NM
+
+### Model. Wells in burn area ~ year * state (WY)
+
+```{r}
+model_fit <- glm(n_wells ~ year,
+                 data = subset(wells_wildfire_state_year, state == "WY"))
+summary(model_fit)
+```
+
+Positive trend but not statistically significant in WY

@@ -38,7 +38,7 @@ wells_ak_buffer_1km <-
 
 # makes figure
 figure_1a_inset <- ggplot() +
-  geom_sf(data = rus_can,      color = NA, fill = "#D4D4D4") +
+  geom_sf(data = rus_can,      color = NA, fill = "#D4D4D4", alpha = 0.8) +
   geom_sf(data = us_states_ak, color = NA, fill = "#E5E5E5", alpha = 0.7) +
   geom_sf(data = wildfires_ak_union, fill = "#e31a1c", color = NA, alpha = 0.7) +
   geom_sf(data = us_states_ak, color = "white", fill = NA, lwd = 0.3) +

@@ -18,13 +18,13 @@ us_states <- st_read("data/raw/esri/USA_States_Generalized.shp") %>%
   st_geometry() %>%
   st_transform(crs_albers)
 us_boundary <- us_states %>% st_union()
-us_states_west <- st_read("data/raw/esri/USA_States_Generalized.shp") %>% 
+us_states_included <- st_read("data/raw/esri/USA_States_Generalized.shp") %>% 
   filter(STATE_ABBR %in% 
            c("OR", "CA", "NV", "AZ", "MT", "WY", "UT", "CO", "NM",
              "ND", "SD", "NE", "KS", "OK", "TX", "MO", "AR", "LA")) %>%
   st_geometry() %>%
   st_transform(crs_albers)
-us_states_east <- st_read("data/raw/esri/USA_States_Generalized.shp") %>% 
+us_states_excluded <- st_read("data/raw/esri/USA_States_Generalized.shp") %>% 
   filter(STATE_ABBR %!in%
            c("OR", "CA", "NV", "AZ", "MT", "WY", "UT", "CO", "NM",
              "ND", "SD", "NE", "KS", "OK", "TX", "MO", "AR", "LA")) %>%
@@ -61,10 +61,10 @@ wildfires_all_union <-
 
 # makes figure
 figure_1a <- ggplot() +
-  geom_sf(data = mex_can,   color = NA, fill = "#D4D4D4") +
+  geom_sf(data = mex_can,   color = NA, fill = "#D4D4D4", alpha = 0.8) +
   geom_sf(data = us_states, color = NA, fill = "#E5E5E5", alpha = 0.7) +
   geom_sf(data = wildfires_all_union, fill = "#e31a1c", color = NA, alpha = 0.7) +
-  geom_sf(data = us_states_east, color = NA, fill = "#D4D4D4") +
+  geom_sf(data = us_states_excluded, color = NA, fill = "#D4D4D4", alpha = 0.8) +
   geom_sf(data = us_states,   color = "white", fill = NA, lwd = 0.2) +
   geom_sf(data = us_boundary, color = "white", fill = NA, lwd = 0.3) +
   geom_sf(data = wells_all_buffer_1km, fill = "black", color = NA, alpha = 0.6) +
@@ -78,6 +78,5 @@ figure_1a <- ggplot() +
 # export
 ggsave(filename = "figure_1a.png", plot = figure_1a, device = "png",
        height = 10.5, width = 10, path = "output/figures/components/")
-
 
 ##============================================================================##

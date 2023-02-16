@@ -13,13 +13,13 @@ us_states <- st_read("data/raw/esri/USA_States_Generalized.shp") %>%
   st_geometry() %>%
   st_transform(crs_albers)
 us_boundary <- us_states %>% st_union()
-us_states_west <- st_read("data/raw/esri/USA_States_Generalized.shp") %>% 
+us_states_included <- st_read("data/raw/esri/USA_States_Generalized.shp") %>% 
   filter(STATE_ABBR %in% 
            c("OR", "CA", "NV", "AZ", "MT", "WY", "UT", "CO", "NM",
              "ND", "SD", "NE", "KS", "OK", "TX", "MO", "AR", "LA")) %>%
   st_geometry() %>%
   st_transform(crs_albers)
-us_states_east <- st_read("data/raw/esri/USA_States_Generalized.shp") %>% 
+us_states_excluded <- st_read("data/raw/esri/USA_States_Generalized.shp") %>% 
   filter(STATE_ABBR %!in%
            c("OR", "CA", "NV", "AZ", "MT", "WY", "UT", "CO", "NM",
              "ND", "SD", "NE", "KS", "OK", "TX", "MO", "AR", "LA")) %>%
@@ -42,7 +42,7 @@ kbdi_high_2017_sf <- readRDS("data/processed/kbdi_max_2017.rds") %>%
                                    kbdi_max_2017 <  600 ~ 0)) %>%
   st_as_sf(coords = c("x", "y"), crs = crs_nad83) %>% 
   st_transform(crs_albers) %>% 
-  st_intersection(us_states_west)
+  st_intersection(us_states_included)
 kbdi_high_2050_sf <- readRDS("data/processed/kbdi_max_2050.rds") %>% 
   as_tibble() %>% 
   mutate(kbdi_over_450 = case_when(kbdi_max_2050 >= 450 ~ 1,
@@ -51,7 +51,7 @@ kbdi_high_2050_sf <- readRDS("data/processed/kbdi_max_2050.rds") %>%
                                    kbdi_max_2050 <  600 ~ 0)) %>%
   st_as_sf(coords = c("x", "y"), crs = crs_nad83) %>% 
   st_transform(crs_albers) %>% 
-  st_intersection(us_states_west)
+  st_intersection(us_states_included)
 kbdi_high_2090_sf <- readRDS("data/processed/kbdi_max_2090.rds") %>% 
   as_tibble() %>% 
   mutate(kbdi_over_450 = case_when(kbdi_max_2090 >= 450 ~ 1,
@@ -60,7 +60,7 @@ kbdi_high_2090_sf <- readRDS("data/processed/kbdi_max_2090.rds") %>%
                                    kbdi_max_2090 <  600 ~ 0)) %>%
   st_as_sf(coords = c("x", "y"), crs = crs_nad83) %>% 
   st_transform(crs_albers) %>% 
-  st_intersection(us_states_west)
+  st_intersection(us_states_included)
 
 # preps layers
 kbdi_450_2017 <-
@@ -84,10 +84,10 @@ rm(kbdi_high_2017_sf, kbdi_high_2050_sf, kbdi_high_2090_sf)
 
 # figure 4a ................................................................
 figure_4a <- ggplot() +
-  geom_sf(data = mex_can,   color = NA, fill = "#D4D4D4") +
+  geom_sf(data = mex_can,   color = NA, fill = "#D4D4D4", alpha = 0.8) +
   geom_sf(data = us_states, color = NA, fill = "#E5E5E5", alpha = 0.7) +
   geom_sf(data = kbdi_450_2017, shape = 15, color = "#AD8ABB", size = 0.0001) +
-  geom_sf(data = us_states_east, color = NA, fill = "#D4D4D4") +
+  geom_sf(data = us_states_excluded, color = NA, fill = "#D4D4D4") +
   geom_sf(data = us_states,   color = "white", fill = NA, lwd = 0.2) +
   geom_sf(data = us_boundary, color = "white", fill = NA, lwd = 0.3) +
   geom_sf(data = wells_all_buffer_1km, fill = "black", color = NA, alpha = 0.6) +
@@ -103,10 +103,10 @@ ggsave(filename = "figure_4a.png", plot = figure_4a, device = "png",
 
 # figure 4b ................................................................
 figure_4b <- ggplot() +
-  geom_sf(data = mex_can,   color = NA, fill = "#D4D4D4") +
+  geom_sf(data = mex_can,   color = NA, fill = "#D4D4D4", alpha = 0.8) +
   geom_sf(data = us_states, color = NA, fill = "#E5E5E5", alpha = 0.7) +
   geom_sf(data = kbdi_450_2050, shape = 15, color = "#AD8ABB", size = 0.4) +
-  geom_sf(data = us_states_east, color = NA, fill = "#D4D4D4") +
+  geom_sf(data = us_states_excluded, color = NA, fill = "#D4D4D4") +
   geom_sf(data = us_states,   color = "white", fill = NA, lwd = 0.2) +
   geom_sf(data = us_boundary, color = "white", fill = NA, lwd = 0.3) +
   geom_sf(data = wells_all_buffer_1km, fill = "black", color = NA, alpha = 0.6) +
@@ -122,10 +122,10 @@ ggsave(filename = "figure_4b.png", plot = figure_4b, device = "png",
 
 # figure 4c ................................................................
 figure_4c <- ggplot() +
-  geom_sf(data = mex_can,   color = NA, fill = "#D4D4D4") +
+  geom_sf(data = mex_can,   color = NA, fill = "#D4D4D4", alpha = 0.8) +
   geom_sf(data = us_states, color = NA, fill = "#E5E5E5", alpha = 0.7) +
   geom_sf(data = kbdi_450_2090, shape = 15, color = "#AD8ABB", size = 0.4) +
-  geom_sf(data = us_states_east, color = NA, fill = "#D4D4D4") +
+  geom_sf(data = us_states_excluded, color = NA, fill = "#D4D4D4") +
   geom_sf(data = us_states,   color = "white", fill = NA, lwd = 0.2) +
   geom_sf(data = us_boundary, color = "white", fill = NA, lwd = 0.3) +
   geom_sf(data = wells_all_buffer_1km, fill = "black", color = NA, alpha = 0.6) +
@@ -141,10 +141,10 @@ ggsave(filename = "figure_4c.png", plot = figure_4c, device = "png",
 
 # figure 4d ................................................................
 figure_4d <- ggplot() +
-  geom_sf(data = mex_can,   color = NA, fill = "#D4D4D4") +
+  geom_sf(data = mex_can,   color = NA, fill = "#D4D4D4", alpha = 0.8) +
   geom_sf(data = us_states, color = NA, fill = "#E5E5E5", alpha = 0.7) +
   geom_sf(data = kbdi_600_2017, shape = 15, color = "#F0A3D0", size = 0.0001) +
-  geom_sf(data = us_states_east, color = NA, fill = "#D4D4D4") +
+  geom_sf(data = us_states_excluded, color = NA, fill = "#D4D4D4") +
   geom_sf(data = us_states,   color = "white", fill = NA, lwd = 0.2) +
   geom_sf(data = us_boundary, color = "white", fill = NA, lwd = 0.3) +
   geom_sf(data = wells_all_buffer_1km, fill = "black", color = NA, alpha = 0.6) +
@@ -160,10 +160,10 @@ ggsave(filename = "figure_4d.png", plot = figure_4d, device = "png",
 
 # figure 4e ................................................................
 figure_4e <- ggplot() +
-  geom_sf(data = mex_can,   color = NA, fill = "#D4D4D4") +
+  geom_sf(data = mex_can,   color = NA, fill = "#D4D4D4", alpha = 0.8) +
   geom_sf(data = us_states, color = NA, fill = "#E5E5E5", alpha = 0.7) +
   geom_sf(data = kbdi_600_2050, shape = 15, color = "#F0A3D0", size = 0.4) +
-  geom_sf(data = us_states_east, color = NA, fill = "#D4D4D4") +
+  geom_sf(data = us_states_excluded, color = NA, fill = "#D4D4D4") +
   geom_sf(data = us_states,   color = "white", fill = NA, lwd = 0.2) +
   geom_sf(data = us_boundary, color = "white", fill = NA, lwd = 0.3) +
   geom_sf(data = wells_all_buffer_1km, fill = "black", color = NA, alpha = 0.6) +
@@ -179,10 +179,10 @@ ggsave(filename = "figure_4e.png", plot = figure_4e, device = "png",
 
 # figure 4f ................................................................
 figure_4f <- ggplot() +
-  geom_sf(data = mex_can,   color = NA, fill = "#D4D4D4") +
+  geom_sf(data = mex_can,   color = NA, fill = "#D4D4D4", alpha = 0.8) +
   geom_sf(data = us_states, color = NA, fill = "#E5E5E5", alpha = 0.7) +
   geom_sf(data = kbdi_600_2090, shape = 15, color = "#F0A3D0", size = 0.4) +
-  geom_sf(data = us_states_east, color = NA, fill = "#D4D4D4") +
+  geom_sf(data = us_states_excluded, color = NA, fill = "#D4D4D4") +
   geom_sf(data = us_states,   color = "white", fill = NA, lwd = 0.2) +
   geom_sf(data = us_boundary, color = "white", fill = NA, lwd = 0.3) +
   geom_sf(data = wells_all_buffer_1km, fill = "black", color = NA, alpha = 0.6) +
