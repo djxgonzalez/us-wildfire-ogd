@@ -92,13 +92,13 @@ figure_3c <- data_3c %>%
   ggplot()  +
   geom_bar(aes(period, n_wells, fill = kbdi), 
            stat = "identity", position = "stack") + 
-  scale_fill_grey(start = 0.6, end = 0.25) +
+  scale_fill_manual(values = c("#AD8ABB", "#ffb3df")) + 
+  #scale_fill_grey(start = 0.6, end = 0.25) +
   labs(x = "", y = "") + 
   ylim(0, 1200000) +
   theme_classic() +
   theme(axis.text.y  = element_blank(),
         legend.position = "none")
-figure_3c
 # exports figures
 ggsave(filename = "figure_3c.png", plot = figure_3c, device = "png",
        height = 2.4, width = 4, path = "output/figures/components/")

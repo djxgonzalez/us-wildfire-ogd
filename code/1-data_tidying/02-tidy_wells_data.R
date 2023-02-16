@@ -15,9 +15,8 @@ wells_raw    <- read_csv("data/raw/enverus/enverus_wells_us.csv")
 
 # restricts to study region and passes wells through custom tidying function
 wells_all <- wells_raw %>% 
-  filter(State %in% c("AK", "WA", "OR", "CA", "ID", "NV", "AZ", "MT", "WY", 
-                      "UT", "CO", "NM", "ND", "SD", "NE", "KS", "OK", "TX",
-                      "MO", "AR", "LA")) %>% 
+  filter(State %in% c("AK", "OR", "CA", "NV", "AZ", "MT", "WY", "UT", "CO", 
+                      "NM", "ND", "SD", "NE", "KS", "OK", "TX", "MO", "AR", "LA")) %>% 
   tidyWellsData()
 
 # re-attaches factor variables to collapsed date variables and finalizes data
@@ -29,14 +28,12 @@ wells_all2 <- wells_all %>%
                               last_prod_date, na.rm = TRUE)) %>%
   # excludes wells where the earliest date was after December 31, 2020, the last
   # date in the study period (retaining NAs)
-  filter(date_earliest <= "2020-12-31" | is.na(date_earliest)) %>% 
+  filter(date_earliest <= "2019-12-31" | is.na(date_earliest)) %>% 
   st_as_sf(coords = c("longitude", "latitude"), crs = crs_nad83) %>% 
   st_make_valid()
 
-
 # exports processed data ...................................................
 saveRDS(wells_all2, "data/processed/wells_all.rds")
-
 
 # removes datasets we no longer need .......................................
 rm(wells_raw, wells_all, wells_all2)

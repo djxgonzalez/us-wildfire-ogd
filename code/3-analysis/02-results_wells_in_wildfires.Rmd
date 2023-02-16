@@ -16,7 +16,8 @@ source("../../code/0-setup/01-setup.R")
 
 ```{r data_input, include=FALSE}
 wildfires_wells_population <- 
-  readRDS("../../data/processed/wildfires_wells_population.rds")
+  readRDS("../../data/processed/wildfires_wells_population.rds") %>% 
+  filter(year %in% c(1984:2019))
 ```
 
 # Description

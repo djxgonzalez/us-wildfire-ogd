@@ -12,11 +12,14 @@ output:
 
 ```{r setup, include=FALSE}
 source("../../code/0-setup/01-setup.R")
+library("lubridate")
 ```
 
 ```{r data_input, include=FALSE}
-wells_all     <- readRDS("../../data/processed/wells_all.rds")
-wildfires_all <- readRDS("../../data/processed/wildfires_all.rds")
+wells_all     <- readRDS("../../data/processed/wells_all.rds") %>% 
+  filter(year(date_latest) <= 2019)
+wildfires_all <- readRDS("../../data/processed/wildfires_all.rds") %>% 
+  filter(year %in% c(1984:2019))
 ```
 
 
@@ -77,6 +80,10 @@ wildfires_all %>%
 
 
 # Wells data
+
+- There were `r wells_all %>% nrow()` wells in the analytic dataset
+- Of these, `r wells_all %>% drop_na(date_earliest) %>% nrow()` had at least one operational date
+
 
 ### All wells
 
