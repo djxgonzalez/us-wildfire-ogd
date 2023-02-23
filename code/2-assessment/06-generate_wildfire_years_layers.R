@@ -12,7 +12,7 @@
 source("code/0-setup/01-setup.R")
 
 # data input
-wildfires_all <- readRDS("data/processed/wildfires_all.rds")
+wildfires_all <- readRDS("data/interim/wildfires_all.rds")
 
 
 ## generates wildfire-year layers --------------------------------------------

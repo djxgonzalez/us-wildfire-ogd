@@ -1,5 +1,5 @@
 ##============================================================================##
-## 2.10 - for each well, matches the KBDI wildfire risk values for the nearest
+## 2.12 - for each well, matches the KBDI wildfire risk values for the nearest
 ## terrestrial point for each of the three time periods: current (2017), 
 ## mid-century (2046-2054, called 2050 here for convenience) and end-century
 ## (2086-2094, called 2090 here)
@@ -27,20 +27,20 @@ source("code/0-setup/01-setup.R")
 # reads in file generated in data prep part 1
 study_region_sf <- readRDS("data/interim/study_region_sf.rds")
 
-kbdi_max_2017_sf <- readRDS("data/processed/kbdi_max_2017.rds") %>% 
+kbdi_max_2017_sf <- readRDS("data/interim/kbdi_max_2017.rds") %>% 
   as_tibble() %>%
   st_as_sf(coords = c("x", "y"), crs = crs_nad83) %>% 
   st_intersection(study_region_sf)
-kbdi_max_2050_sf <- readRDS("data/processed/kbdi_max_2050.rds") %>% 
+kbdi_max_2050_sf <- readRDS("data/interim/kbdi_max_2050.rds") %>% 
   as_tibble() %>%
   st_as_sf(coords = c("x", "y"), crs = crs_nad83) %>% 
   st_intersection(study_region_sf)
-kbdi_max_2090_sf <- readRDS("data/processed/kbdi_max_2090.rds") %>% 
+kbdi_max_2090_sf <- readRDS("data/interim/kbdi_max_2090.rds") %>% 
   as_tibble() %>%
   st_as_sf(coords = c("x", "y"), crs = crs_nad83) %>% 
   st_intersection(study_region_sf)
 
-wells_all <- readRDS("data/processed/wells_all.rds")
+wells_all <- readRDS("data/interim/wells_all.rds")
 
 
 ## exposure assessment -------------------------------------------------------

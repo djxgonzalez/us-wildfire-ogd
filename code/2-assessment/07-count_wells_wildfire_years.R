@@ -22,7 +22,7 @@ alaska    <- st_read("data/raw/esri/USA_States_Generalized.shp") %>%
   select(state, geometry) %>% 
   filter(state == "AK") %>%
   st_transform(crs_alaska)
-wells_all <- readRDS("data/processed/wells_all.rds")
+wells_all <- readRDS("data/interim/wells_all.rds")
 
 
 ## assessments by state-year =================================================

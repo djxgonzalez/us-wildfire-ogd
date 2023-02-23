@@ -6,10 +6,11 @@
 
 # attaches packages we need for this script
 source("code/0-setup/01-setup.R")
-library("stars")
+library("raster")
+library("terra")
 
 # data input
-pop_gridded_1990 <- read_stars("data/raw/socscape/us_pop2010myc.tif")
+pop_gridded_1990 <- rast("data/raw/socscape/us_pop2010myc.tif")
 
 us_states_west <- st_read("data/raw/esri/USA_States_Generalized.shp") %>% 
   filter(STATE_ABBR %in% c("WA", "OR", "CA", "ID", "NV", "AZ", "MT", "WY", "UT",

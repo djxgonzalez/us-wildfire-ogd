@@ -8,8 +8,8 @@
 source("code/0-setup/01-setup.R")
 
 # data input
-wells_all <- readRDS("data/processed/wells_all.rds")
-wildfires_all <- readRDS("data/processed/wildfires_all.rds")
+wells_all <- readRDS("data/interim/wells_all.rds")
+wildfires_all <- readRDS("data/interim/wildfires_all.rds")
 
 ## makes wells buffers -------------------------------------------------------
 

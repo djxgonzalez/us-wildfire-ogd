@@ -14,10 +14,10 @@ library("parallel")   # for the `mclapply()` fxn, if using MacOS
 library("lubridate")  # for `Year()` fxn
 
 # data input .............................................................
-wells_with_dates <- readRDS("data/processed/wells_all.rds") %>% 
+wells_with_dates <- readRDS("data/interim/wells_all.rds") %>% 
   drop_na(date_earliest) %>% 
   st_as_sf()
-wildfires_all <- readRDS("data/processed/wildfires_all.rds")
+wildfires_all <- readRDS("data/interim/wildfires_all.rds")
 
 
 ## assessments by state ======================================================

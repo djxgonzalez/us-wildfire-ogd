@@ -5,13 +5,13 @@
 
 # attaches functions .....................................................
 source("code/0-setup/01-setup.R")
-source("code/2-exposure_assessment/05-fxn-assess_exposure_wells_population.R")
+source("code/2-assessment/10-fxn-assess_exposure_wells_population.R")
 library("parallel")   # for the `mclapply()` fxn, if using MacOS
 library("lubridate")  # for `Year()` fxn
 
 # data input .............................................................
-wells_all     <- readRDS("data/processed/wells_all.rds")
-wildfires_all <- readRDS("data/processed/wildfires_all.rds")
+wells_all     <- readRDS("data/interim/wells_all.rds")
+wildfires_all <- readRDS("data/interim/wildfires_all.rds")
 
 
 ## exposure assessments by state =============================================
