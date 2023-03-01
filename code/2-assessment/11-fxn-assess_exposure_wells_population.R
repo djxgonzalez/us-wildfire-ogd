@@ -1,5 +1,5 @@
 ##============================================================================##
-## 2.08 - defines function to flexibility estimate, for each wildfire, the 
+## 2.11 - defines function to flexibility estimate, for each wildfire, the 
 ## number of people that lived within 1 km of wells that were in the burn area
 
 assessPopulationWellsWildfire <- 

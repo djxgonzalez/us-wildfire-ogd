@@ -1,5 +1,5 @@
 ##============================================================================##
-## 2.12 - for each well, matches the KBDI wildfire risk values for the nearest
+## 2.13 - for each well, matches the KBDI wildfire risk values for the nearest
 ## terrestrial point for each of the three time periods: current (2017), 
 ## mid-century (2046-2054, called 2050 here for convenience) and end-century
 ## (2086-2094, called 2090 here)
