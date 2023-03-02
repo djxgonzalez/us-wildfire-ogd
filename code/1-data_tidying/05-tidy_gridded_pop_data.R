@@ -3,7 +3,7 @@
 ## of the number of people who reside near wells that burned in wildfires
 
 
-##### consisder moving this straight to the assessment script; not sure if any
+##### move this straight to the assessment script; not sure if any
 ##### prep is actually needed!
 
 ## setup ---------------------------------------------------------------------
