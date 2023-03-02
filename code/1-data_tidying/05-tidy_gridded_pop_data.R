@@ -42,7 +42,7 @@ pop_1990_cropped <- terra::crop(pop_1990, vect(study_region))
 pop_1990_masked  <- terra::mask(pop_1990_cropped,
                                 vect(study_region), 
                                 touches = TRUE)
-plot(pop_1990_masked)
+#plot(pop_1990_masked)
 # to calculate population in the mask...
 pop_1990_in_mask <- pop_1990_masked %>% 
   as.data.frame() %>%  # coerce to dataframe
