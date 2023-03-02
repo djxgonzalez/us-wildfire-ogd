@@ -1,57 +1,40 @@
 ##============================================================================##
-## 2.12 - 
+## 2.12 - imports and prepares SocScape gridded population data for assessment
+## of the number of people who reside near wells that burned in wildfires
 
 ## setup ---------------------------------------------------------------------
 
-# attaches functions .....................................................
+# attaches packages we need for this script
 source("code/0-setup/01-setup.R")
-source("code/2-assessment/10-fxn-assess_exposure_wells_population.R")
-library("parallel")   # for the `mclapply()` fxn, if using MacOS
-library("lubridate")  # for `Year()` fxn
+library("terra")
 
-# data input .............................................................
-wells_all     <- readRDS("data/interim/wells_all.rds")
-wildfires_all <- readRDS("data/interim/wildfires_all.rds")
+# data input
+pop_1990 <- rast("data/raw/socscape/us_pop1990myc.tif") 
+pop_1990 <- pop_1990 %>%  # necessary so we can call projectExtent below
+  raster() %>%  # converts to terra raster object
+  projectRaster(projectExtent(pop_1990, st_crs(study_region)))
+# population_2000 <- rast("data/raw/socscape/us_pop2000myc.tif")
+# population_2010 <- rast("data/raw/socscape/us_pop2010myc.tif")
+# population_2020 <- rast("data/raw/socscape/us_pop2020myc.tif")
 
 
-## exposure assessments by state =============================================
+## data prep -----------------------------------------------------------------
 
-# NM -----------------------------------------------------------------------
+# clips population data to states to study region mask
+pop_1990_cropped <- terra::crop(pop_1990, vect(study_region))
+pop_1990_masked  <- terra::mask(pop_1990_cropped,
+                                vect(study_region), 
+                                touches = TRUE)
+plot(pop_1990_masked)
+# to calculate population in the mask...
+pop_1990_in_mask <- pop_1990_masked %>% 
+  as.data.frame() %>%  # coerce to dataframe
+  as_tibble() %>%   # then coerce to tibble (most comfortable to work with)
+  drop_na(us_pop1990myc.population_data)  # drop NA cells, i.e., outside mask
+# now we can take the sum
+sum(pop_1990_in_mask$us_pop1990myc.population_data)
 
-# 1984-1994 ............................................................
-
-# restricts to wildfires near wells for 1984 to 1994
-wildfires_in <- wildfires_all %>%
-  filter(state == "NM" & year %in% c(1984:1994)) %>% 
-  st_as_sf() %>%
-  st_transform(crs_albers) %>% 
-  st_intersection(readRDS("data/interim/wells_buffers/wells_nm_buffer_1km.rds"))
-wildfires_in <- split(wildfires_in, seq(1, nrow(wildfires_in))) #converts to list
-# restricts to wells near wildfires (i.e., w/in 1 km of wildfire boundaries)
-wells_in <- wells_all %>% 
-  filter(state == "NM") %>% 
-  # drops wells drilled after the period
-  filter(year(date_earliest) <= 1994 | is.na(date_earliest)) %>% 
-  st_intersection(
-    readRDS("data/interim/wildfires_buffers/wildfires_nm_buffer_1km.rds")) %>% 
-  st_transform(crs_albers)
-pop_in <- 1
-
-# wells inside wildfire boundary  . . . . . . . . . . . . . . . . . . .
-pop_wells_wildfires_nm <- 
-  lapply(wildfires_in,
-         FUN          = assessPopulationWellsWildfire,
-         wells        = wells_in,
-         pop_grid     = 0,  # 1990 pop grid
-         exp_variable = "n_pop_exposed") 
-pop_wells_wildfires_nm <- 
-  do.call("rbind", pop_wells_wildfires_nm)  # converts from list
-write_csv(pop_wells_wildfires_nm, 
-          "data/processed/wildfires_wells_dates/pop_wells_wildfires_nm.csv")
-
-# removes datasets before moving on to the next state
-rm(wildfires_in, wells_in, pop_wells_wildfires_nm)
-
+#### do this for each state-year and WE'RE GOLDEN
 
 
 
