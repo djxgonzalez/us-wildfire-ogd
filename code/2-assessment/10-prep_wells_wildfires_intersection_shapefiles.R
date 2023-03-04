@@ -169,7 +169,8 @@ for(year in c(1986:1998, 2000:2019)) {
 
 # LA .......................................................................
 wells_in <- wells_all %>% filter(state == "LA")
-for(year in c(1985, 1987, 1989, 1993, 1995:2007, 2009:2011, 2013:2019)) {
+#for(year in c(1985, 1987, 1989, 1993, 1995:2007, 2009:2011, 2013:2019)) {
+for(year in c(2006:2007, 2009:2011, 2013:2019)) {
   makeIntersectionZone(wells_in, year, "la")
 }
 
@@ -226,9 +227,9 @@ for(year in c(1988, 1991:1992, 1996, 1998:2007, 2009:2012, 2015:2019)) {
   makeIntersectionZone(wells_in, year, "wy")
 }
 
-# We opted to use a for loop to run this assessment, but it may make sense to
-# do this with lapply. To do so, we'd need to generate a list object with, for
-# each state-year, the wells that were drilled during or prior to that year.
+# Note: We opted to use a for loop to run this assessment, but it may make sense
+# to do this with lapply. To do so, we'd need to generate a list object with, 
+# for each state-year, the wells that were drilled during or prior to that year.
 # Given that this list object will take up a good amount of RAM, it was unclear
 # to us whether it'd be more efficient than the for loop approach.
 
