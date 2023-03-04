@@ -132,6 +132,7 @@ makeIntersectionZone <- function(wells_in, year, state_prefix){
                                  (paste("wildfires_", year, sep = ""))))) %>% 
     st_buffer(dist = 1000) %>% 
     st_union() %>% 
+    st_make_valid() %>% 
     saveRDS(paste("data/interim/wells_wildfire_intersection_state_year/",
                   state_prefix, "_", year, ".rds", sep = ""))
 }
@@ -151,7 +152,8 @@ for(year in c(1986:1987, 1989, 1995, 1998, 2000, 2003:2007, 2010:2011,
 
 # CA .......................................................................
 wells_in <- wells_all %>% filter(state == "CA")
-for(year in c(1984:2013, 2015:2019)) {
+#for(year in c(1984:2013, 2015:2019)) {
+for(year in c(2011:2013, 2015:2019)) {
   makeIntersectionZone(wells_in, year, "ca")
 }
 
@@ -163,14 +165,15 @@ for(year in c(1985:1987, 1989, 1994, 1996, 2000:2002, 2004:2008, 2011:2019)) {
 
 # KS .......................................................................
 wells_in <- wells_all %>% filter(state == "KS")
-for(year in c(1986:1998, 2000:2019)) {
+#for(year in c(1986:1998, 2000:2019)) {
+for(year in c(2011:2019)) {
   makeIntersectionZone(wells_in, year, "ks")
 }
 
 # LA .......................................................................
 wells_in <- wells_all %>% filter(state == "LA")
 #for(year in c(1985, 1987, 1989, 1993, 1995:2007, 2009:2011, 2013:2019)) {
-for(year in c(2006:2007, 2009:2011, 2013:2019)) {
+for(year in c(2011, 2013:2019)) {
   makeIntersectionZone(wells_in, year, "la")
 }
 

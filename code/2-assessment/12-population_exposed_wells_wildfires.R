@@ -62,14 +62,29 @@ assessPopulationExposed <- function(state_upper, state_lower, year) {
 
 ## assessment ----------------------------------------------------------------
 
-# CA .......................................................................
+# AR .......................................................................
+# makes tibble to capture data
+ar_pop_exposed <- tibble(state       = "",
+                         year        = as.numeric(),
+                         pop_exposed = as.numeric())
+# for each state-year with >= 1 wells in wildfire burn areas (previously 
+# assessed), estimates population within 1 km of those wells
+for(year in c(1986:1987, 1989, 1995, 1998, 2000, 2003:2007, 2010:2011, 
+              2013:2019)) {
+  pop_exposed_out <-
+    assessPopulationExposed(state_upper = "AR", state_lower = "ar", year = year)
+  ar_pop_exposed <- ar_pop_exposed %>% bind_rows(pop_exposed_out)
+}
+write_csv(ar_pop_exposed, "output/results/ar_pop_exposed.csv")
 
+# CA .......................................................................
 # makes tibble to capture data
 ca_pop_exposed <- tibble(state       = "",
                          year        = as.numeric(),
                          pop_exposed = as.numeric())
-#for(year in c(1984:2013, 2015:2010)) {
-for(year in c(1984:1985)) {
+# for each state-year with >= 1 wells in wildfire burn areas (previously 
+# assessed), estimates population within 1 km of those wells
+for(year in c(1984:2013, 2015:2010)) {
   pop_exposed_out <-
     assessPopulationExposed(state_upper = "CA", state_lower = "ca", year = year)
   ca_pop_exposed <- ca_pop_exposed %>% bind_rows(pop_exposed_out)
@@ -77,94 +92,14 @@ for(year in c(1984:1985)) {
 write_csv(ca_pop_exposed, "output/results/ca_pop_exposed.csv")
 
 
+##### add the rest of the states once the well-wildfire data are done
 
 
+## assemble dataset ----------------------------------------------------------
+
+##### generate blank tibble for each state-year, then left_join with each
+##### of the exposure datasets generated above, replaces NAs with 0s, and export
 
 
-for(year in c(1984:2013, 2015:2010)) {
-  
-  state_year_wells_in_wildfires <- 
-    vect(eval(parse(text = (paste(state_lower, year, sep = "_")))))
-  # series of if else statements to make sure we're using the correct
-  # population dataset
-  if(year %in% c(1984:1994)){
-    
-    dat <- dat %>% bind_rows(estimate_out)
-  } else if(year %in% c(1995:2004)) {
-    pop_estimate <- 
-      terra::crop(pop_2000, 
-                  vect(eval(parse(text = (paste("ca_", year, sep = ""))))))
-    pop_estimate <-
-      terra::mask(pop_estimate,
-                  vect(eval(parse(text = (paste("ca_", year, sep = ""))))), 
-                  touches = TRUE)
-    pop_estimate <- pop_estimate %>% 
-      as.data.frame() %>%  # coerce to dataframe
-      as_tibble()  # then coerce to tibble (most comfortable to work with)
-    estimate_out <- 
-      tibble(state       = "CA", 
-             year        = year, 
-             pop_exposed = sum(pop_estimate$us_pop2000myc.population_data, 
-                               na.rm = TRUE))
-    dat <- dat %>% bind_rows(estimate_out)
-  } else if(year %in% c(2005:2014)) {
-    pop_estimate <- 
-      terra::crop(pop_2010, 
-                  vect(eval(parse(text = (paste("ca_", year, sep = ""))))))
-    pop_estimate <-
-      terra::mask(pop_estimate,
-                  vect(eval(parse(text = (paste("ca_", year, sep = ""))))), 
-                  touches = TRUE)
-    pop_estimate <- pop_estimate %>% 
-      as.data.frame() %>%  # coerce to dataframe
-      as_tibble()  # then coerce to tibble (most comfortable to work with)
-    estimate_out <- 
-      tibble(state       = "CA", 
-             year        = year, 
-             pop_exposed = sum(pop_estimate$us_pop2010myc.population_data, 
-                               na.rm = TRUE))
-    dat <- dat %>% bind_rows(estimate_out)
-  } else if(year %in% c(2015:2019)) {
-    pop_estimate <- 
-      terra::crop(pop_2020, 
-                  vect(eval(parse(text = (paste("ca_", year, sep = ""))))))
-    pop_estimate <-
-      terra::mask(pop_estimate,
-                  vect(eval(parse(text = (paste("ca_", year, sep = ""))))), 
-                  touches = TRUE)
-    pop_estimate <- pop_estimate %>% 
-      as.data.frame() %>%  # coerce to dataframe
-      as_tibble()  # then coerce to tibble (most comfortable to work with)
-    estimate_out <- 
-      tibble(state       = "CA", 
-             year        = year, 
-             pop_exposed = sum(pop_estimate$us_pop2020myc, 
-                               na.rm = TRUE))
-    dat <- dat %>% bind_rows(estimate_out)
-  }
-}
-
-dat %>% 
-  ggplot(aes(year, pop_exposed)) +
-  geom_point() +
-  theme_classic()
-
-##============================================================================##
-
-# clips population data to states to study region mask
-# pop_2020_cropped <- terra::crop(pop_2020, vect(ar_2018))
-# pop_2020_masked  <- terra::mask(pop_2020_cropped,
-#                                 vect(ar_2018), 
-#                                 touches = TRUE)
-# plot(pop_2020_masked)
-# # to calculate population in the mask...
-# pop_2020_in_mask <- pop_2020_masked %>% 
-#   as.data.frame() %>%  # coerce to dataframe
-#   as_tibble() %>%   # then coerce to tibble (most comfortable to work with)
-#   drop_na(us_pop2020myc)  # drop NA cells, i.e., outside mask
-# # now we can take the sum
-# sum(pop_2020_in_mask$us_pop2020myc)
-
-#### do this for each state-year and WE'RE GOLDEN
 
 ##============================================================================##
