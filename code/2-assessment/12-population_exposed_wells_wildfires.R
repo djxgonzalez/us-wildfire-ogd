@@ -15,11 +15,10 @@ pop_2000 <- rast("data/raw/socscape/us_pop2000myc.tif")
 pop_2010 <- rast("data/raw/socscape/us_pop2010myc.tif")
 pop_2020 <- rast("data/raw/socscape/us_pop2020myc.tif")
 
-
 # defines function to count population within 1 km of wells in wildfire burn
 # areas for each state-year and outputs the estimate
 assessPopulationExposed <- function(state_upper, state_lower, year) {
-  # imports relevant state-year wells in wildfire data
+  # flexibly imports relevant state-year wells in wildfire data
   state_year_wells_in_wildfires <- 
     readRDS(paste("data/interim/wells_wildfire_intersection_state_year/", 
                   state_lower, "_", year, ".rds", sep = "")) %>%  
@@ -55,7 +54,6 @@ assessPopulationExposed <- function(state_upper, state_lower, year) {
     tibble(state       = state_upper, 
            year        = year, 
            pop_exposed = sum(eval(parse(text = pop_variable)), na.rm = TRUE))
-           #pop_exposed = sum(as.name(pop_variable), na.rm = TRUE))
   return(estimate_out)
 }
 
@@ -75,7 +73,7 @@ for(year in c(1986:1987, 1989, 1995, 1998, 2000, 2003:2007, 2010:2011,
     assessPopulationExposed(state_upper = "AR", state_lower = "ar", year = year)
   ar_pop_exposed <- ar_pop_exposed %>% bind_rows(pop_exposed_out)
 }
-write_csv(ar_pop_exposed, "output/results/ar_pop_exposed.csv")
+write_csv(ar_pop_exposed, "output/results/ar_pop_exposed.csv")  # export
 
 # CA .......................................................................
 # makes tibble to capture data
@@ -89,7 +87,7 @@ for(year in c(1984:2013, 2015:2010)) {
     assessPopulationExposed(state_upper = "CA", state_lower = "ca", year = year)
   ca_pop_exposed <- ca_pop_exposed %>% bind_rows(pop_exposed_out)
 }
-write_csv(ca_pop_exposed, "output/results/ca_pop_exposed.csv")
+write_csv(ca_pop_exposed, "output/results/ca_pop_exposed.csv")  # export
 
 
 ##### add the rest of the states once the well-wildfire data are done
@@ -99,7 +97,7 @@ write_csv(ca_pop_exposed, "output/results/ca_pop_exposed.csv")
 
 ##### generate blank tibble for each state-year, then left_join with each
 ##### of the exposure datasets generated above, replaces NAs with 0s, and export
-
+##### could use wells_wildfires_state_year dataset
 
 
 ##============================================================================##

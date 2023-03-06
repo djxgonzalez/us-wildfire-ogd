@@ -12,14 +12,13 @@ source("code/0-setup/01-setup.R")
 
 # only need to run this once; un-comment and run if needed:
 # study_region_sf <- st_read("data/raw/noaa/us_states/s_22mr22.shp") %>%
-#   filter(STATE %in% c("WA", "OR", "CA", "ID", "NV", "AZ", "MT", "WY", "UT", 
-#                       "CO", "NM", "ND", "SD", "NE", "KS", "OK", "TX", "MO",
-#                       "AR", "LA")) %>%
+#   filter(STATE %in% c("OR", "CA", "NV", "AZ", "MT", "WY", "UT", "CO", "NM",
+#                       "ND", "SD", "NE", "KS", "OK", "TX", "MO", "AR", "LA")) %>%
 #   st_make_valid() %>%
 #   st_transform() %>%
 #   st_union() %>%
 #   st_geometry()
-# # exports processed data sine this step takes a minute
+# # # exports processed data sine this step takes a minute
 # saveRDS(study_region_sf, "data/interim/study_region_sf.rds")
 
 ## data prep, part 2 ........................................................

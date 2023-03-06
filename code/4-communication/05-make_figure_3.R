@@ -8,6 +8,8 @@
 
 # attaches necessary packages
 source("code/0-setup/01-setup.R")
+library("rgeos")
+library("geofacet")
 library("viridis")
 
 # data input
@@ -44,6 +46,30 @@ figure_3a <- wells_wildfire_state_year %>%
 # exports figures
 ggsave(filename = "figure_3a.png", plot = figure_3a, device = "png",
        height = 2.2, width = 4, path = "output/figures/components/")
+
+###### same as above but with geofacet --- move to supplemental?
+# figure_3a <- wells_wildfire_state_year %>% 
+#   filter(year %in% c(1984:2019)) %>% 
+#   group_by(year) %>% 
+#   summarize(n_wells = sum(n_wells),
+#             state   = state) %>% 
+#   ggplot(aes(year, n_wells))  +
+#   geom_smooth(method = "lm", formula = y ~ x, 
+#               color = "black", lwd = 0.3, linetype = "longdash", alpha = 0.3) +
+#   # geom_smooth(method = "lm", formula = y ~ poly(x, 2), 
+#   #             color = "blue", fill = "blue", lwd = 0.3, alpha = 0.3) +
+#   geom_point(size = 0.6) + 
+#   labs(x = "", y = "") + 
+#   facet_geo(~ state) +
+#   theme_classic() +
+#   theme(axis.line.x  = element_blank(),  # removes x-axis
+#         axis.ticks.x = element_blank(),
+#         axis.text.x  = element_blank(),
+#         axis.text.y  = element_blank(),
+#         legend.position = "none")
+# # exports figures
+# ggsave(filename = "figure_3a.png", plot = figure_3a, device = "png",
+#        height = 2.2, width = 4, path = "output/figures/components/")
 
 # figure 3b ................................................................
 # estimated total U.S. population within 1 km of oil and gas wells that were in 

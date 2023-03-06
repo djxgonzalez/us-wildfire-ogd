@@ -6,8 +6,8 @@
         },
         {
             "columnIndex": 4,
-            "ascending": true
+            "ascending": false
         }
     ],
-    "path": "~/Documents/Professional/research/projects active/us wildfire ogd/us-wildfire-ogd/code/1-data_tidying"
+    "path": "~/Documents/Professional/research/projects active/us wildfire ogd/us-wildfire-ogd/code/4-communication"
 }
