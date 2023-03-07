@@ -75,6 +75,7 @@ for(year in c(1986:1987, 1989, 1995, 1998, 2000, 2003:2007, 2010:2011,
 }
 write_csv(ar_pop_exposed, "output/results/ar_pop_exposed.csv")  # export
 
+
 # CA .......................................................................
 # makes tibble to capture data
 ca_pop_exposed <- tibble(state       = "",
@@ -82,7 +83,8 @@ ca_pop_exposed <- tibble(state       = "",
                          pop_exposed = as.numeric())
 # for each state-year with >= 1 wells in wildfire burn areas (previously 
 # assessed), estimates population within 1 km of those wells
-for(year in c(1984:2013, 2015:2010)) {
+for(year in c(1984:2010, 2012:2013, 2015:2019)) {
+#for(year in c(1984:2013, 2015:2010)) {
   pop_exposed_out <-
     assessPopulationExposed(state_upper = "CA", state_lower = "ca", year = year)
   ca_pop_exposed <- ca_pop_exposed %>% bind_rows(pop_exposed_out)
@@ -90,7 +92,260 @@ for(year in c(1984:2013, 2015:2010)) {
 write_csv(ca_pop_exposed, "output/results/ca_pop_exposed.csv")  # export
 
 
-##### add the rest of the states once the well-wildfire data are done
+# CO .......................................................................
+# makes tibble to capture data
+co_pop_exposed <- tibble(state       = "",
+                         year        = as.numeric(),
+                         pop_exposed = as.numeric())
+# for each state-year with >= 1 wells in wildfire burn areas (previously 
+# assessed), estimates population within 1 km of those wells
+for(year in c(1985:1987, 1989, 1994, 1996, 2000:2002, 2004:2008, 2011:2019)) {
+  pop_exposed_out <-
+    assessPopulationExposed(state_upper = "CO", state_lower = "co", year = year)
+  co_pop_exposed <- co_pop_exposed %>% bind_rows(pop_exposed_out)
+}
+write_csv(co_pop_exposed, "output/results/co_pop_exposed.csv")  # export
+
+
+##### to do: replace XX, yy, and year ranges for each state
+# XX .......................................................................
+# makes tibble to capture data
+yy_pop_exposed <- tibble(state       = "",
+                         year        = as.numeric(),
+                         pop_exposed = as.numeric())
+# for each state-year with >= 1 wells in wildfire burn areas (previously 
+# assessed), estimates population within 1 km of those wells
+for(year in c(1000:1001)) {
+  pop_exposed_out <-
+    assessPopulationExposed(state_upper = "XX", state_lower = "yy", year = year)
+  yy_pop_exposed <- yy_pop_exposed %>% bind_rows(pop_exposed_out)
+}
+write_csv(yy_pop_exposed, "output/results/yy_pop_exposed.csv")  # export
+
+
+# XX .......................................................................
+# makes tibble to capture data
+yy_pop_exposed <- tibble(state       = "",
+                         year        = as.numeric(),
+                         pop_exposed = as.numeric())
+# for each state-year with >= 1 wells in wildfire burn areas (previously 
+# assessed), estimates population within 1 km of those wells
+for(year in c(1000:1001)) {
+  pop_exposed_out <-
+    assessPopulationExposed(state_upper = "XX", state_lower = "yy", year = year)
+  yy_pop_exposed <- yy_pop_exposed %>% bind_rows(pop_exposed_out)
+}
+write_csv(yy_pop_exposed, "output/results/yy_pop_exposed.csv")  # export
+
+
+# XX .......................................................................
+# makes tibble to capture data
+yy_pop_exposed <- tibble(state       = "",
+                         year        = as.numeric(),
+                         pop_exposed = as.numeric())
+# for each state-year with >= 1 wells in wildfire burn areas (previously 
+# assessed), estimates population within 1 km of those wells
+for(year in c(1000:1001)) {
+  pop_exposed_out <-
+    assessPopulationExposed(state_upper = "XX", state_lower = "yy", year = year)
+  yy_pop_exposed <- yy_pop_exposed %>% bind_rows(pop_exposed_out)
+}
+write_csv(yy_pop_exposed, "output/results/yy_pop_exposed.csv")  # export
+
+
+# XX .......................................................................
+# makes tibble to capture data
+yy_pop_exposed <- tibble(state       = "",
+                         year        = as.numeric(),
+                         pop_exposed = as.numeric())
+# for each state-year with >= 1 wells in wildfire burn areas (previously 
+# assessed), estimates population within 1 km of those wells
+for(year in c(1000:1001)) {
+  pop_exposed_out <-
+    assessPopulationExposed(state_upper = "XX", state_lower = "yy", year = year)
+  yy_pop_exposed <- yy_pop_exposed %>% bind_rows(pop_exposed_out)
+}
+write_csv(yy_pop_exposed, "output/results/yy_pop_exposed.csv")  # export
+
+
+# XX .......................................................................
+# makes tibble to capture data
+yy_pop_exposed <- tibble(state       = "",
+                         year        = as.numeric(),
+                         pop_exposed = as.numeric())
+# for each state-year with >= 1 wells in wildfire burn areas (previously 
+# assessed), estimates population within 1 km of those wells
+for(year in c(1000:1001)) {
+  pop_exposed_out <-
+    assessPopulationExposed(state_upper = "XX", state_lower = "yy", year = year)
+  yy_pop_exposed <- yy_pop_exposed %>% bind_rows(pop_exposed_out)
+}
+write_csv(yy_pop_exposed, "output/results/yy_pop_exposed.csv")  # export
+
+
+# XX .......................................................................
+# makes tibble to capture data
+yy_pop_exposed <- tibble(state       = "",
+                         year        = as.numeric(),
+                         pop_exposed = as.numeric())
+# for each state-year with >= 1 wells in wildfire burn areas (previously 
+# assessed), estimates population within 1 km of those wells
+for(year in c(1000:1001)) {
+  pop_exposed_out <-
+    assessPopulationExposed(state_upper = "XX", state_lower = "yy", year = year)
+  yy_pop_exposed <- yy_pop_exposed %>% bind_rows(pop_exposed_out)
+}
+write_csv(yy_pop_exposed, "output/results/yy_pop_exposed.csv")  # export
+
+
+# XX .......................................................................
+# makes tibble to capture data
+yy_pop_exposed <- tibble(state       = "",
+                         year        = as.numeric(),
+                         pop_exposed = as.numeric())
+# for each state-year with >= 1 wells in wildfire burn areas (previously 
+# assessed), estimates population within 1 km of those wells
+for(year in c(1000:1001)) {
+  pop_exposed_out <-
+    assessPopulationExposed(state_upper = "XX", state_lower = "yy", year = year)
+  yy_pop_exposed <- yy_pop_exposed %>% bind_rows(pop_exposed_out)
+}
+write_csv(yy_pop_exposed, "output/results/yy_pop_exposed.csv")  # export
+
+
+# XX .......................................................................
+# makes tibble to capture data
+yy_pop_exposed <- tibble(state       = "",
+                         year        = as.numeric(),
+                         pop_exposed = as.numeric())
+# for each state-year with >= 1 wells in wildfire burn areas (previously 
+# assessed), estimates population within 1 km of those wells
+for(year in c(1000:1001)) {
+  pop_exposed_out <-
+    assessPopulationExposed(state_upper = "XX", state_lower = "yy", year = year)
+  yy_pop_exposed <- yy_pop_exposed %>% bind_rows(pop_exposed_out)
+}
+write_csv(yy_pop_exposed, "output/results/yy_pop_exposed.csv")  # export
+
+
+# XX .......................................................................
+# makes tibble to capture data
+yy_pop_exposed <- tibble(state       = "",
+                         year        = as.numeric(),
+                         pop_exposed = as.numeric())
+# for each state-year with >= 1 wells in wildfire burn areas (previously 
+# assessed), estimates population within 1 km of those wells
+for(year in c(1000:1001)) {
+  pop_exposed_out <-
+    assessPopulationExposed(state_upper = "XX", state_lower = "yy", year = year)
+  yy_pop_exposed <- yy_pop_exposed %>% bind_rows(pop_exposed_out)
+}
+write_csv(yy_pop_exposed, "output/results/yy_pop_exposed.csv")  # export
+
+
+# XX .......................................................................
+# makes tibble to capture data
+yy_pop_exposed <- tibble(state       = "",
+                         year        = as.numeric(),
+                         pop_exposed = as.numeric())
+# for each state-year with >= 1 wells in wildfire burn areas (previously 
+# assessed), estimates population within 1 km of those wells
+for(year in c(1000:1001)) {
+  pop_exposed_out <-
+    assessPopulationExposed(state_upper = "XX", state_lower = "yy", year = year)
+  yy_pop_exposed <- yy_pop_exposed %>% bind_rows(pop_exposed_out)
+}
+write_csv(yy_pop_exposed, "output/results/yy_pop_exposed.csv")  # export
+
+
+# XX .......................................................................
+# makes tibble to capture data
+yy_pop_exposed <- tibble(state       = "",
+                         year        = as.numeric(),
+                         pop_exposed = as.numeric())
+# for each state-year with >= 1 wells in wildfire burn areas (previously 
+# assessed), estimates population within 1 km of those wells
+for(year in c(1000:1001)) {
+  pop_exposed_out <-
+    assessPopulationExposed(state_upper = "XX", state_lower = "yy", year = year)
+  yy_pop_exposed <- yy_pop_exposed %>% bind_rows(pop_exposed_out)
+}
+write_csv(yy_pop_exposed, "output/results/yy_pop_exposed.csv")  # export
+
+
+# XX .......................................................................
+# makes tibble to capture data
+yy_pop_exposed <- tibble(state       = "",
+                         year        = as.numeric(),
+                         pop_exposed = as.numeric())
+# for each state-year with >= 1 wells in wildfire burn areas (previously 
+# assessed), estimates population within 1 km of those wells
+for(year in c(1000:1001)) {
+  pop_exposed_out <-
+    assessPopulationExposed(state_upper = "XX", state_lower = "yy", year = year)
+  yy_pop_exposed <- yy_pop_exposed %>% bind_rows(pop_exposed_out)
+}
+write_csv(yy_pop_exposed, "output/results/yy_pop_exposed.csv")  # export
+
+
+# XX .......................................................................
+# makes tibble to capture data
+yy_pop_exposed <- tibble(state       = "",
+                         year        = as.numeric(),
+                         pop_exposed = as.numeric())
+# for each state-year with >= 1 wells in wildfire burn areas (previously 
+# assessed), estimates population within 1 km of those wells
+for(year in c(1000:1001)) {
+  pop_exposed_out <-
+    assessPopulationExposed(state_upper = "XX", state_lower = "yy", year = year)
+  yy_pop_exposed <- yy_pop_exposed %>% bind_rows(pop_exposed_out)
+}
+write_csv(yy_pop_exposed, "output/results/yy_pop_exposed.csv")  # export
+
+
+# XX .......................................................................
+# makes tibble to capture data
+yy_pop_exposed <- tibble(state       = "",
+                         year        = as.numeric(),
+                         pop_exposed = as.numeric())
+# for each state-year with >= 1 wells in wildfire burn areas (previously 
+# assessed), estimates population within 1 km of those wells
+for(year in c(1000:1001)) {
+  pop_exposed_out <-
+    assessPopulationExposed(state_upper = "XX", state_lower = "yy", year = year)
+  yy_pop_exposed <- yy_pop_exposed %>% bind_rows(pop_exposed_out)
+}
+write_csv(yy_pop_exposed, "output/results/yy_pop_exposed.csv")  # export
+
+
+# XX .......................................................................
+# makes tibble to capture data
+yy_pop_exposed <- tibble(state       = "",
+                         year        = as.numeric(),
+                         pop_exposed = as.numeric())
+# for each state-year with >= 1 wells in wildfire burn areas (previously 
+# assessed), estimates population within 1 km of those wells
+for(year in c(1000:1001)) {
+  pop_exposed_out <-
+    assessPopulationExposed(state_upper = "XX", state_lower = "yy", year = year)
+  yy_pop_exposed <- yy_pop_exposed %>% bind_rows(pop_exposed_out)
+}
+write_csv(yy_pop_exposed, "output/results/yy_pop_exposed.csv")  # export
+
+
+# XX .......................................................................
+# makes tibble to capture data
+yy_pop_exposed <- tibble(state       = "",
+                         year        = as.numeric(),
+                         pop_exposed = as.numeric())
+# for each state-year with >= 1 wells in wildfire burn areas (previously 
+# assessed), estimates population within 1 km of those wells
+for(year in c(1000:1001)) {
+  pop_exposed_out <-
+    assessPopulationExposed(state_upper = "XX", state_lower = "yy", year = year)
+  yy_pop_exposed <- yy_pop_exposed %>% bind_rows(pop_exposed_out)
+}
+write_csv(yy_pop_exposed, "output/results/yy_pop_exposed.csv")  # export
 
 
 ## assemble dataset ----------------------------------------------------------
