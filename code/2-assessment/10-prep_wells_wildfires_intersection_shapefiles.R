@@ -205,7 +205,9 @@ for(year in c(1986:2001, 2005:2014, 2016:2019)) {
 
 # OK .......................................................................
 wells_in <- wells_all %>% filter(state == "OK")
-for(year in c(1991, 1994:1998, 2000:2019)) {
+#for(year in c(1991, 1994:1998, 2000:2019)) {
+###### error with 2014
+for(year in c(2015:2019)) {
   makeIntersectionZone(wells_in, year, "ok")
 }
 
