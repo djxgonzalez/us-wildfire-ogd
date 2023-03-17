@@ -29,13 +29,13 @@ assessPopulationExposed <- function(state_upper, state_lower, year) {
   # based on input year, defines appropriate population raster and variable
   pop_raster <-
     case_when(year %in% c(1984:1994) ~ "pop_1990",
-              year %in% c(1994:2004) ~ "pop_2000",
+              year %in% c(1995:2004) ~ "pop_2000",
               year %in% c(2005:2014) ~ "pop_2010",
               year %in% c(2015:2020) ~ "pop_2020")
   pop_variable <- 
     case_when(year %in% c(1984:1994) ~ 
                 "pop_estimate$us_pop1990myc.population_data",
-              year %in% c(1994:2004) ~ 
+              year %in% c(1995:2004) ~ 
                 "pop_estimate$us_pop2000myc.population_data",
               year %in% c(2005:2014) ~ 
                 "pop_estimate$us_pop2010myc.population_data",
@@ -114,14 +114,12 @@ ks_pop_exposed <- tibble(state       = "",
                          pop_exposed = as.numeric())
 # for each state-year with >= 1 wells in wildfire burn areas (previously 
 # assessed), estimates population within 1 km of those wells
-##### need to fix 2011
-#for(year in c(1986:1998, 2000:2019)) {
-for(year in c(1986:1998, 2000:2010, 2012:2019)) {
+for(year in c(1986:1998, 2000:2019)) {  ##### need to fix 2011
   pop_exposed_out <-
     assessPopulationExposed(state_upper = "KS", state_lower = "ks", year = year)
   ks_pop_exposed <- ks_pop_exposed %>% bind_rows(pop_exposed_out)
 }
-write_csv(ks_pop_exposed, "output/results/ks_pop_exposed.csv")  # export
+write_csv(ks_pop_exposed, "output/results/ks_pop_exposed_2012_2019.csv")  # export
 
 
 # LA .......................................................................
@@ -236,13 +234,107 @@ tx_pop_exposed <- tibble(state       = "",
                          year        = as.numeric(),
                          pop_exposed = as.numeric())
 # for each state-year with >= 1 wells in wildfire burn areas (previously 
-# assessed), estimates population within 1 km of those wells
-for(year in c(1986:2019)) {
-  pop_exposed_out <-
-    assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = year)
-  tx_pop_exposed <- tx_pop_exposed %>% bind_rows(pop_exposed_out)
-}
-write_csv(tx_pop_exposed, "output/results/tx_pop_exposed.csv")  # export
+# assessed), estimates population within 1 km of those wells; Texas had large
+# datasets, so I did this assessment in 5-year increments#
+# for(year in c(1986:1989)) {
+#   pop_exposed_out <-
+#     assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = year)
+#   tx_pop_exposed <- tx_pop_exposed %>% bind_rows(pop_exposed_out)
+# }
+# write_csv(tx_pop_exposed, "output/results/tx_pop_exposed_1990_1994.csv")
+# 5-year increment still crashed the server I was working on, so I did this
+# separately for each year
+pop_exposed_1990 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 1990)
+write_csv(pop_exposed_1990, "output/results/tx_pop_exposed_1990.csv")
+# separately for each year
+pop_exposed_1991 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 1991)
+write_csv(pop_exposed_1991, "output/results/tx_pop_exposed_1991.csv")
+pop_exposed_1992 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 1992)
+write_csv(pop_exposed_1992, "output/results/tx_pop_exposed_1992.csv")
+pop_exposed_1993 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 1993)
+write_csv(pop_exposed_1993, "output/results/tx_pop_exposed_1993.csv")
+pop_exposed_1994 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 1994)
+write_csv(pop_exposed_1994, "output/results/tx_pop_exposed_1994.csv")
+pop_exposed_1995 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 1995)
+write_csv(pop_exposed_1995, "output/results/tx_pop_exposed_1995.csv")
+pop_exposed_1996 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 1996)
+write_csv(pop_exposed_1996, "output/results/tx_pop_exposed_1996.csv")
+pop_exposed_1997 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 1997)
+write_csv(pop_exposed_1997, "output/results/tx_pop_exposed_1997.csv")
+pop_exposed_1998 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 1998)
+write_csv(pop_exposed_1998, "output/results/tx_pop_exposed_1998.csv")
+pop_exposed_1999 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 1999)
+write_csv(pop_exposed_1999, "output/results/tx_pop_exposed_1999.csv")
+pop_exposed_2000 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 2000)
+write_csv(pop_exposed_2000, "output/results/tx_pop_exposed_2000.csv")
+pop_exposed_2001 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 2001)
+write_csv(pop_exposed_2001, "output/results/tx_pop_exposed_2001.csv")
+pop_exposed_2002 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 2002)
+write_csv(pop_exposed_2002, "output/results/tx_pop_exposed_2002.csv")
+pop_exposed_2003 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 2003)
+write_csv(pop_exposed_2003, "output/results/tx_pop_exposed_2003.csv")
+pop_exposed_2004 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 2004)
+write_csv(pop_exposed_2004, "output/results/tx_pop_exposed_2004.csv")
+pop_exposed_2005 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 2005)
+write_csv(pop_exposed_2005, "output/results/tx_pop_exposed_2005.csv")
+pop_exposed_2006 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 2006)
+write_csv(pop_exposed_2006, "output/results/tx_pop_exposed_2006.csv")
+pop_exposed_2007 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 2007)
+write_csv(pop_exposed_2007, "output/results/tx_pop_exposed_2007.csv")
+pop_exposed_2008 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 2008)
+write_csv(pop_exposed_2008, "output/results/tx_pop_exposed_2008.csv")
+pop_exposed_2009 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 2009)
+write_csv(pop_exposed_2009, "output/results/tx_pop_exposed_2009.csv")
+pop_exposed_2010 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 2010)
+write_csv(pop_exposed_2010, "output/results/tx_pop_exposed_2010.csv")
+pop_exposed_2011 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 2011)
+write_csv(pop_exposed_2011, "output/results/tx_pop_exposed_2011.csv")
+pop_exposed_2012 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 2012)
+write_csv(pop_exposed_2012, "output/results/tx_pop_exposed_2012.csv")
+pop_exposed_2013 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 2013)
+write_csv(pop_exposed_2013, "output/results/tx_pop_exposed_2013.csv")
+pop_exposed_2014 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 2014)
+write_csv(pop_exposed_2014, "output/results/tx_pop_exposed_2014.csv")
+pop_exposed_2015 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 2015)
+write_csv(pop_exposed_2015, "output/results/tx_pop_exposed_2015.csv")
+pop_exposed_2016 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 2016)
+write_csv(pop_exposed_2016, "output/results/tx_pop_exposed_2016.csv")
+pop_exposed_2017 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 2017)
+write_csv(pop_exposed_2017, "output/results/tx_pop_exposed_2017.csv")
+pop_exposed_2018 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 2018)
+write_csv(pop_exposed_2018, "output/results/tx_pop_exposed_2018.csv")
+pop_exposed_2019 <-
+  assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 2019)
+write_csv(pop_exposed_2019, "output/results/tx_pop_exposed_2019.csv")
 
 
 # UT .......................................................................
