@@ -114,7 +114,7 @@ ks_pop_exposed <- tibble(state       = "",
                          pop_exposed = as.numeric())
 # for each state-year with >= 1 wells in wildfire burn areas (previously 
 # assessed), estimates population within 1 km of those wells
-for(year in c(1986:1998, 2000:2019)) {  ##### need to fix 2011
+for(year in c(1986:1998, 2000:2019)) {  ##### need to fix 2011, 2014
   pop_exposed_out <-
     assessPopulationExposed(state_upper = "KS", state_lower = "ks", year = year)
   ks_pop_exposed <- ks_pop_exposed %>% bind_rows(pop_exposed_out)
