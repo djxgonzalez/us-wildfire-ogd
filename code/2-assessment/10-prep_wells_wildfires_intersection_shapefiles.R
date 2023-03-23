@@ -94,7 +94,7 @@ wildfires_2009 <-
 wildfires_2010 <-
   readRDS("data/interim/wildfire_years/wildfires_union_contiguous_2010.rds") %>% 
   st_transform(crs_albers)
-wildfires_2011 <-  # LOAD
+wildfires_2011 <-
   readRDS("data/interim/wildfire_years/wildfires_union_contiguous_2011.rds") %>% 
   st_transform(crs_albers)
 wildfires_2012 <-
@@ -103,7 +103,7 @@ wildfires_2012 <-
 wildfires_2013 <-
   readRDS("data/interim/wildfire_years/wildfires_union_contiguous_2013.rds") %>% 
   st_transform(crs_albers)
-wildfires_2014 <-  # LOAD
+wildfires_2014 <-
   readRDS("data/interim/wildfire_years/wildfires_union_contiguous_2014.rds") %>% 
   st_transform(crs_albers)
 wildfires_2015 <-
@@ -112,7 +112,7 @@ wildfires_2015 <-
 wildfires_2016 <-
   readRDS("data/interim/wildfire_years/wildfires_union_contiguous_2016.rds") %>% 
   st_transform(crs_albers)
-wildfires_2017 <-  # LOAD
+wildfires_2017 <-
   readRDS("data/interim/wildfire_years/wildfires_union_contiguous_2017.rds") %>% 
   st_transform(crs_albers)
 wildfires_2018 <-
@@ -130,28 +130,15 @@ wildfires_2019 <-
 makeIntersectionZone <- function(wells_in, year, state_prefix){
   wells_in %>% 
     filter(year(date_earliest) <= year | is.na(date_earliest)) %>% 
-    st_intersection(eval(parse(text = 
-                                 (paste("wildfires_", year, sep = ""))))) %>% 
+    st_intersection(st_make_valid(
+      eval(parse(text = 
+                   (paste("wildfires_", year, sep = "")))))) %>% 
     st_buffer(dist = 1000) %>% 
     st_union() %>% 
     st_make_valid() %>% 
     saveRDS(paste("data/interim/wells_wildfire_intersection_state_year/",
                   state_prefix, "_", year, ".rds", sep = ""))
 }
-
-
-# defines function to identify wells within wildfire boundaries, generate  1 km
-# buffers around those wells for each state-year, and flexibly export each
-# layer as a RDS file with a unique name for each state-year
-year = 2011
-state_prefix = "ok"
-
-wells_out <- wells_in %>% 
-  filter(year(date_earliest) <= year | is.na(date_earliest)) %>% 
-  st_intersection(st_make_valid(wildfires_2011)) #%>% 
-  st_buffer(dist = 1000) %>% 
-  st_union() %>% 
-  st_make_valid()
 
 
 ## assessment by state -------------------------------------------------------
@@ -168,8 +155,7 @@ for(year in c(1986:1987, 1989, 1995, 1998, 2000, 2003:2007, 2010:2011,
 
 # CA .......................................................................
 wells_in <- wells_all %>% filter(state == "CA")
-#for(year in c(1984:2013, 2015:2019)) { 
-for(year in c(2011)) {  ##### need to fix 2011
+for(year in c(1984:2013, 2015:2019)) { 
   makeIntersectionZone(wells_in, year, "ca")
 }
 
@@ -182,7 +168,7 @@ for(year in c(1985:1987, 1989, 1994, 1996, 2000:2002, 2004:2008, 2011:2019)) {
 # KS .......................................................................
 wells_in <- wells_all %>% filter(state == "KS")
 #for(year in c(1986:1998, 2000:2019)) {
-for(year in c(2011, 2014, 2017)) { ##### need to fix 2011, 2014, 2017
+for(year in c(2014, 2017)) { ##### need to fix 2011, 2014, 2017
   makeIntersectionZone(wells_in, year, "ks")
 }
 
