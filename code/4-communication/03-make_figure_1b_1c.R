@@ -10,16 +10,17 @@ library("lubridate")
 # library("units")  # I don't think we need this package
 
 # data input
-wells_all <- readRDS("data/processed/wells_all.rds")
-wildfires_wells_population <- 
-  readRDS("data/processed/wildfires_wells_population.rds")
+wells_all <- readRDS("data/interim/wells_all.rds")
+wells_individual_wildfires <- 
+  read_csv("data/processed/wells_individual_wildfires.csv")
+pop_exposed_state_year <- read_csv("data/processed/pop_exposed_state_year.csv")
 
 
 ## manuscript figure ---------------------------------------------------------
 
 # figure 1b ................................................................
 # total area burned by year
-figure_1b <- wildfires_wells_population %>%
+figure_1b <- wells_individual_wildfires %>%
   filter(year %in% c(1984:2019)) %>% 
   mutate(year = as.factor(year),
          wildfire_area_km2 = (as.numeric(wildfire_area_m2) / 1000000)) %>%  
@@ -38,7 +39,7 @@ ggsave(filename = "figure_1b.png", plot = figure_1b, device = "png",
        height = 2.5, width = 10, path = "output/figures/components/")
 
 # figure 1c ................................................................
-# count of oil and gas wells in wildfire burn areas by year
+# cumulative number of oil and gas wells in the study region by year, 1984–2019
 
 # preps data
 data_1c <- wells_all %>% 

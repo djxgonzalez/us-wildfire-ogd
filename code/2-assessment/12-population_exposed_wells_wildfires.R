@@ -367,11 +367,41 @@ for(year in c(1988, 1991:1992, 1996, 1998:2007, 2009:2012, 2015:2019)) {
 write_csv(wy_pop_exposed, "output/results/wy_pop_exposed.csv")  # export
 
 
-## assemble dataset ----------------------------------------------------------
+# Processing ...............................................................
+# combines TX datasets
+tx_pop_exposed <- read_csv("output/results/tx_pop_exposed_1986_1989.csv") %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_1990.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_1991.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_1992.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_1993.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_1994.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_1995.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_1996.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_1997.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_1998.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_1999.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_2000.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_2001.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_2002.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_2003.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_2004.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_2005.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_2006.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_2007.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_2008.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_2009.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_2010.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_2011.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_2012.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_2013.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_2014.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_2015.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_2016.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_2017.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_2018.csv")) %>% 
+  bind_rows(read_csv("output/results/tx_pop_exposed_2019.csv"))
 
-##### generate blank tibble for each state-year, then left_join with each
-##### of the exposure datasets generated above, replaces NAs with 0s, and export
-##### could use wells_wildfires_state_year dataset
+write_csv(tx_pop_exposed, "output/results/tx_pop_exposed.csv")
 
 
 ##============================================================================##

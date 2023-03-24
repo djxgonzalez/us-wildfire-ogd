@@ -34,7 +34,7 @@ source("code/2-assessment/.R")
 source("code/2-assessment/.R")
 source("code/2-assessment/.R")
 
-## 3. Analyses ===============================================================
+## 3. Results ===============================================================
 # 
 source("code/3-analysis/.R")
 source("code/3-analysis/.R")

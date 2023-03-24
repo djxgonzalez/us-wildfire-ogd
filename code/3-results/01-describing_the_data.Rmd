@@ -1,0 +1,116 @@
+---
+title: "Summary Statistics - Wildfires and wells data"
+output:
+  html_notebook:
+    theme: flatly
+    highlight: haddock 
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+source("../../code/0-setup/01-setup.R")
+library("lubridate")
+```
+
+```{r data_input, include=FALSE}
+wells_all     <- readRDS("../../data/processed/wells_all.rds") %>% 
+  filter(year(date_latest) <= 2019)
+wildfires_all <- readRDS("../../data/processed/wildfires_all.rds") %>% 
+  filter(year %in% c(1984:2019))
+```
+
+
+# Wildfires data
+
+### Summary stats
+
+ - n = `r length(unique(wildfires_all$wildfire_id))` unique wildfires
+
+**Mean wildfire area:**
+
+```{r echo=FALSE}
+####### pick up here; do we need this?
+# wildfires_sf <- wildfires_all %>% st_as_sf(crs = crs_nad83) ##### change to WGS84
+# wildfires_sf <- wildfires_sf %>% 
+#   st_make_valid() %>% 
+#   # group_by(wildfire_id) %>% 
+#   # summarize(geometry = st_union(geometry)) %>% 
+#   mutate(area = st_area(wildfires_sf)) ####
+#   ##### adapted from redlining study:
+#   #mutate(area_sqkm = (as.numeric(st_area(wildfires_all)) / 1000000))
+```
+
+
+
+### Plots
+
+#### Plot. Wildfires by state
+
+```{r echo=FALSE}
+wildfires_all %>% 
+  distinct(wildfire_id, .keep_all = TRUE) %>% 
+  ggplot() +
+  geom_bar(aes(state)) +
+  theme_classic()
+```
+
+#### Plot. Wildfires by year
+
+```{r echo=FALSE}
+wildfires_all %>% 
+  distinct(wildfire_id, .keep_all = TRUE) %>%
+  ggplot() +
+  geom_bar(aes(year)) +
+  theme_classic()
+```
+
+#### Plot. Wildfires by year by state
+
+```{r echo=FALSE}
+wildfires_all %>% 
+  distinct(wildfire_id, .keep_all = TRUE) %>%
+  ggplot() +
+  geom_bar(aes(year)) +
+  facet_wrap(~ state) +
+  theme_classic()
+```
+
+
+# Wells data
+
+- There were `r wells_all %>% nrow()` wells in the analytic dataset
+- Of these, `r wells_all %>% drop_na(date_earliest) %>% nrow()` had at least one operational date
+
+
+### All wells
+
+```{r echo=FALSE}
+summary(wells_all)
+```
+
+### Wells with dates
+
+```{r}
+print("Average duration of operation (years):")
+d <- wells_all %>% 
+  drop_na(first_prod_date) %>% 
+  drop_na(last_prod_date) %>% 
+  mutate(prod_duration = last_prod_date - first_prod_date) %>% 
+  select(prod_duration)
+d <- d %>% mutate(prod_duration = as.numeric(prod_duration)) %>%  
+  filter(prod_duration > 0 & prod_duration < 32689)  # known max; removes errors
+summary(as.numeric(d$prod_duration) / 365.25)
+sd(as.numeric(d$prod_duration) / 365.25)
+```
+
+### Wells without dates
+
+```{r}
+
+```
+
+
+

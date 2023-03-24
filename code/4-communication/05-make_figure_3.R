@@ -8,17 +8,17 @@
 
 # attaches necessary packages
 source("code/0-setup/01-setup.R")
-library("rgeos")
-library("geofacet")
+##### this is for GEOFACET package
+#library("rgeos")  ##### apparently not available for MacOS, try on server
+#library("geofacet")
 library("viridis")
 
 # data input
-
 wells_kbdi <- readRDS("data/processed/wells_kbdi.rds")
 wells_wildfire_state_year <- 
-  readRDS("data/processed/wells_wildfire_state_year.rds")
-wildfires_wells_population <- 
-  readRDS("data/processed/wildfires_wells_population.rds")
+  read_csv("data/processed/wells_wildfire_state_year.csv")
+pop_exposed_state_year <- 
+  read_csv("data/processed/pop_exposed_state_year.csv")
 
 
 ## retrospective assessments - panels a, b -----------------------------------
@@ -47,46 +47,19 @@ figure_3a <- wells_wildfire_state_year %>%
 ggsave(filename = "figure_3a.png", plot = figure_3a, device = "png",
        height = 2.2, width = 4, path = "output/figures/components/")
 
-###### same as above but with geofacet --- move to supplemental?
-# figure_3a <- wells_wildfire_state_year %>% 
-#   filter(year %in% c(1984:2019)) %>% 
-#   group_by(year) %>% 
-#   summarize(n_wells = sum(n_wells),
-#             state   = state) %>% 
-#   ggplot(aes(year, n_wells))  +
-#   geom_smooth(method = "lm", formula = y ~ x, 
-#               color = "black", lwd = 0.3, linetype = "longdash", alpha = 0.3) +
-#   # geom_smooth(method = "lm", formula = y ~ poly(x, 2), 
-#   #             color = "blue", fill = "blue", lwd = 0.3, alpha = 0.3) +
-#   geom_point(size = 0.6) + 
-#   labs(x = "", y = "") + 
-#   facet_geo(~ state) +
-#   theme_classic() +
-#   theme(axis.line.x  = element_blank(),  # removes x-axis
-#         axis.ticks.x = element_blank(),
-#         axis.text.x  = element_blank(),
-#         axis.text.y  = element_blank(),
-#         legend.position = "none")
-# # exports figures
-# ggsave(filename = "figure_3a.png", plot = figure_3a, device = "png",
-#        height = 2.2, width = 4, path = "output/figures/components/")
-
 # figure 3b ................................................................
 # estimated total U.S. population within 1 km of oil and gas wells that were in 
 # wildfire burn areas by year
-##### EDIT THIS; shows wells count right now
-figure_3b <- wildfires_wells_population %>% 
-  filter(year %in% c(1984:2019)) %>% 
-  filter(n_wells > 0) %>% 
+figure_3b <- pop_exposed_state_year %>% 
   group_by(year) %>% 
-  summarize(n = n()) %>% 
+  summarize(pop_exposed_n = sum(pop_exposed_n)) %>% 
   ggplot()  +
-  geom_bar(aes(year, n), stat = "identity") + 
-  labs(x = "", y = "") + 
+  geom_bar(aes(year, pop_exposed_n), stat = "identity") + 
+  labs(x = "", y = "") +
   theme_classic() +
-  theme(#axis.text.x  = element_blank(),
-    axis.text.y  = element_blank(),
-    legend.position = "none")
+  theme(axis.text.x  = element_blank(),
+        axis.text.y  = element_blank(),
+        legend.position = "none")
 # exports figures
 ggsave(filename = "figure_3b.png", plot = figure_3b, device = "png",
        height = 2.4, width = 4, path = "output/figures/components/")
@@ -128,5 +101,31 @@ figure_3c <- data_3c %>%
 # exports figures
 ggsave(filename = "figure_3c.png", plot = figure_3c, device = "png",
        height = 2.4, width = 4, path = "output/figures/components/")
+
+##============================================================================##
+
+###### same as above but with geofacet --- move to supplemental
+# figure_3a <- wells_wildfire_state_year %>% 
+#   filter(year %in% c(1984:2019)) %>% 
+#   group_by(year) %>% 
+#   summarize(n_wells = sum(n_wells),
+#             state   = state) %>% 
+#   ggplot(aes(year, n_wells))  +
+#   geom_smooth(method = "lm", formula = y ~ x, 
+#               color = "black", lwd = 0.3, linetype = "longdash", alpha = 0.3) +
+#   # geom_smooth(method = "lm", formula = y ~ poly(x, 2), 
+#   #             color = "blue", fill = "blue", lwd = 0.3, alpha = 0.3) +
+#   geom_point(size = 0.6) + 
+#   labs(x = "", y = "") + 
+#   facet_geo(~ state) +
+#   theme_classic() +
+#   theme(axis.line.x  = element_blank(),  # removes x-axis
+#         axis.ticks.x = element_blank(),
+#         axis.text.x  = element_blank(),
+#         axis.text.y  = element_blank(),
+#         legend.position = "none")
+# # exports figures
+# ggsave(filename = "figure_3a.png", plot = figure_3a, device = "png",
+#        height = 2.2, width = 4, path = "output/figures/components/")
 
 ##============================================================================##
