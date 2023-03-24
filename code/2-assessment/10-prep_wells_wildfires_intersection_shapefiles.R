@@ -12,6 +12,7 @@ library("lubridate")
 # data input ...............................................................
 wells_all <- readRDS("data/interim/wells_all.rds") %>% 
   st_transform(crs_albers)
+
 wildfires_1984 <-
   readRDS("data/interim/wildfire_years/wildfires_union_contiguous_1984.rds") %>% 
   st_transform(crs_albers)
@@ -123,13 +124,15 @@ wildfires_2019 <-
 
 
 ## assessment by state -------------------------------------------------------
-## defines function to generate identify wells within wildfire boundaries and 
-## and generate 1 km buffers around those wells for each state-year
+# defines function to identify wells within wildfire boundaries, generate  1 km
+# buffers around those wells for each state-year, and flexibly export each
+# layer as a RDS file with a unique name for each state-year
 makeIntersectionZone <- function(wells_in, year, state_prefix){
   wells_in %>% 
     filter(year(date_earliest) <= year | is.na(date_earliest)) %>% 
-    st_intersection(eval(parse(text = 
-                                 (paste("wildfires_", year, sep = ""))))) %>% 
+    st_intersection(st_make_valid(
+      eval(parse(text = 
+                   (paste("wildfires_", year, sep = "")))))) %>% 
     st_buffer(dist = 1000) %>% 
     st_union() %>% 
     st_make_valid() %>% 
@@ -139,9 +142,9 @@ makeIntersectionZone <- function(wells_in, year, state_prefix){
 
 
 ## assessment by state -------------------------------------------------------
-## for each state-year *with* > 0 wells in wildfire burn areas (which we 
-## previously assessed), calls the function defined above to outputs
-## state-year `sf` objects with 1 km buffers around wells in wildfire burn areas
+# for each state-year *with* > 0 wells in wildfire burn areas (which we 
+# previously assessed), calls the function defined above to outputs
+# state-year `sf` objects with 1 km buffers around wells in wildfire burn areas
 
 # AR .......................................................................
 wells_in <- wells_all %>% filter(state == "AR")
@@ -152,8 +155,7 @@ for(year in c(1986:1987, 1989, 1995, 1998, 2000, 2003:2007, 2010:2011,
 
 # CA .......................................................................
 wells_in <- wells_all %>% filter(state == "CA")
-#for(year in c(1984:2013, 2015:2019)) { 
-for(year in c(2011)) {  ##### need to fix 2011
+for(year in c(1984:2013, 2015:2019)) { 
   makeIntersectionZone(wells_in, year, "ca")
 }
 
@@ -166,8 +168,7 @@ for(year in c(1985:1987, 1989, 1994, 1996, 2000:2002, 2004:2008, 2011:2019)) {
 # KS .......................................................................
 wells_in <- wells_all %>% filter(state == "KS")
 #for(year in c(1986:1998, 2000:2019)) {
-for(year in c(2012:2019)) { ##### need to run this
-#for(year in c(2011)) { ##### need to fix 2011 
+for(year in c(2014, 2017)) { ##### need to fix 2011, 2014, 2017
   makeIntersectionZone(wells_in, year, "ks")
 }
 
@@ -192,7 +193,7 @@ for(year in c(1988:1989, 1992, 1994, 1999:2000, 2003:2005, 2007:2008, 2012,
 
 # NE .......................................................................
 wells_in <- wells_all %>% filter(state == "NE")
-makeIntersectionZone(wells_in, 2002, "ne")  # only year with wells in wildfires
+makeIntersectionZone(wells_in, 2002, "ne") # only 1 year with wells in wildfires
 
 # NM .......................................................................
 wells_in <- wells_all %>% filter(state == "NM")
@@ -203,20 +204,19 @@ for(year in c(1986:2001, 2005:2014, 2016:2019)) {
 # OK .......................................................................
 wells_in <- wells_all %>% filter(state == "OK")
 #for(year in c(1991, 1994:1998, 2000:2019)) {
-for(year in c(2014)) {  ###### need to fix error with 2014
+for(year in c(2014)) {  ###### need to fix 2014
   makeIntersectionZone(wells_in, year, "ok")
 }
 
 # SD .......................................................................
-wells_in <- wells_all %>% filter(state == "SD")  ##### need to run this
+wells_in <- wells_all %>% filter(state == "SD")
 for(year in c(1984:1985, 1988, 1999:2003, 2006:2007, 2011:2012, 2015:2016)) {
   makeIntersectionZone(wells_in, year, "sd")
 }
 
 # TX .......................................................................
 wells_in <- wells_all %>% filter(state == "TX")
-#for(year in c(1986:2019)) {
-for(year in c(2016:2019)) {
+for(year in c(1986:2019)) {
   makeIntersectionZone(wells_in, year, "tx")
 }
 

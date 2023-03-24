@@ -83,8 +83,7 @@ ca_pop_exposed <- tibble(state       = "",
                          pop_exposed = as.numeric())
 # for each state-year with >= 1 wells in wildfire burn areas (previously 
 # assessed), estimates population within 1 km of those wells
-for(year in c(1984:2010, 2012:2013, 2015:2019)) {
-  #for(year in c(1984:2013, 2015:2010)) {
+for(year in c(1984:2013, 2015:2010)) {
   pop_exposed_out <-
     assessPopulationExposed(state_upper = "CA", state_lower = "ca", year = year)
   ca_pop_exposed <- ca_pop_exposed %>% bind_rows(pop_exposed_out)
@@ -114,12 +113,12 @@ ks_pop_exposed <- tibble(state       = "",
                          pop_exposed = as.numeric())
 # for each state-year with >= 1 wells in wildfire burn areas (previously 
 # assessed), estimates population within 1 km of those wells
-for(year in c(1986:1998, 2000:2019)) {  ##### need to fix 2011
+for(year in c(1986:1998, 2000:2019)) {  ##### need to fix 2011, 2014, 2017
   pop_exposed_out <-
     assessPopulationExposed(state_upper = "KS", state_lower = "ks", year = year)
   ks_pop_exposed <- ks_pop_exposed %>% bind_rows(pop_exposed_out)
 }
-write_csv(ks_pop_exposed, "output/results/ks_pop_exposed_2012_2019.csv")  # export
+write_csv(ks_pop_exposed, "output/results/ks_pop_exposed.csv")  # export
 
 
 # LA .......................................................................
@@ -129,7 +128,6 @@ la_pop_exposed <- tibble(state       = "",
                          pop_exposed = as.numeric())
 # for each state-year with >= 1 wells in wildfire burn areas (previously 
 # assessed), estimates population within 1 km of those wells
-##### errors with LA for 2012; fix and incorporate; confirm we should do 2012!
 for(year in c(1985, 1987, 1989, 1993, 1995:2007, 2009:2011, 2013:2019)) {
   pop_exposed_out <-
     assessPopulationExposed(state_upper = "LA", state_lower = "la", year = year)
@@ -204,8 +202,7 @@ ok_pop_exposed <- tibble(state       = "",
                          pop_exposed = as.numeric())
 # for each state-year with >= 1 wells in wildfire burn areas (previously 
 # assessed), estimates population within 1 km of those wells
-#for(year in c(1991, 1994:1998, 2000:2019)) {  ###### error with 2014, will fix
-for(year in c(1991, 1994:1998, 2000:2013, 2015:2019)) {
+for(year in c(1991, 1994:1998, 2000:2019)) {
   pop_exposed_out <-
     assessPopulationExposed(state_upper = "OK", state_lower = "ok", year = year)
   ok_pop_exposed <- ok_pop_exposed %>% bind_rows(pop_exposed_out)
@@ -235,15 +232,15 @@ tx_pop_exposed <- tibble(state       = "",
                          pop_exposed = as.numeric())
 # for each state-year with >= 1 wells in wildfire burn areas (previously 
 # assessed), estimates population within 1 km of those wells; Texas had large
-# datasets, so I did this assessment in 5-year increments#
-# for(year in c(1986:1989)) {
-#   pop_exposed_out <-
-#     assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = year)
-#   tx_pop_exposed <- tx_pop_exposed %>% bind_rows(pop_exposed_out)
-# }
-# write_csv(tx_pop_exposed, "output/results/tx_pop_exposed_1990_1994.csv")
-# 5-year increment still crashed the server I was working on, so I did this
-# separately for each year
+# datasets, so I did this assessment in a 4-year increment for the 1980s..
+for(year in c(1986:1989)) {
+  pop_exposed_out <-
+    assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = year)
+  tx_pop_exposed <- tx_pop_exposed %>% bind_rows(pop_exposed_out)
+}
+# ...but 5-year increment still crashed the server I was working on, so I did
+# the assessment separately for each year for the rest of the timeframe, 
+# clearing the memory in R between each run
 pop_exposed_1990 <-
   assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 1990)
 write_csv(pop_exposed_1990, "output/results/tx_pop_exposed_1990.csv")
@@ -335,6 +332,7 @@ write_csv(pop_exposed_2018, "output/results/tx_pop_exposed_2018.csv")
 pop_exposed_2019 <-
   assessPopulationExposed(state_upper = "TX", state_lower = "tx", year = 2019)
 write_csv(pop_exposed_2019, "output/results/tx_pop_exposed_2019.csv")
+# in a separate script, I 
 
 
 # UT .......................................................................
@@ -365,7 +363,6 @@ for(year in c(1988, 1991:1992, 1996, 1998:2007, 2009:2012, 2015:2019)) {
   wy_pop_exposed <- wy_pop_exposed %>% bind_rows(pop_exposed_out)
 }
 write_csv(wy_pop_exposed, "output/results/wy_pop_exposed.csv")  # export
-
 
 # Processing ...............................................................
 # combines TX datasets
