@@ -28,13 +28,10 @@ pop_exposed_state_year <-
 figure_3a <- wells_wildfire_state_year %>% 
   filter(year %in% c(1984:2019)) %>% 
   group_by(year) %>% 
-  summarize(n_wells = sum(n_wells),
-            state   = state) %>% 
+  summarize(n_wells = sum(n_wells)) %>% 
   ggplot(aes(year, n_wells))  +
-  geom_smooth(method = "lm", formula = y ~ x, 
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE,
               color = "black", lwd = 0.3, linetype = "longdash", alpha = 0.3) +
-  # geom_smooth(method = "lm", formula = y ~ poly(x, 2), 
-  #             color = "blue", fill = "blue", lwd = 0.3, alpha = 0.3) +
   geom_point(size = 0.6) + 
   labs(x = "", y = "") + 
   theme_classic() +
@@ -53,8 +50,10 @@ ggsave(filename = "figure_3a.png", plot = figure_3a, device = "png",
 figure_3b <- pop_exposed_state_year %>% 
   group_by(year) %>% 
   summarize(pop_exposed_n = sum(pop_exposed_n)) %>% 
-  ggplot()  +
-  geom_bar(aes(year, pop_exposed_n), stat = "identity") + 
+  ggplot(aes(year, pop_exposed_n))  +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE,
+              color = "black", lwd = 0.3, linetype = "longdash", alpha = 0.3) +
+  geom_point(size = 0.6) + 
   labs(x = "", y = "") +
   theme_classic() +
   theme(axis.text.x  = element_blank(),

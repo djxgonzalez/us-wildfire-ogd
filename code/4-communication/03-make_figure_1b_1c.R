@@ -23,16 +23,20 @@ pop_exposed_state_year <- read_csv("data/processed/pop_exposed_state_year.csv")
 figure_1b <- wells_individual_wildfires %>%
   filter(year %in% c(1984:2019)) %>% 
   mutate(year = as.factor(year),
-         wildfire_area_km2 = (as.numeric(wildfire_area_m2) / 1000000)) %>%  
+         wildfire_area_ha = (as.numeric(wildfire_area_m2) / 10000)) %>%  
   group_by(year) %>% 
-  summarize(area_burned_km2 = sum(wildfire_area_km2)) %>% 
-  ggplot() +
-  geom_bar(aes(year, area_burned_km2), stat = "identity") + 
+  summarize(area_burned_ha = sum(wildfire_area_ha)) %>% 
+  mutate(year = as.numeric(year)) %>% 
+  ggplot(aes(year, area_burned_ha)) +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE,
+              color = "black", lwd = 0.3, linetype = "longdash", alpha = 0.3) +
+  geom_point(size = 0.6) + 
   labs(x = "", y = "") + 
   theme_classic() +
   theme(axis.line.x  = element_blank(),  # removes x-axis
         axis.ticks.x = element_blank(),
-        axis.text.x  = element_blank(),axis.text.y  = element_blank(),
+        axis.text.x  = element_blank(),
+        axis.text.y  = element_blank(),
         legend.position = "none")
 # exports figures
 ggsave(filename = "figure_1b.png", plot = figure_1b, device = "png",
