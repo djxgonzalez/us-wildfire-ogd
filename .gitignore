@@ -16,3 +16,4 @@ output/tables/
 .Rproj.user/shared/notebooks/paths
 code/.DS_Store
 code/3-analysis/.DS_Store
+*.pper

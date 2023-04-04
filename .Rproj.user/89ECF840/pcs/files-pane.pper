@@ -1,13 +1,13 @@
 {
     "sortOrder": [
         {
-            "columnIndex": 4,
+            "columnIndex": 2,
             "ascending": true
         },
         {
-            "columnIndex": 2,
-            "ascending": true
+            "columnIndex": 4,
+            "ascending": false
         }
     ],
-    "path": "R:/DJXG/research/projects active/us wildfire ogd/us-wildfire-ogd/data/interim/wells_wildfire_intersection_state_year"
+    "path": "R:/DJXG/research/projects active/us wildfire ogd/us-wildfire-ogd/data/interim/wells_on_public_lands"
 }
