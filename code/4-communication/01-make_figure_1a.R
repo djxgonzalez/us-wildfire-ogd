@@ -37,7 +37,8 @@ mex_can <- st_read("data/raw/esri/Countries_WGS84.shp", crs = crs_wgs84) %>%
 
 # combined 1 km well buffers for contiguous states
 wells_all_buffer_1km <- 
-  readRDS("data/interim/wells_buffers/wells_all_buffer_1km.rds")
+  readRDS("data/interim/wells_buffers/wells_all_buffer_1km.rds") %>% 
+  st_intersection(us_states_included)
 
 # unionizes wildfire buffers . . . . . . . . . . . . . . . . . . . . . . . .
 # just need to run this once, uncomment and run if needed; otherwise, use
@@ -61,18 +62,18 @@ wildfires_all_union <-
 
 # makes figure
 figure_1a <- ggplot() +
-  geom_sf(data = mex_can,   color = NA, fill = "#D4D4D4", alpha = 0.8) +
-  geom_sf(data = us_states, color = NA, fill = "#E5E5E5", alpha = 0.7) +
+  geom_sf(data = mex_can,   color = NA, fill = "#c1c2c7") +
+  geom_sf(data = us_states, color = NA, fill = "#dedfe4") +
   geom_sf(data = wildfires_all_union, fill = "#e31a1c", color = NA, alpha = 0.7) +
-  geom_sf(data = us_states_excluded, color = NA, fill = "#D4D4D4", alpha = 0.8) +
-  geom_sf(data = us_states,   color = "white", fill = NA, lwd = 0.2) +
-  geom_sf(data = us_boundary, color = "white", fill = NA, lwd = 0.3) +
+  geom_sf(data = us_states_excluded, color = NA, fill = "#c1c2c7") +
+  geom_sf(data = us_states,   color = "white", fill = NA, lwd = 0.4) +
+  geom_sf(data = us_boundary, color = "white", fill = NA, lwd = 0.6) +
   geom_sf(data = wells_all_buffer_1km, fill = "black", color = NA, alpha = 0.6) +
   xlim(-2300000, 560000) + ylim(340000, 3100000) +  # origin: 96W, 23N
   labs(x = "", y = "") +
   theme_void() +  
-  theme(panel.background = element_rect(fill  = "#e9f5f8"),
-        panel.grid       = element_line(color = "#e9f5f8"),
+  theme(panel.background = element_rect(fill  = "#d6ecf3"),
+        panel.grid       = element_line(color = "#d6ecf3"),
         legend.position = "none")
 
 # export

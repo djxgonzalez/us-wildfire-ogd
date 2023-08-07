@@ -29,8 +29,8 @@ figure_1b <- wells_individual_wildfires %>%
   mutate(year = as.numeric(year)) %>% 
   ggplot(aes(year, area_burned_ha)) +
   geom_smooth(method = "lm", formula = y ~ x, se = FALSE,
-              color = "black", lwd = 0.3, linetype = "longdash", alpha = 0.3) +
-  geom_point(size = 0.6) + 
+              color = "#e31a1c", lwd = 0.3, linetype = "longdash", alpha = 0.3) +
+  geom_point(size = 0.6, color = "#e31a1c") + 
   labs(x = "", y = "") + 
   theme_classic() +
   theme(axis.line.x  = element_blank(),  # removes x-axis

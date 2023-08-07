@@ -1,0 +1,281 @@
+---
+title: "Results - Wells within 1 km of wildfires by state and year (secondary analysis)"
+output:
+  html_notebook:
+    theme: flatly
+    highlight: haddock 
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE)
+source("../../code/0-setup/01-setup.R")
+```
+
+```{r data_input, include=FALSE}
+wells_wildfire_state_year <- 
+  read_csv("../../data/processed/wells_wildfire_state_year.csv") %>% 
+  filter(year %in% c(1984:2019))
+```
+
+# Description
+
+These analyses are for the assessments of the number of wells in all wildfire burn areas by state and year (1984-2020). These are oil and gas wells with any operation date before the year of the wildfire and wells with missing operation dates, which we presume to have been drilled before the study period in an era of poor record-keeping. In a sensitivity analysis, we omit wells without data on operation dates.
+
+# Aggregated results for all states
+
+## wells in or near wildfire burn areas
+
+### Summary of wells in or near wildfire burn areas by year
+
+```{r}
+d <- wells_wildfire_state_year %>% 
+  group_by(year) %>% 
+  summarize(n_wells_buffer_1km = sum(n_wells_buffer_1km))
+summary(d$n_wells_buffer_1km)
+sd(d$n_wells_buffer_1km)
+```
+
+
+### Total wells burned by decade
+
+- 1984-1989: **`r wells_wildfire_state_year %>% filter(year %in% c(1984:1989)) %>% select(n_wells_buffer_1km) %>% sum()`**
+- 1990-1999: **`r wells_wildfire_state_year %>% filter(year %in% c(1990:1999)) %>% select(n_wells_buffer_1km) %>% sum()`**
+- 2000-2009: **`r wells_wildfire_state_year %>% filter(year %in% c(2000:2009)) %>% select(n_wells_buffer_1km) %>% sum()`**
+- 2010-2019: **`r wells_wildfire_state_year %>% filter(year %in% c(2010:2019)) %>% select(n_wells_buffer_1km) %>% sum()`**
+
+### Average annual wells burned by decade
+
+- 1984-1989: **`r wells_wildfire_state_year %>% filter(year %in% c(1984:1989)) %>% select(n_wells_buffer_1km) %>% sum() / 6` ± `r d <- wells_wildfire_state_year %>% filter(year %in% c(1984:1989)) %>% select(n_wells_buffer_1km); round(sd(d$n_wells_buffer_1km), digits = 1)`**
+- 1984-1993: **`r wells_wildfire_state_year %>% filter(year %in% c(1984:1993)) %>% select(n_wells_buffer_1km) %>% sum() / 6` ± `r d <- wells_wildfire_state_year %>% filter(year %in% c(1984:1993)) %>% select(n_wells_buffer_1km); round(sd(d$n_wells_buffer_1km), digits = 1)`**
+- 1990-1999: **`r wells_wildfire_state_year %>% filter(year %in% c(1990:1999)) %>% select(n_wells_buffer_1km) %>% sum() / 10` ± `r d <- wells_wildfire_state_year %>% filter(year %in% c(1990:1999)) %>% select(n_wells_buffer_1km); round(sd(d$n_wells_buffer_1km), digits = 1)`**
+- 2000-2009: **`r wells_wildfire_state_year %>% filter(year %in% c(2000:2009)) %>% select(n_wells_buffer_1km) %>% sum() / 10` ± `r d <- wells_wildfire_state_year %>% filter(year %in% c(2000:2009)) %>% select(n_wells_buffer_1km); round(sd(d$n_wells_buffer_1km), digits = 1)`**
+- 2010-2019: **`r wells_wildfire_state_year %>% filter(year %in% c(2010:2019)) %>% select(n_wells_buffer_1km) %>% sum() / 10` ± `r d <- wells_wildfire_state_year %>% filter(year %in% c(2010:2019)) %>% select(n_wells_buffer_1km); round(sd(d$n_wells_buffer_1km), digits = 1)`**
+
+### Table. wells in or near wildfire burn areas by year
+
+```{r}
+d <- wells_wildfire_state_year %>% 
+  filter(year %in% c(1984:2020)) %>% 
+  group_by(year) %>% 
+  summarize(n = sum(n_wells_buffer_1km),
+            n_wells_buffer_1km = sum(n_wells_buffer_1km))
+write_csv(d, "../../output/results/wells_wildfire_state_year.csv")
+d
+```
+
+### Plot. wells in or near wildfire burn areas by year
+
+```{r echo=FALSE}
+wells_wildfire_state_year %>% 
+  group_by(year) %>% 
+  summarize(n = sum(n_wells_buffer_1km)) %>% 
+  ggplot() +
+  geom_bar(aes(year, n), stat = "identity") +
+  labs(x = "Year", y = "Wells (n)") +
+  theme_classic()
+```
+
+### Plot. wells in or near wildfire burn areas by year with best fit line
+
+```{r echo=FALSE}
+wells_wildfire_state_year %>% 
+  filter(year %in% c(1984:2019)) %>%  # omitting 2020 with incomplete fire data
+  group_by(year) %>% 
+  summarize(n = sum(n_wells_buffer_1km)) %>% 
+  ggplot(aes(year, n)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "black") +
+  geom_smooth(method = "lm", color = "blue", formula = y ~ poly(x, 2)) +
+  labs(x = "Year", y = "Wells (n)") +
+  theme_classic()
+```
+
+### Model. Wells in burn area \~ year
+
+```{r}
+model_fit <- glm(n_wells_buffer_1km ~ year,
+                 data = wells_wildfire_state_year)
+summary(model_fit)
+```
+
+### Model. Wells in burn area \~ year \* state
+
+```{r}
+model_fit <- glm(n_wells_buffer_1km ~ year + factor(state),
+                 data = wells_wildfire_state_year)
+summary(model_fit)
+```
+
+In models adjusted for state, the number of wells in or near wildfire burn areas increased throughout the study period, 1984-2020 (p \< 0.001). Unclear if this holds up when we use a non-linear model, given peaks in the mid-2010s. Getting 2020 wildfire data would help resolve this.
+
+## Wells within 1 km of wildfire burn areas
+
+### Plot. Wells within 1km of wildfire burn areas by year
+
+```{r echo=FALSE}
+wells_wildfire_state_year %>% 
+  group_by(year) %>% 
+  summarize(n = sum(n_wells_buffer_1km)) %>% 
+  ggplot() +
+  geom_bar(aes(year, n), stat = "identity") +
+  labs(x = "Year", y = "Wells (n)") +
+  theme_classic()
+```
+
+### Plot. Wells within 1 km of wildfire burn areas by year with best fit line
+
+```{r echo=FALSE}
+wells_wildfire_state_year %>% 
+  filter(year %in% c(1984:2019)) %>%  # omitting 2020 with incomplete fire data
+  group_by(year) %>% 
+  summarize(n = sum(n_wells_buffer_1km)) %>% 
+  ggplot(aes(year, n)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "black") +
+  geom_smooth(method = "lm", color = "blue", formula = y ~ poly(x, 2)) +
+  labs(x = "Year", y = "Wells (n)") +
+  theme_classic()
+```
+
+### Model. Wells within 1km of burn area \~ year \* state
+
+```{r}
+model_fit <- glm(n_wells_buffer_1km ~ year + factor(state),
+                 data = wells_wildfire_state_year)
+summary(model_fit)
+```
+
+In models adjusted for state, the number of wells within 1km of wildfire burn areas (including wells within and just outside of the burn areas) increased throughout the study period, 1984-2020 (p \< 0.001).
+
+# Stratified by state
+
+## wells in or near wildfire burn areas
+
+### Table. wells in or near wildfire burn areas by state
+
+```{r echo=FALSE}
+wells_wildfire_state_year %>% 
+  group_by(state) %>% 
+  summarize(n_wells_buffer_1km_by_state = sum(n_wells_buffer_1km),
+            n_wells_buffer_1km_by_state = sum(n_wells_buffer_1km)) %>% 
+  arrange(desc(n_wells_buffer_1km_by_state))
+```
+
+### Plot. wells in or near wildfire burn areas by state
+
+```{r echo=FALSE}
+wells_wildfire_state_year %>% 
+  group_by(state) %>% 
+  summarize(n = sum(n_wells_buffer_1km)) %>% 
+  ggplot() +
+  geom_bar(aes(state, n), stat = "identity") +
+  labs(x = "State", y = "Wells (n)") +
+  theme_classic()
+```
+
+### Table. wells in or near wildfire burn areas by state and year
+
+```{r}
+wells_wildfire_state_year %>% 
+  filter(year %in% c(1984:2020)) %>% 
+  group_by(state, year) %>% 
+  summarize(n = sum(n_wells_buffer_1km),
+            n_wells_buffer_1km = sum(n_wells_buffer_1km))
+```
+
+### Plot. wells in or near wildfire burn areas by state and year
+
+```{r echo=FALSE}
+wells_wildfire_state_year %>% 
+  group_by(state, year) %>% 
+  summarize(n = sum(n_wells_buffer_1km)) %>% 
+  ggplot() +
+  geom_bar(aes(year, n), stat = "identity") +
+  labs(x = "Year", y = "Wells (n)") +
+  facet_wrap(. ~ state) +
+  theme_classic()
+```
+
+### Plot. wells in or near wildfire burn areas by year with best fit line
+
+```{r echo=FALSE}
+wells_wildfire_state_year %>% 
+  filter(year %in% c(1984:2019)) %>%  # omitting 2020 with incomplete fire data
+  group_by(state, year) %>% 
+  summarize(n = sum(n_wells_buffer_1km)) %>% 
+  ggplot(aes(year, n)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "black") +
+  geom_smooth(method = "lm", color = "blue", formula = y ~ poly(x, 2)) +
+  labs(x = "Year", y = "Wells (n)") +
+  facet_wrap(. ~ state) +
+  theme_classic()
+```
+
+## Investigating time trends by state
+
+Fit OLS linear regression models to look at the association between n wells in burn areas and time (in years). Some notable heterogeneity among the three states with the most wells in burn areas.
+
+### Model. Wells in burn area \~ year \* state (CA)
+
+```{r}
+model_fit <- glm(n_wells_buffer_1km ~ year,
+                 data = subset(wells_wildfire_state_year, state == "CA"))
+summary(model_fit)
+```
+
+No time trend in California.
+
+### Model. Wells in burn area \~ year \* state (OK)
+
+```{r}
+model_fit <- glm(n_wells_buffer_1km ~ year,
+                 data = subset(wells_wildfire_state_year, state == "OK"))
+summary(model_fit)
+```
+
+Increasing number of wells in burn areas in Oklahoma (p \< 0.01).
+
+### Model. Wells in burn area \~ year \* state (TX)
+
+```{r}
+model_fit <- glm(n_wells_buffer_1km ~ year,
+                 data = subset(wells_wildfire_state_year, state == "TX"))
+summary(model_fit)
+```
+
+Trend of increasing number of wells in burn areas in Texas, not statistically significant (p = 0.13).
+
+### Model. Wells in burn area \~ year \* state (KS)
+
+```{r}
+model_fit <- glm(n_wells_buffer_1km ~ year,
+                 data = subset(wells_wildfire_state_year, state == "KS"))
+summary(model_fit)
+```
+
+Positive time trend in KS (p = 0.001)
+
+### Model. Wells in burn area \~ year \* state (NM)
+
+```{r}
+model_fit <- glm(n_wells_buffer_1km ~ year,
+                 data = subset(wells_wildfire_state_year, state == "NM"))
+summary(model_fit)
+```
+
+No time trend in NM
+
+### Model. Wells in burn area \~ year \* state (WY)
+
+```{r}
+model_fit <- glm(n_wells_buffer_1km ~ year,
+                 data = subset(wells_wildfire_state_year, state == "WY"))
+summary(model_fit)
+```
+
+Positive trend but not statistically significant in WY

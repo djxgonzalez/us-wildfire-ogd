@@ -7,6 +7,10 @@
         {
             "columnIndex": 4,
             "ascending": false
+        },
+        {
+            "columnIndex": 3,
+            "ascending": false
         }
     ],
     "path": "~/Documents/Professional/research/projects active/us wildfire ogd/us-wildfire-ogd/code/4-communication"

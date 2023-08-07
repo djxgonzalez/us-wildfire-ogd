@@ -1,0 +1,226 @@
+---
+title: "Results - Wells by state and wildfire-year (primary analysis)"
+output:
+  html_notebook:
+    theme: flatly
+    highlight: haddock 
+    toc: yes
+    toc_depth: 3
+    toc_float: yes
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo=FALSE)
+source("../../code/0-setup/01-setup.R")
+```
+
+```{r data_input, include=FALSE}
+pop_exposed_state_year <- 
+  read_csv("../../data/processed/pop_exposed_state_year.csv")
+```
+
+# Description
+
+These analyses are for the assessments of the population exposed to wells in wildfire burn areas by state and year (1984-2029). For purposes of this analysis, we defined exposure as residing within 1 km of a well that was located in a wildfire burn area.
+
+# Aggregated results for all states
+
+## Population exposed to wells in wildfire burn areas
+
+### Summary of population exposed by year
+
+```{r include=TRUE}
+d <- pop_exposed_state_year %>% 
+  group_by(year) %>% 
+  summarize(pop_exposed_n = sum(pop_exposed_n))
+summary(d$pop_exposed_n)
+print(paste0("SD = ", round(sd(d$pop_exposed_n), digits = 1)))
+```
+
+### Total population exposed by decade
+
+-   1984-1989: **`r d <- pop_exposed_state_year %>% filter(year %in% c(1984:1989)) %>% select(pop_exposed_n) %>% sum(); round(d, digits = 0)`**
+-   1990-1999: **`r d <- d <- pop_exposed_state_year %>% filter(year %in% c(1990:1999)) %>% select(pop_exposed_n) %>% sum(); round(d, digits = 0)`**
+-   2000-2009: **`r pop_exposed_state_year %>% filter(year %in% c(2000:2009)) %>% select(pop_exposed_n) %>% sum(); round(d, digits = 0)`**
+-   2010-2019: **`r d <- pop_exposed_state_year %>% filter(year %in% c(2010:2019)) %>% select(pop_exposed_n) %>% sum(); round(d, digits = 0)`**
+
+### Average annual population exposed by decade
+
+-   1984-1989: **`r d <- pop_exposed_state_year %>% filter(year %in% c(1984:1989)) %>% select(pop_exposed_n) %>% sum() / 6; round(d, digits = 1)` ± `r d <- pop_exposed_state_year %>% filter(year %in% c(1984:1989)) %>% select(pop_exposed_n); round(sd(d$pop_exposed_n), digits = 1)`**  
+-   1984-1993: **`r d <- pop_exposed_state_year %>% filter(year %in% c(1984:1993)) %>% select(pop_exposed_n) %>% sum() / 6; round(d, digits = 1)` ± `r d <- pop_exposed_state_year %>% filter(year %in% c(1984:1993)) %>% select(pop_exposed_n); round(sd(d$pop_exposed_n), digits = 1)`**  
+-   1990-1999: **`r d <- pop_exposed_state_year %>% filter(year %in% c(1990:1999)) %>% select(pop_exposed_n) %>% sum() / 10; round(d, digits = 1)` ± `r d <- pop_exposed_state_year %>% filter(year %in% c(1990:1999)) %>% select(pop_exposed_n); round(sd(d$pop_exposed_n), digits = 1)`**
+-   2000-2009: **`r d <- pop_exposed_state_year %>% filter(year %in% c(2000:2009)) %>% select(pop_exposed_n) %>% sum() / 10; round(d, digits = 1)` ± `r d <- pop_exposed_state_year %>% filter(year %in% c(2000:2009)) %>% select(pop_exposed_n); round(sd(d$pop_exposed_n), digits = 1)`**
+-   2010-2019: **`r d <- pop_exposed_state_year %>% filter(year %in% c(2010:2019)) %>% select(pop_exposed_n) %>% sum() / 10; round(d, digits = 1)` ± `r d <- pop_exposed_state_year %>% filter(year %in% c(2010:2019)) %>% select(pop_exposed_n); round(sd(d$pop_exposed_n), digits = 1)`**
+
+### Plot. Population exposed by year
+
+```{r echo=FALSE}
+pop_exposed_state_year %>% 
+  group_by(year) %>% 
+  summarize(n = sum(pop_exposed_n)) %>% 
+  ggplot() +
+  geom_bar(aes(year, n), stat = "identity") +
+  labs(x = "Year", y = "Population exposed (n)") +
+  theme_classic()
+```
+
+### Table. Population exposed by year
+
+```{r}
+d <- pop_exposed_state_year %>% 
+  group_by(year) %>% 
+  summarize(n = round(sum(pop_exposed_n), digits = 0))
+write_csv(d, "../../output/results/pop_exposed_state_year.csv")
+d
+```
+
+### Plot. Population exposed by year with best fit line
+
+Blue line is linear model; black line is cubic polynomial model
+
+```{r echo=FALSE}
+pop_exposed_state_year %>% 
+  group_by(year) %>% 
+  summarize(n = sum(pop_exposed_n)) %>% 
+  ggplot(aes(year, n)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "blue") +
+  geom_smooth(method = "lm", color = "black", formula = y ~ poly(x, 3)) +
+  labs(x = "Year", y = "Population exposed (n)") +
+  theme_classic()
+```
+
+### Model. Population exposed in burn area by state-year
+
+```{r}
+model_fit <- glm(pop_exposed_n ~ year + factor(state),
+                 data = pop_exposed_state_year)
+summary(model_fit)
+```
+
+In a linear model adjusted for state, the exposed population increased significantly throughout the study period (p \< 0.005).
+
+# Results stratified by state
+
+## Population exposed by state
+
+### Table. Population exposed by state
+
+```{r echo=FALSE}
+pop_exposed_state_year %>% 
+  group_by(state) %>% 
+  summarize(pop_exposed_n_by_state = round(sum(pop_exposed_n), digits = 0)) %>% 
+  arrange(desc(pop_exposed_n_by_state))
+```
+
+### Plot. Population exposed by state
+
+```{r echo=FALSE}
+pop_exposed_state_year %>% 
+  group_by(state) %>% 
+  summarize(n = sum(pop_exposed_n)) %>% 
+  ggplot() +
+  geom_bar(aes(state, n), stat = "identity") +
+  labs(x = "State", y = "Population exposed (n)") +
+  theme_classic()
+```
+
+### Table. Population exposed by state and year
+
+```{r}
+pop_exposed_state_year %>% 
+  group_by(state, year) %>% 
+  summarize(n = round(sum(pop_exposed_n), digits = 0))
+```
+
+### Plot. Population exposed by state and year
+
+```{r echo=FALSE}
+pop_exposed_state_year %>% 
+  group_by(state, year) %>% 
+  summarize(n = sum(pop_exposed_n)) %>% 
+  ggplot() +
+  geom_bar(aes(year, n), stat = "identity") +
+  labs(x = "Year", y = "Population exposed (n)") +
+  facet_wrap(. ~ state) +
+  theme_classic()
+```
+
+### Plot. Population exposed by year with best fit line
+
+```{r echo=FALSE}
+pop_exposed_state_year %>% 
+  group_by(state, year) %>% 
+  summarize(n = sum(pop_exposed_n)) %>% 
+  ggplot(aes(year, n)) +
+  geom_point() +
+  geom_smooth(method = "lm", color = "blue") +
+  labs(x = "Year", y = "Population exposed (n)") +
+  facet_wrap(. ~ state) +
+  theme_classic()
+```
+
+## Investigating time trends by state
+
+Fit OLS linear regression models to look at the association between n wells in burn areas and time (in years). Some notable heterogeneity among the three states with the most wells in burn areas.
+
+### Model. Population exposed by year and state (CA)
+
+```{r}
+model_fit <- glm(pop_exposed_n ~ year,
+                 data = subset(pop_exposed_state_year, state == "CA"))
+summary(model_fit)
+```
+
+Weak association between advancing time and population exposed in California (p = 0.095)
+
+### Model. Population exposed by year and state (OK)
+
+```{r}
+model_fit <- glm(pop_exposed_n ~ year,
+                 data = subset(pop_exposed_state_year, state == "OK"))
+summary(model_fit)
+```
+
+Increasing population exposure in Oklahoma (p \< 0.01).
+
+### Model. Population exposed by year and state (TX)
+
+```{r}
+model_fit <- glm(pop_exposed_n ~ year,
+                 data = subset(pop_exposed_state_year, state == "TX"))
+summary(model_fit)
+```
+
+Weak association between advancing time and population exposed in Texas (p = 0.077)
+
+### Model. Population exposed by year and state (KS)
+
+```{r}
+model_fit <- glm(pop_exposed_n ~ year,
+                 data = subset(pop_exposed_state_year, state == "KS"))
+summary(model_fit)
+```
+
+Positive time trend in KS (p = 0.001)
+
+### Model. Population exposed by year and state (NM)
+
+```{r}
+model_fit <- glm(pop_exposed_n ~ year,
+                 data = subset(pop_exposed_state_year, state == "NM"))
+summary(model_fit)
+```
+
+No time trend in NM
+
+### Model. Population exposed by year and state (AR)
+
+```{r}
+model_fit <- glm(pop_exposed_n ~ year,
+                 data = subset(pop_exposed_state_year, state == "AR"))
+summary(model_fit)
+```
+
+No time trend in AR

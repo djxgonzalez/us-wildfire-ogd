@@ -1,0 +1,410 @@
+---
+title: "Results: Wildfires in areas with projected wildfire risk"
+output:
+  html_notebook:
+    theme: flatly
+    highlight: haddock 
+    toc: yes
+    toc_depth: 2
+    toc_float: yes
+    number_sections: true
+---
+
+```{r setup, include=FALSE}
+# loads necessary packages and defines global variables
+source("../../code/0-setup/01-setup.R")
+library("viridis")
+```
+
+```{r data_input, include=FALSE}
+wells_kbdi <- readRDS("../../data/processed/wells_kbdi.rds")
+#study_region_sf <- readRDS("../../data/interim/study_region_sf.rds")
+us_states_west <- st_read("../../data/raw/us_census/tl_2018_us_state.shp") %>% 
+  filter(STUSPS %in% c("OR", "CA", "NV", "AZ", "MT", "WY", "UT", "CO", "NM",
+                       "ND","SD", "NE", "KS", "OK", "TX", "MO", "AR", "LA")) %>%
+  st_geometry() %>%
+  st_transform(crs_albers)
+kbdi_max_2017_sf <- readRDS("../../data/interim/kbdi_rasters/kbdi_max_2017.rds") %>% 
+  as_tibble() %>%
+  st_as_sf(coords = c("x", "y"), crs = crs_nad83) %>% 
+  st_transform(crs_albers) %>% 
+  st_intersection(us_states_west)
+kbdi_max_2050_sf <- readRDS("../../data/interim/kbdi_rasters/kbdi_max_2050.rds") %>% 
+  as_tibble() %>%
+  st_as_sf(coords = c("x", "y"), crs = crs_nad83) %>% 
+  st_transform(crs_albers) %>% 
+  st_intersection(us_states_west)
+kbdi_max_2090_sf <- readRDS("../../data/interim/kbdi_rasters/kbdi_max_2090.rds") %>% 
+  as_tibble() %>%
+  st_as_sf(coords = c("x", "y"), crs = crs_nad83) %>% 
+  st_transform(crs_albers) %>% 
+  st_intersection(us_states_west)
+```
+
+
+# Extreme wildfire risk: KBDI ≥ 600
+
+## Descriptive statistics, aggregate
+
+N wells in high wildfire risk areas (i.e., areas with KBDI ≥ 600):
+
+- 2017: `r wells_kbdi %>% filter(kbdi_max_2017 >= 600) %>% nrow`
+- 2050: `r wells_kbdi %>% filter(kbdi_max_2050 >= 600) %>% nrow`
+- 2090: `r wells_kbdi %>% filter(kbdi_max_2090 >= 600) %>% nrow`
+
+N wells in high wildfire risk areas (i.e., areas with KBDI ≥ 600) *and* on federal lands:
+
+- 2017: `r wells_kbdi %>% filter(well_on_federal_land == 1) %>% filter(kbdi_max_2017 >= 600) %>% nrow`
+- 2050: `r wells_kbdi %>% filter(well_on_federal_land == 1) %>% filter(kbdi_max_2050 >= 600) %>% nrow`
+- 2090: `r wells_kbdi %>% filter(well_on_federal_land == 1) %>% filter(kbdi_max_2090 >= 600) %>% nrow`
+
+
+## Results, 2017 wildfire risk
+
+**Plot. KBDI in study region**
+
+```{r echo=FALSE}
+ggplot() +
+  geom_sf(data = kbdi_max_2017_sf, aes(color = kbdi_max_2017)) +
+  scale_color_viridis(option = "B") +
+  geom_sf(data = us_states_west, color = "white", fill = NA) +
+  labs(color = "KBDI") +
+  theme_minimal()
+```
+
+
+**Plot. Wells in high wildfire risk areas by state**
+
+```{r echo=FALSE}
+wells_kbdi %>% 
+  filter(kbdi_max_2017 >= 600) %>% 
+  group_by(state) %>% 
+  summarize(n = n()) %>% 
+  ggplot() +
+  geom_bar(aes(state, n), stat = "identity") +
+  theme_classic()
+```
+
+**Table. Wells in high wildfire risk areas by state**
+
+```{r echo=FALSE}
+wells_kbdi %>% 
+  filter(kbdi_max_2017 >= 600) %>% 
+  group_by(state) %>% 
+  summarize(n = n()) #%>% 
+  #arrange(desc(n))
+```
+
+**Table. Wells in high wildfire risk areas by county**
+
+```{r echo=FALSE}
+wells_kbdi %>% 
+  filter(kbdi_max_2017 >= 600) %>% 
+  group_by(county_parish) %>% 
+  summarize(n = n()) %>% 
+  arrange(desc(n))
+```
+
+**Table. Wells in high wildfire risk areas by operator**
+
+```{r echo=FALSE}
+wells_kbdi %>% 
+  filter(kbdi_max_2017 >= 600) %>% 
+  group_by(operator) %>% 
+  summarize(n = n()) %>% 
+  arrange(desc(n))
+```
+
+
+## Results, 2050 wildfire risk
+
+**Plot. KBDI in study region**
+
+```{r echo=FALSE}
+ggplot() +
+  geom_sf(data = kbdi_max_2050_sf, aes(color = kbdi_max_2050)) +
+  scale_color_viridis(option = "B") +
+  geom_sf(data = us_states_west, color = "white", fill = NA) +
+  labs(color = "KBDI") +
+  theme_minimal()
+```
+
+**Plot. Wells in high wildfire risk areas by state**
+
+```{r echo=FALSE}
+wells_kbdi %>% 
+  filter(kbdi_max_2050 >= 600) %>% 
+  group_by(state) %>% 
+  summarize(n = n()) %>% 
+  ggplot() +
+  geom_bar(aes(state, n), stat = "identity") +
+  theme_classic()
+```
+
+**Table. Wells in high wildfire risk areas by state**
+
+```{r echo=FALSE}
+wells_kbdi %>% 
+  filter(kbdi_max_2050 >= 600) %>% 
+  group_by(state) %>% 
+  summarize(n = n()) %>% 
+  arrange(desc(n))
+```
+
+**Table. Wells in high wildfire risk areas by county**
+
+```{r echo=FALSE}
+wells_kbdi %>% 
+  filter(kbdi_max_2050 >= 600) %>% 
+  group_by(county_parish) %>% 
+  summarize(n = n()) %>% 
+  arrange(desc(n))
+```
+
+**Table. Wells in high wildfire risk areas by operator**
+
+```{r echo=FALSE}
+wells_kbdi %>% 
+  filter(kbdi_max_2050 >= 600) %>% 
+  group_by(operator) %>% 
+  summarize(n = n()) %>% 
+  arrange(desc(n))
+```
+
+
+## Results, 2090 wildfire risk
+
+**Plot. KBDI in study region**
+
+```{r echo=FALSE}
+ggplot() +
+  geom_sf(data = kbdi_max_2090_sf, aes(color = kbdi_max_2090)) +
+  scale_color_viridis(option = "B") +
+  geom_sf(data = us_states_west, color = "white", fill = NA) +
+  labs(color = "KBDI") +
+  theme_minimal()
+```
+
+**Plot. Wells in high wildfire risk areas by state**
+
+```{r echo=FALSE}
+wells_kbdi %>% 
+  filter(kbdi_max_2090 >= 600) %>% 
+  group_by(state) %>% 
+  summarize(n = n()) %>% 
+  ggplot() +
+  geom_bar(aes(state, n), stat = "identity") +
+  theme_classic()
+```
+
+**Table. Wells in high wildfire risk areas by state**
+
+```{r echo=FALSE}
+wells_kbdi %>% 
+  filter(kbdi_max_2090 >= 600) %>% 
+  group_by(state) %>% 
+  summarize(n = n()) #%>% 
+  #arrange(desc(n))
+```
+
+**Table. Wells in high wildfire risk areas by county**
+
+```{r echo=FALSE}
+wells_kbdi %>% 
+  filter(kbdi_max_2090 >= 600) %>% 
+  group_by(county_parish) %>% 
+  summarize(n = n()) %>% 
+  arrange(desc(n))
+```
+
+**Table. Wells in high wildfire risk areas by operator**
+
+```{r echo=FALSE}
+wells_kbdi %>% 
+  filter(kbdi_max_2090 >= 600) %>% 
+  group_by(operator) %>% 
+  summarize(n = n()) %>% 
+  arrange(desc(n))
+```
+
+# Moderately high wildfire risk: KBDI ≥ 450
+
+## Descriptive statistics, aggregate
+
+N wells in high wildfire risk areas (i.e., areas with KBDI ≥ 450):
+
+- 2017: `r wells_kbdi %>% filter(kbdi_max_2017 >= 450) %>% nrow`
+- 2050: `r wells_kbdi %>% filter(kbdi_max_2050 >= 450) %>% nrow`
+- 2090: `r wells_kbdi %>% filter(kbdi_max_2090 >= 450) %>% nrow`
+
+N wells in high wildfire risk areas (i.e., areas with KBDI ≥ 450) *and* located on federal lands:
+
+- 2017: `r wells_kbdi %>% filter(well_on_federal_land == 1) %>% filter(kbdi_max_2017 >= 450) %>% nrow`
+- 2050: `r wells_kbdi %>% filter(well_on_federal_land == 1) %>% filter(kbdi_max_2050 >= 450) %>% nrow`
+- 2090: `r wells_kbdi %>% filter(well_on_federal_land == 1) %>% filter(kbdi_max_2090 >= 450) %>% nrow`
+
+## Results, 2017 wildfire risk
+
+**Plot. KBDI in study region**
+
+```{r echo=FALSE}
+ggplot() +
+  geom_sf(data = kbdi_max_2017_sf, aes(color = kbdi_max_2017)) +
+  scale_color_viridis(option = "B") +
+  geom_sf(data = us_states_west, color = "white", fill = NA) +
+  labs(color = "KBDI") +
+  theme_minimal()
+```
+
+**Plot. Wells in high wildfire risk areas by state**
+
+```{r echo=FALSE}
+wells_kbdi %>% 
+  filter(kbdi_max_2017 >= 450) %>% 
+  group_by(state) %>% 
+  summarize(n = n()) %>% 
+  ggplot() +
+  geom_bar(aes(state, n), stat = "identity") +
+  theme_classic()
+```
+
+**Table. Wells in high wildfire risk areas by state**
+
+```{r echo=FALSE}
+wells_kbdi %>% 
+  filter(kbdi_max_2017 >= 450) %>% 
+  group_by(state) %>% 
+  summarize(n = n()) #%>% 
+  #arrange(desc(n))
+```
+
+**Table. Wells in high wildfire risk areas by county**
+
+```{r echo=FALSE}
+wells_kbdi %>% 
+  filter(kbdi_max_2017 >= 450) %>% 
+  group_by(county_parish) %>% 
+  summarize(n = n()) %>% 
+  arrange(desc(n))
+```
+
+**Table. Wells in high wildfire risk areas by operator**
+
+```{r echo=FALSE}
+wells_kbdi %>% 
+  filter(kbdi_max_2017 >= 450) %>% 
+  group_by(operator) %>% 
+  summarize(n = n()) %>% 
+  arrange(desc(n))
+```
+
+## Results, 2050 wildfire risk
+
+**Plot. KBDI in study region**
+
+```{r echo=FALSE}
+ggplot() +
+  geom_sf(data = kbdi_max_2050_sf, aes(color = kbdi_max_2050)) +
+  scale_color_viridis(option = "B") +
+  geom_sf(data = us_states_west, color = "white", fill = NA) +
+  labs(color = "KBDI") +
+  theme_minimal()
+```
+
+**Plot. Wells in high wildfire risk areas by state**
+
+```{r echo=FALSE}
+wells_kbdi %>% 
+  filter(kbdi_max_2050 >= 450) %>% 
+  group_by(state) %>% 
+  summarize(n = n()) %>% 
+  ggplot() +
+  geom_bar(aes(state, n), stat = "identity") +
+  theme_classic()
+```
+
+**Table. Wells in high wildfire risk areas by state**
+
+```{r echo=FALSE}
+wells_kbdi %>% 
+  filter(kbdi_max_2050 >= 450) %>% 
+  group_by(state) %>% 
+  summarize(n = n()) %>% 
+  arrange(desc(n))
+```
+
+**Table. Wells in high wildfire risk areas by county**
+
+```{r echo=FALSE}
+wells_kbdi %>% 
+  filter(kbdi_max_2050 >= 450) %>% 
+  group_by(county_parish) %>% 
+  summarize(n = n()) %>% 
+  arrange(desc(n))
+```
+
+**Table. Wells in high wildfire risk areas by operator**
+
+```{r echo=FALSE}
+wells_kbdi %>% 
+  filter(kbdi_max_2050 >= 450) %>% 
+  group_by(operator) %>% 
+  summarize(n = n()) %>% 
+  arrange(desc(n))
+```
+
+
+## Results, 2090 wildfire risk
+
+**Plot. KBDI in study region**
+
+```{r echo=FALSE}
+ggplot() +
+  geom_sf(data = kbdi_max_2090_sf, aes(color = kbdi_max_2090)) +
+  scale_color_viridis(option = "B") +
+  geom_sf(data = us_states_west, color = "white", fill = NA) +
+  labs(color = "KBDI") +
+  theme_minimal()
+```
+**Plot. Wells in high wildfire risk areas by state**
+
+```{r echo=FALSE}
+wells_kbdi %>% 
+  filter(kbdi_max_2090 >= 450) %>% 
+  group_by(state) %>% 
+  summarize(n = n()) %>% 
+  ggplot() +
+  geom_bar(aes(state, n), stat = "identity") +
+  theme_classic()
+```
+
+**Table. Wells in high wildfire risk areas by state**
+
+```{r echo=FALSE}
+wells_kbdi %>% 
+  filter(kbdi_max_2090 >= 450) %>% 
+  group_by(state) %>% 
+  summarize(n = n()) %>% 
+  arrange(desc(n))
+```
+
+**Table. Wells in high wildfire risk areas by county**
+
+```{r echo=FALSE}
+wells_kbdi %>% 
+  filter(kbdi_max_2090 >= 450) %>% 
+  group_by(county_parish) %>% 
+  summarize(n = n()) %>% 
+  arrange(desc(n))
+```
+
+**Table. Wells in high wildfire risk areas by operator**
+
+```{r echo=FALSE}
+wells_kbdi %>% 
+  filter(kbdi_max_2090 >= 450) %>% 
+  group_by(operator) %>% 
+  summarize(n = n()) %>% 
+  arrange(desc(n))
+```
+

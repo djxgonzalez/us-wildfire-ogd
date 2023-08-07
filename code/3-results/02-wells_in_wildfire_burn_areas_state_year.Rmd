@@ -42,17 +42,29 @@ sd(d$n_wells)
 
 ### Total wells burned by decade
 
--   1984-1989: **`r wells_wildfire_state_year %>% filter(year %in% c(1984:1989)) %>% select(n_wells) %>% sum()`**
--   1990-1999: **`r wells_wildfire_state_year %>% filter(year %in% c(1990:1999)) %>% select(n_wells) %>% sum()`**
--   2000-2009: **`r wells_wildfire_state_year %>% filter(year %in% c(2000:2009)) %>% select(n_wells) %>% sum()`**
--   2010-2019: **`r wells_wildfire_state_year %>% filter(year %in% c(2010:2019)) %>% select(n_wells) %>% sum()`**
+- 1984-1989: **`r wells_wildfire_state_year %>% filter(year %in% c(1984:1989)) %>% select(n_wells) %>% sum()`**
+- 1990-1999: **`r wells_wildfire_state_year %>% filter(year %in% c(1990:1999)) %>% select(n_wells) %>% sum()`**
+- 2000-2009: **`r wells_wildfire_state_year %>% filter(year %in% c(2000:2009)) %>% select(n_wells) %>% sum()`**
+- 2010-2019: **`r wells_wildfire_state_year %>% filter(year %in% c(2010:2019)) %>% select(n_wells) %>% sum()`**
 
 ### Average annual wells burned by decade
 
--   1984-1989: **`r wells_wildfire_state_year %>% filter(year %in% c(1984:1989)) %>% select(n_wells) %>% sum() / 6`**
--   1990-1999: **`r wells_wildfire_state_year %>% filter(year %in% c(1990:1999)) %>% select(n_wells) %>% sum() / 10`**
--   2000-2009: **`r wells_wildfire_state_year %>% filter(year %in% c(2000:2009)) %>% select(n_wells) %>% sum() / 10`**
--   2010-2019: **`r wells_wildfire_state_year %>% filter(year %in% c(2010:2019)) %>% select(n_wells) %>% sum() / 10`**
+- 1984-1989: **`r wells_wildfire_state_year %>% filter(year %in% c(1984:1989)) %>% select(n_wells) %>% sum() / 6` ± `r d <- wells_wildfire_state_year %>% filter(year %in% c(1984:1989)) %>% select(n_wells); round(sd(d$n_wells), digits = 1)`**
+- 1984-1993: **`r wells_wildfire_state_year %>% filter(year %in% c(1984:1993)) %>% select(n_wells) %>% sum() / 6` ± `r d <- wells_wildfire_state_year %>% filter(year %in% c(1984:1993)) %>% select(n_wells); round(sd(d$n_wells), digits = 1)`**
+- 1990-1999: **`r wells_wildfire_state_year %>% filter(year %in% c(1990:1999)) %>% select(n_wells) %>% sum() / 10` ± `r d <- wells_wildfire_state_year %>% filter(year %in% c(1990:1999)) %>% select(n_wells); round(sd(d$n_wells), digits = 1)`**
+- 2000-2009: **`r wells_wildfire_state_year %>% filter(year %in% c(2000:2009)) %>% select(n_wells) %>% sum() / 10` ± `r d <- wells_wildfire_state_year %>% filter(year %in% c(2000:2009)) %>% select(n_wells); round(sd(d$n_wells), digits = 1)`**
+- 2010-2019: **`r wells_wildfire_state_year %>% filter(year %in% c(2010:2019)) %>% select(n_wells) %>% sum() / 10` ± `r d <- wells_wildfire_state_year %>% filter(year %in% c(2010:2019)) %>% select(n_wells); round(sd(d$n_wells), digits = 1)`**
+
+### Table. Wells in wildfire burn areas by state
+
+```{r}
+d <- wells_wildfire_state_year %>% 
+  filter(year %in% c(1984:2020)) %>% 
+  group_by(state) %>% 
+  summarize(n = sum(n_wells),
+            n_wells_buffer_1km = sum(n_wells_buffer_1km))
+d
+```
 
 ### Table. Wells in wildfire burn areas by year
 
@@ -91,6 +103,14 @@ wells_wildfire_state_year %>%
   geom_smooth(method = "lm", color = "blue", formula = y ~ poly(x, 2)) +
   labs(x = "Year", y = "Wells (n)") +
   theme_classic()
+```
+
+### Model. Wells in burn area \~ year
+
+```{r}
+model_fit <- glm(n_wells ~ year,
+                 data = wells_wildfire_state_year)
+summary(model_fit)
 ```
 
 ### Model. Wells in burn area \~ year \* state

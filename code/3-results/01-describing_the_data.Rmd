@@ -16,9 +16,9 @@ library("lubridate")
 ```
 
 ```{r data_input, include=FALSE}
-wells_all     <- readRDS("../../data/processed/wells_all.rds") %>% 
-  filter(year(date_latest) <= 2019)
-wildfires_all <- readRDS("../../data/processed/wildfires_all.rds") %>% 
+wells_all <- readRDS("../../data/interim/wells_all.rds") %>% 
+  filter(year(date_latest) <= 2019 | is.na(date_latest))
+wildfires_all <- readRDS("../../data/interim/wildfires_all.rds") %>% 
   filter(year %in% c(1984:2019))
 ```
 
@@ -105,12 +105,5 @@ d <- d %>% mutate(prod_duration = as.numeric(prod_duration)) %>%
 summary(as.numeric(d$prod_duration) / 365.25)
 sd(as.numeric(d$prod_duration) / 365.25)
 ```
-
-### Wells without dates
-
-```{r}
-
-```
-
 
 

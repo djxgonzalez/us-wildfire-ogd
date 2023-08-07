@@ -22,7 +22,7 @@ rus_can <- st_read("data/raw/esri/Countries_WGS84.shp") %>%  # for AK map
   st_geometry() %>%
   st_transform(crs_alaska)
 # Alaska wildfires
-wildfires_ak_union <- readRDS("data/processed/wildfires_all.rds") %>%
+wildfires_ak_union <- readRDS("data/interim/wildfires_all.rds") %>%
   filter(state == "AK") %>%
   st_as_sf() %>%  
   st_transform(crs_alaska) %>%  # note distinct CRS: NAD83/Alaska Albers
@@ -38,16 +38,16 @@ wells_ak_buffer_1km <-
 
 # makes figure
 figure_1a_inset <- ggplot() +
-  geom_sf(data = rus_can,      color = NA, fill = "#D4D4D4", alpha = 0.8) +
-  geom_sf(data = us_states_ak, color = NA, fill = "#E5E5E5", alpha = 0.7) +
+  geom_sf(data = rus_can,      color = NA, fill = "#c1c2c7", alpha = 0.8) +
+  geom_sf(data = us_states_ak, color = NA, fill = "#dedfe4", alpha = 0.7) +
   geom_sf(data = wildfires_ak_union, fill = "#e31a1c", color = NA, alpha = 0.7) +
   geom_sf(data = us_states_ak, color = "white", fill = NA, lwd = 0.3) +
   geom_sf(data = wells_ak_buffer_1km, fill = "black", color = NA, alpha = 0.7) +
   xlim(-1100000, 1240000) + ylim(500000, 2300000) +
   labs(x = "", y = "") +
   theme_void() +  
-  theme(panel.background = element_rect(fill  = "#e9f5f8"),
-        panel.grid       = element_line(color = "#e9f5f8"),
+  theme(panel.background = element_rect(fill  = "#d6ecf3"),
+        panel.grid       = element_line(color = "#d6ecf3"),
         legend.position = "none")
 # export
 ggsave(filename = "figure_1a_inset.png", plot = figure_1a_inset, device = "png",

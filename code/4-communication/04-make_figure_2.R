@@ -1,178 +1,140 @@
 ##============================================================================##
-## 4.06 -  makes Figure 2 plots the top four wildfires with the most oil and gas 
-## wells drilled before the fire year, including wells without operation dates,
-## presumed to have been drilled before 1984
+## makes Figure 2, showing the primary results for all parts of the analysis:
+## (a) wells in wildfire burn areas by year; (c) people near wells in burn areas,
+## and wells in areas with projected (b) moderately high and (d) high wildfire 
+## risk currently, in mid,-century, and in late century 
 
 ## setup ---------------------------------------------------------------------
 
-# attaches packages ........................................................
+# attaches necessary packages
 source("code/0-setup/01-setup.R")
-library("ggspatial")
-library("ggmap")
-library("lubridate")
+##### this is for GEOFACET package
+#library("rgeos")  ##### apparently not available for MacOS, try on server
+#library("geofacet")
+library("viridis")
 
-# data input ...............................................................
-wildfires_all <- readRDS("data/interim/wildfires_all.rds")
-wells_all     <- readRDS("data/interim/wells_all.rds")
+# data input
+wells_kbdi <- readRDS("data/processed/wells_kbdi.rds")
+wells_wildfire_state_year <- 
+  read_csv("data/processed/wells_wildfire_state_year.csv")
+pop_exposed_state_year <- 
+  read_csv("data/processed/pop_exposed_state_year.csv")
 
-# data prep ................................................................
 
-# Figure 3a - East Amarillo Complex Fire - T - 2006
-wildfire_a <- wildfires_all %>%  
-  filter(wildfire_id == "TX3551510078020060312") %>%  
-  st_as_sf() %>%
-  st_transform(crs_nad83)
-wildfire_a_buffer_1km <- wildfire_a %>% 
-  st_buffer(dist = 1000) %>%
-  st_difference(wildfire_a)
-wildfire_a_buffer_40km <- wildfire_a %>% 
-  st_buffer(dist = 40000) %>% 
-  st_difference(wildfire_a)
-wells_a <- wells_all %>% 
-  filter(state == "TX") %>% 
-  filter(year(date_earliest) <= wildfire_a$year | is.na(date_earliest)) %>% 
-  st_transform(crs_nad83) %>% 
-  st_intersection(wildfire_a)
-wells_a_buffer <- wells_all %>%
-  filter(state == "TX") %>% 
-  filter(year(date_earliest) <= wildfire_a$year | is.na(date_earliest)) %>%  
-  st_transform(crs_nad83) %>% 
-  st_intersection(wildfire_a_buffer_40km)
+## retrospective assessments - panels a, b -----------------------------------
 
-# Figure 3b - Loco-Healdton Fire - OK - 2009
-wildfire_b <- wildfires_all %>%  
-  filter(wildfire_id == "OK3431309744020090409") %>%  
-  st_as_sf() %>% 
-  st_transform(crs_nad83)
-wildfire_b_buffer_1km <- wildfire_b %>% 
-  st_buffer(dist = 1000) %>%
-  st_difference(wildfire_b)
-wildfire_b_buffer_30km <- wildfire_b %>% 
-  st_buffer(dist = 30000) %>% 
-  st_difference(wildfire_b)
-wells_b <- wells_all %>% 
-  filter(state == "OK") %>% 
-  filter(year(date_earliest) <= wildfire_b$year | is.na(date_earliest)) %>% 
-  st_transform(crs_nad83) %>% 
-  st_intersection(wildfire_b)
-wells_b_buffer <- wells_all %>%
-  filter(state == "OK") %>% 
-  filter(year(date_earliest) <= wildfire_b$year | is.na(date_earliest)) %>%  
-  st_transform(crs_nad83) %>% 
-  st_intersection(wildfire_b_buffer_30km)
+# figure 2a ................................................................
+# count of oil and gas wells in wildfire burn areas by year
+figure_2a <- wells_wildfire_state_year %>% 
+  filter(year %in% c(1984:2019)) %>% 
+  group_by(year) %>% 
+  summarize(n_wells = sum(n_wells)) %>% 
+  ggplot(aes(year, n_wells))  +
+  geom_vline(aes(xintercept = 1990), lwd = 0.2, color = "gray") +
+  geom_vline(aes(xintercept = 2000), lwd = 0.2, color = "gray") +
+  geom_vline(aes(xintercept = 2010), lwd = 0.2, color = "gray") +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE,
+              color = "black", lwd = 0.3, linetype = "longdash", alpha = 0.3) +
+  geom_point(size = 0.6) + 
+  labs(x = "", y = "") + 
+  theme_classic() +
+  theme(axis.line.x  = element_blank(),  # removes x-axis
+        axis.ticks.x = element_blank(),
+        axis.text.x  = element_blank(),
+        axis.text.y  = element_blank(),
+        legend.position = "none")
+# exports figures
+ggsave(filename = "figure_2a.png", plot = figure_2a, device = "png",
+       height = 2.2, width = 4, path = "output/figures/components/")
 
-# Figure 3c - Thomas Fire - CA - 2017
-wildfire_c <- wildfires_all %>%  
-  filter(wildfire_id == "CA3442911910020171205") %>%  
-  st_as_sf() %>% 
-  st_transform(crs_nad83)
-wildfire_c_buffer_1km <- wildfire_c %>% 
-  st_buffer(dist = 1000) %>%
-  st_difference(wildfire_c)
-wildfire_c_buffer_30km <- wildfire_c %>% 
-  st_buffer(dist = 30000) %>% 
-  st_difference(wildfire_c)
-wells_c <- wells_all %>% 
-  filter(state == "CA") %>% 
-  filter(year(date_earliest) <= wildfire_c$year | is.na(date_earliest)) %>% 
-  st_transform(crs_nad83) %>% 
-  st_intersection(wildfire_c)
-wells_c_buffer <- wells_all %>%
-  filter(state == "CA") %>% 
-  filter(year(date_earliest) <= wildfire_c$year | is.na(date_earliest)) %>%  
-  st_transform(crs_nad83) %>% 
-  st_intersection(wildfire_c_buffer_30km)
+# figure 2b ................................................................
+# estimated total U.S. population within 1 km of oil and gas wells that were in 
+# wildfire burn areas by year
+figure_2b <- pop_exposed_state_year %>% 
+  group_by(year) %>% 
+  summarize(pop_exposed_n = sum(pop_exposed_n)) %>% 
+  ggplot(aes(year, pop_exposed_n))  +
+  geom_vline(aes(xintercept = 1990), lwd = 0.2, color = "gray") +
+  geom_vline(aes(xintercept = 2000), lwd = 0.2, color = "gray") +
+  geom_vline(aes(xintercept = 2010), lwd = 0.2, color = "gray") +
+  geom_smooth(method = "lm", formula = y ~ x, se = FALSE,
+              color = "black", lwd = 0.3, linetype = "longdash", alpha = 0.3) +
+  geom_point(size = 0.6) + 
+  labs(x = "", y = "") +
+  theme_classic() +
+  theme(axis.text.x  = element_blank(),
+        axis.text.y  = element_blank(),
+        legend.position = "none")
+# exports figures
+ggsave(filename = "figure_2b.png", plot = figure_2b, device = "png",
+       height = 2.4, width = 4, path = "output/figures/components/")
 
-# Figure 3d - Simi Fire - CA - 2003
-wildfire_d <- wildfires_all %>%  
-  filter(wildfire_id == "CA3433511879220031025") %>%  
-  st_as_sf() %>% 
-  st_transform(crs_nad83)
-wildfire_d_buffer_1km <- wildfire_d %>% 
-  st_buffer(dist = 1000) %>%
-  st_difference(wildfire_d)
-wildfire_d_buffer_30km <- wildfire_d %>% 
-  st_buffer(dist = 30000) %>% 
-  st_difference(wildfire_d)
-wells_d <- wells_all %>% 
-  filter(state == "CA") %>% 
-  filter(year(date_earliest) <= wildfire_d$year | is.na(date_earliest)) %>% 
-  st_transform(crs_nad83) %>% 
-  st_intersection(wildfire_d)
-wells_d_buffer <- wells_all %>%
-  filter(state == "CA") %>% 
-  filter(year(date_earliest) <= wildfire_d$year | is.na(date_earliest)) %>%  
-  st_transform(crs_nad83) %>% 
-  st_intersection(wildfire_d_buffer_30km)
 
-## generates figure ----------------------------------------------------------
+## prospective assessments - panel c -----------------------------------------
 
-# Figure 3a ................................................................
-# East Amarillo Complex Fire - CA - 2006 - TX3551510078020060312
-figure_3a <- ggplot() +
-  geom_sf(data = wells_a_buffer, shape = 4, size = 2, color = "gray", alpha = 0.2) +
-  geom_sf(data = wildfire_a_buffer_1km, fill = "orange", color = NA, alpha = 0.3) +
-  geom_sf(data = wildfire_a, fill = "red", color = NA, alpha = 0.6) +
-  geom_sf(data = wells_a, shape = 4, size = 2, alpha = 0.2) +
-  geom_sf(data = wildfire_a, fill = NA, color = "red") +
-  annotation_scale(location = "br", width_hint = 0.25) +
-  annotation_north_arrow(location = "tr", which_north = "true",
-                         style = north_arrow_minimal) +
-  xlim(-101.5, -100.2) + ylim(35.0, 36.1) +
-  theme_void() +
-  theme(legend.position = "none",
-        panel.background = element_rect(fill = "white"))
-ggsave(filename = "figure_3a.png", plot = figure_3a, device = "png",
-       height = 6, width = 6, path = "output/figures/components/")
+# figure 2c ................................................................
+# count of oil and gas wells in moderately high wildfire risk areas by period
 
-# Figure 3b ................................................................
-# Loco-Healdton Fire - OK - 2009 - OK3431309744020090409
-figure_3b <- ggplot() +
-  geom_sf(data = wells_b_buffer, shape = 4, size = 2, color = "gray", alpha = 0.2) +
-  geom_sf(data = wildfire_b_buffer_1km, fill = "orange", color = NA, alpha = 0.3) +
-  geom_sf(data = wildfire_b, fill = "red", color = NA, alpha = 0.6) +
-  geom_sf(data = wells_b, shape = 4, size = 2, alpha = 0.2) +
-  geom_sf(data = wildfire_b, fill = NA, color = "red") +
-  annotation_scale(location = "bl", width_hint = 0.25) +
-  xlim(-97.81, -97.25) + ylim(34.1, 34.55) +
-  theme_void() +
-  theme(legend.position = "none",
-        panel.background = element_rect(fill = "white"))
-figure_3b
-ggsave(filename = "figure_3b.png", plot = figure_3b, device = "png",
-       height = 6, width = 6, path = "output/figures/components/")
+# summarizes results to feed into ggplot
+data_3c <- 
+  tibble(period  = c("1996–2004", "2046–2054", "2086–2094",
+                     "1996–2004", "2046–2054", "2086–2094"),
+         kbdi    = c("450", "450", "450", 
+                     "600", "600", "600"),
+         n_wells = c(nrow(subset(wells_kbdi, kbdi_max_2017 >= 450 &
+                                   kbdi_max_2017 < 600)),
+                     nrow(subset(wells_kbdi, kbdi_max_2050 >= 450 &
+                                   kbdi_max_2050 < 600)),
+                     nrow(subset(wells_kbdi, kbdi_max_2090 >= 450 &
+                                   kbdi_max_2090 < 600)),
+                     nrow(subset(wells_kbdi, kbdi_max_2017 >= 600)),
+                     nrow(subset(wells_kbdi, kbdi_max_2050 >= 600)),
+                     nrow(subset(wells_kbdi, kbdi_max_2090 >= 600))))
 
-# Figure 3c ................................................................
-# Thomas Fire - CA - 2017 - CA3442911910020171205
-figure_3c <- ggplot() +
-  geom_sf(data = wells_c_buffer, shape = 4, size = 2, color = "gray", alpha = 0.2) +
-  geom_sf(data = wildfire_c_buffer_1km, fill = "orange", color = NA, alpha = 0.3) +
-  geom_sf(data = wildfire_c, fill = "red", color = NA, alpha = 0.6) +
-  geom_sf(data = wells_c, shape = 4, size = 2, alpha = 0.2) +
-  geom_sf(data = wildfire_c, fill = NA, color = "red") +
-  annotation_scale(location = "tr", width_hint = 0.25) +
-  xlim(-119.8, -118.8) + ylim(34.05, 34.85) +
-  theme_void() +
-  theme(legend.position = "none",
-        panel.background = element_rect(fill = "white"))
-ggsave(filename = "figure_3c.png", plot = figure_3c, device = "png",
-       height = 6, width = 6, path = "output/figures/components/")
+# makes figure
+figure_2c <- data_3c %>% 
+  ggplot()  +
+  geom_bar(aes(period, n_wells, fill = kbdi), 
+           stat = "identity", position = "stack") + 
+  scale_fill_manual(values = c("#AD8ABB", "#ffb3df")) + 
+  labs(x = "", y = "") + 
+  ylim(0, 1200000)  +
+  scale_y_continuous("",
+                     # adds second y-axis with % wells in high risk areas
+                     sec.axis = 
+                       sec_axis(~ . / nrow(wells_kbdi) * 100, name = "")) +
+  theme_classic() +
+  theme(axis.text.y  = element_blank(),
+        legend.position = "none")
+figure_2c
+# exports figures
+ggsave(filename = "figure_2c.png", plot = figure_2c, device = "png",
+       height = 2.4, width = 4, path = "output/figures/components/")
 
-# Figure 3d ................................................................
-# Simi Fire - CA - 2003 - CA3433511879220031025
-figure_3d <- ggplot() +
-  geom_sf(data = wells_d_buffer, shape = 4, size = 2, color = "gray", alpha = 0.2) +
-  geom_sf(data = wildfire_d_buffer_1km, fill = "orange", color = NA, alpha = 0.3) +
-  geom_sf(data = wildfire_d, fill = "red", color = NA, alpha = 0.6) +
-  geom_sf(data = wells_d, shape = 4, size = 2, alpha = 0.2) +
-  geom_sf(data = wildfire_d, fill = NA, color = "red") +
-  annotation_scale(location = "tl", width_hint = 0.25) +
-  xlim(-119.2, -118.5) + ylim(34.05, 34.65) +
-  theme_void() +
-  theme(legend.position = "none",
-        panel.background = element_rect(fill = "white"))
-ggsave(filename = "figure_3d.png", plot = figure_3d, device = "png",
-       height = 6, width = 6, path = "output/figures/components/")
+##============================================================================##
 
+###### same as above but with geofacet --- move to supplemental
+# figure_2a <- wells_wildfire_state_year %>% 
+#   filter(year %in% c(1984:2019)) %>% 
+#   group_by(year) %>% 
+#   summarize(n_wells = sum(n_wells),
+#             state   = state) %>% 
+#   ggplot(aes(year, n_wells))  +
+#   geom_smooth(method = "lm", formula = y ~ x, 
+#               color = "black", lwd = 0.3, linetype = "longdash", alpha = 0.3) +
+#   # geom_smooth(method = "lm", formula = y ~ poly(x, 2), 
+#   #             color = "blue", fill = "blue", lwd = 0.3, alpha = 0.3) +
+#   geom_point(size = 0.6) + 
+#   labs(x = "", y = "") + 
+#   facet_geo(~ state) +
+#   theme_classic() +
+#   theme(axis.line.x  = element_blank(),  # removes x-axis
+#         axis.ticks.x = element_blank(),
+#         axis.text.x  = element_blank(),
+#         axis.text.y  = element_blank(),
+#         legend.position = "none")
+# # exports figures
+# ggsave(filename = "figure_2a.png", plot = figure_2a, device = "png",
+#        height = 2.2, width = 4, path = "output/figures/components/")
 
 ##============================================================================##

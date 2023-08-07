@@ -10,13 +10,20 @@ source("code/1-data_tidying/01-fxn-tidy_wells_data.R")
 
 # data input
 wells_raw    <- read_csv("data/raw/enverus/enverus_wells_us.csv")
+us_states_included <- st_read("data/raw/esri/USA_States_Generalized.shp") %>% 
+  filter(STATE_ABBR %in% 
+           c("AK", "OR", "CA", "NV", "AZ", "MT", "WY", "UT", "CO", 
+             "NM", "ND", "SD", "NE", "KS", "OK", "TX", "MO", "AR", "LA")) %>% 
+  st_geometry() %>%
+  st_transform(crs_albers)
 
 ## tidies and exports data  --------------------------------------------------
 
 # restricts to study region and passes wells through custom tidying function
 wells_all <- wells_raw %>% 
-  filter(State %in% c("AK", "OR", "CA", "NV", "AZ", "MT", "WY", "UT", "CO", 
-                      "NM", "ND", "SD", "NE", "KS", "OK", "TX", "MO", "AR", "LA")) %>% 
+  filter(State %in% 
+           c("AK", "OR", "CA", "NV", "AZ", "MT", "WY", "UT", "CO", 
+             "NM", "ND", "SD", "NE", "KS", "OK", "TX", "MO", "AR", "LA")) %>% 
   tidyWellsData()
 
 # re-attaches factor variables to collapsed date variables and finalizes data
@@ -32,10 +39,16 @@ wells_all2 <- wells_all %>%
   st_as_sf(coords = c("longitude", "latitude"), crs = crs_nad83) %>% 
   st_make_valid()
 
+# intersects wells with boundaries of states in the study region, to exclude
+# offshore wells in coastal states
+wells_all3 <- wells_all2 %>% 
+  st_transform(crs = crs_albers) %>% 
+  st_intersection(us_states_included)
+
 # exports processed data ...................................................
-saveRDS(wells_all2, "data/processed/wells_all.rds")
+saveRDS(wells_all3, "data/interim/wells_all.rds")
 
 # removes datasets we no longer need .......................................
-rm(wells_raw, wells_all, wells_all2)
+rm(wells_raw, wells_all, wells_all2, wells_all3)
 
-##============================================================================##
+w##============================================================================##
