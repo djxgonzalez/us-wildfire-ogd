@@ -130,9 +130,10 @@ wildfires_2019 <-
 makeIntersectionZone <- function(wells_in, year, state_prefix){
   wells_in %>% 
     filter(year(date_earliest) <= year | is.na(date_earliest)) %>% 
-    st_intersection(st_make_valid(
-      eval(parse(text = 
-                   (paste("wildfires_", year, sep = "")))))) %>% 
+    st_intersection(
+      st_make_valid(
+        eval(parse(text = 
+                     (paste("wildfires_", year, sep = "")))))) %>% 
     st_buffer(dist = 1000) %>% 
     st_union() %>% 
     st_make_valid() %>% 

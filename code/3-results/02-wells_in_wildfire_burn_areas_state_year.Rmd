@@ -108,15 +108,15 @@ wells_wildfire_state_year %>%
 ### Model. Wells in burn area \~ year
 
 ```{r}
-model_fit <- glm(n_wells ~ year,
-                 data = wells_wildfire_state_year)
+model_fit <- glm(n_wells ~ year, family = "poisson",
+                data = wells_wildfire_state_year)
 summary(model_fit)
 ```
 
 ### Model. Wells in burn area \~ year \* state
 
 ```{r}
-model_fit <- glm(n_wells ~ year + factor(state),
+model_fit <- glm(n_wells ~ year + factor(state), family = "poisson",
                  data = wells_wildfire_state_year)
 summary(model_fit)
 ```
@@ -155,7 +155,7 @@ wells_wildfire_state_year %>%
 ### Model. Wells within 1km of burn area \~ year \* state
 
 ```{r}
-model_fit <- glm(n_wells_buffer_1km ~ year + factor(state),
+model_fit <- glm(n_wells_buffer_1km ~ year + factor(state), family = "poisson",
                  data = wells_wildfire_state_year)
 summary(model_fit)
 ```
@@ -234,7 +234,7 @@ Fit OLS linear regression models to look at the association between n wells in b
 ### Model. Wells in burn area \~ year \* state (CA)
 
 ```{r}
-model_fit <- glm(n_wells ~ year,
+model_fit <- glm(n_wells ~ year, family = "poisson",
                  data = subset(wells_wildfire_state_year, state == "CA"))
 summary(model_fit)
 ```
@@ -244,7 +244,7 @@ No time trend in California.
 ### Model. Wells in burn area \~ year \* state (OK)
 
 ```{r}
-model_fit <- glm(n_wells ~ year,
+model_fit <- glm(n_wells ~ year, family = "poisson",
                  data = subset(wells_wildfire_state_year, state == "OK"))
 summary(model_fit)
 ```
@@ -254,17 +254,17 @@ Increasing number of wells in burn areas in Oklahoma (p \< 0.01).
 ### Model. Wells in burn area \~ year \* state (TX)
 
 ```{r}
-model_fit <- glm(n_wells ~ year,
+model_fit <- glm(n_wells ~ year, family = "poisson",
                  data = subset(wells_wildfire_state_year, state == "TX"))
 summary(model_fit)
 ```
 
-Trend of increasing number of wells in burn areas in Texas, not statistically significant (p = 0.13).
+Trend of increasing number of wells in burn areas in Texas, statistically significant.
 
 ### Model. Wells in burn area \~ year \* state (KS)
 
 ```{r}
-model_fit <- glm(n_wells ~ year,
+model_fit <- glm(n_wells ~ year, family = "poisson",
                  data = subset(wells_wildfire_state_year, state == "KS"))
 summary(model_fit)
 ```
@@ -274,19 +274,18 @@ Positive time trend in KS (p = 0.001)
 ### Model. Wells in burn area \~ year \* state (NM)
 
 ```{r}
-model_fit <- glm(n_wells ~ year,
+model_fit <- glm(n_wells ~ year, family = "poisson",
                  data = subset(wells_wildfire_state_year, state == "NM"))
 summary(model_fit)
 ```
-
-No time trend in NM
+Positive time trend in NM
 
 ### Model. Wells in burn area \~ year \* state (WY)
 
 ```{r}
-model_fit <- glm(n_wells ~ year,
+model_fit <- glm(n_wells ~ year, family = "poisson",
                  data = subset(wells_wildfire_state_year, state == "WY"))
 summary(model_fit)
 ```
 
-Positive trend but not statistically significant in WY
+Statistically significant positive trend in WY

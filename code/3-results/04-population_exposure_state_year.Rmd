@@ -168,7 +168,7 @@ Fit OLS linear regression models to look at the association between n wells in b
 ### Model. Population exposed by year and state (CA)
 
 ```{r}
-model_fit <- glm(pop_exposed_n ~ year,
+model_fit <- glm(pop_exposed_n ~ year, family = "poisson",
                  data = subset(pop_exposed_state_year, state == "CA"))
 summary(model_fit)
 ```
